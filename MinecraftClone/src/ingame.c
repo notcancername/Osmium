@@ -148,6 +148,35 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_CHUNKDATA) {
 			unsigned char* data = pkt.data.play_server.chunkdata.data;
 			size_t size = pkt.data.play_server.chunkdata.size;
+			if (size < 1) continue;
+			unsigned char bpb = data[0];
+			unsigned char bpbr = bpb;
+			data++;
+			size--;
+			int32_t plen = 0;
+			int32_t* pal = NULL;
+			if (bpb == 0) {
+				bpbr = 13;
+			} else {
+				int rx = readVarInt(&plen, data, size);
+				data += rx;
+				size -= rx;
+				pal = malloc(sizeof(int32_t) * pal);
+				for (int32_t i = 0; i < plen; i++) {
+					rx = readVarInt(&pal[i], data, size);
+					data += rx;
+					size -= rx;
+				}
+			}
+			int32_t bks_l;
+			int rx = readVarInt(&bks_l, data, size);
+			data += rx;
+			size -= rx;
+			bks_l *= 8;
+			if (bks_l < 0) {
+				if (pal != NULL) free(pal);
+				continue;
+			}
 
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
