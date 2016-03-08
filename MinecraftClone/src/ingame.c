@@ -11,7 +11,6 @@
 #include "entity.h"
 #include <string.h>
 #include <stdio.h>
-#include "network.h"
 #include <math.h>
 
 int running = 0;
@@ -176,6 +175,7 @@ void runNetwork(struct conn* conn) {
 			size -= rx;
 			bks_l *= 8;
 			struct chunk* chunk = pkt.data.play_server.chunkdata.continuous ? malloc(sizeof(struct chunk)) : getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
+			size_t bo = 0;
 			for (int32_t x = 0; x < 16; x++) { // could be more!
 				if (!(pkt.data.play_server.chunkdata.bitMask & (1 << x))) {
 					continue;
@@ -186,7 +186,8 @@ void runNetwork(struct conn* conn) {
 					goto rcmp;
 				}
 				size_t bs = 4096 * bpbr;
-				if (bs / 8 + (bs % 8) > bks_l) {
+				size_t tx = (bs + (bs % 8) + bo);
+				if (tx / 8 + (tx % 8 > 0 ? 1 : 0) > bks_l) {
 					if (pal != NULL) free(pal);
 					if (pkt.data.play_server.chunkdata.continuous) free(chunk);
 					goto rcmp;
@@ -194,27 +195,29 @@ void runNetwork(struct conn* conn) {
 				block cv = 0;
 				unsigned char cvi = 0;
 				int16_t bi = 0;
-				for (size_t i = 0; i < bs; i++) {
+				for (size_t i = bo; i < bs + bo; i++) {
 					unsigned char bit = data[i / 8] & (1 << (i % 8));
 					if (bit) cv |= (1 << cvi);
 					cvi++;
 					if (cvi == bpbr) {
 						cvi = 0;
-						if (plen > 0 && cv < plen) {
+						if (bpb == 0) {
+							chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = cv;
+						} else if (plen > 0 && cv < plen) {
 							chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = pal[cv];
 							if (pal[cv] >> 4 == 7) {
 								printf("(%i) bedrock @ %i, %i, %i\n", x, bi & 0x0f, (x * 16) + ((bi & 0xf00) >> 8), (bi & 0xf0) >> 4);
 							}
-							bi++;
 						}
+						bi++;
 						cv = 0;
 					}
 				}
-				size -= bs / 8 + (bs % 8);
-				data += bs / 8 + (bs % 8);
+				bo = bs % 8;
+				size -= bs / 8;
+				data += bs / 8;
 			}
 			printf("c 0, 0, 0 = %i\n", getBlockChunk(chunk, 0, 0, 0) >> 4);
-			printf("c 0, 16, 0 = %i\n", getBlockChunk(chunk, 0, 16, 0) >> 4);
 			if (pkt.data.play_server.chunkdata.continuous) {
 				struct chunk* cc = getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
 				if (cc != NULL) {
