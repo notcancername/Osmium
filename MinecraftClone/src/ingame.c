@@ -146,6 +146,8 @@ void runNetwork(struct conn* conn) {
 			rpkt.data.play_client.keepalive.key = pkt.data.play_server.keepalive.key;
 			writePacket(conn, &rpkt);
 		} else if (pkt.id == PKT_PLAY_SERVER_CHUNKDATA) {
+			unsigned char* data = pkt.data.play_server.chunkdata.data;
+			size_t size = pkt.data.play_server.chunkdata.size;
 
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
