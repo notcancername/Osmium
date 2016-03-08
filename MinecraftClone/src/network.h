@@ -18,6 +18,8 @@
 #define STATE_LOGIN 2
 #define STATE_PLAY 3
 
+int readVarInt(int32_t* output, unsigned char* buffer, size_t buflen);
+
 struct conn {
 		int fd;
 		unsigned char* obuf;

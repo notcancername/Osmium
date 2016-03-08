@@ -4,8 +4,8 @@
  *  Created on: Feb 22, 2016
  *      Author: root
  */
-#include "entity.h"
 #include "world.h"
+#include "entity.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
@@ -46,7 +46,7 @@ void addChunk(struct world* world, struct chunk* chunk) {
 
 block getBlockChunk(struct chunk* chunk, uint8_t x, uint8_t y, uint8_t z) {
 	if (x > 15 || z > 15 || y > 255 || x < 0 || z < 0 || y < 0) return 0;
-	return chunk->blocks[(x << 12) | (z << 8) | y];
+	return chunk->blocks[x][z][y];
 }
 
 block getBlockWorld(struct world* world, int32_t x, uint8_t y, int32_t z) {
@@ -65,7 +65,7 @@ struct chunk* newChunk(int16_t x, int16_t z) {
 
 void setBlockChunk(struct chunk* chunk, block blk, uint8_t x, uint8_t y, uint8_t z) {
 	if (x > 15 || z > 15 || y > 255 || x < 0 || z < 0 || y < 0) return;
-	chunk->blocks[(x << 12) | (z << 8) | y] = blk;
+	chunk->blocks[x][z][y] = blk;
 }
 
 void setBlockWorld(struct world* world, block blk, int32_t x, int32_t y, int32_t z) {

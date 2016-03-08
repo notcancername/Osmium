@@ -28,7 +28,8 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
  /usr/share/mingw-w64/include/stdio.h \
  /usr/share/mingw-w64/include/_mingw_print_push.h \
  /usr/share/mingw-w64/include/sec_api/stdio_s.h \
- /usr/share/mingw-w64/include/_mingw_print_pop.h
+ /usr/share/mingw-w64/include/_mingw_print_pop.h \
+ /usr/share/mingw-w64/include/math.h
 
 ../src/ingame.h:
 
@@ -99,3 +100,5 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
 /usr/share/mingw-w64/include/sec_api/stdio_s.h:
 
 /usr/share/mingw-w64/include/_mingw_print_pop.h:
+
+/usr/share/mingw-w64/include/math.h:

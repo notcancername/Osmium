@@ -11,6 +11,8 @@
 #include "entity.h"
 #include <string.h>
 #include <stdio.h>
+#include "network.h"
+#include <math.h>
 
 int running = 0;
 
@@ -161,7 +163,7 @@ void runNetwork(struct conn* conn) {
 				int rx = readVarInt(&plen, data, size);
 				data += rx;
 				size -= rx;
-				pal = malloc(sizeof(int32_t) * pal);
+				pal = malloc(sizeof(int32_t) * plen);
 				for (int32_t i = 0; i < plen; i++) {
 					rx = readVarInt(&pal[i], data, size);
 					data += rx;
@@ -173,11 +175,55 @@ void runNetwork(struct conn* conn) {
 			data += rx;
 			size -= rx;
 			bks_l *= 8;
-			if (bks_l < 0) {
-				if (pal != NULL) free(pal);
-				continue;
+			struct chunk* chunk = pkt.data.play_server.chunkdata.continuous ? malloc(sizeof(struct chunk)) : getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
+			for (int32_t x = 0; x < 16; x++) { // could be more!
+				if (!(pkt.data.play_server.chunkdata.bitMask & (1 << x))) {
+					continue;
+				}
+				if (bks_l < 0 || bks_l > size || bpbr > 16) {
+					if (pal != NULL) free(pal);
+					if (pkt.data.play_server.chunkdata.continuous) free(chunk);
+					goto rcmp;
+				}
+				size_t bs = 4096 * bpbr;
+				if (bs / 8 + (bs % 8) > bks_l) {
+					if (pal != NULL) free(pal);
+					if (pkt.data.play_server.chunkdata.continuous) free(chunk);
+					goto rcmp;
+				}
+				block cv = 0;
+				unsigned char cvi = 0;
+				int16_t bi = 0;
+				for (size_t i = 0; i < bs; i++) {
+					unsigned char bit = data[i / 8] & (1 << (i % 8));
+					if (bit) cv |= (1 << cvi);
+					cvi++;
+					if (cvi == bpbr) {
+						cvi = 0;
+						if (plen > 0 && cv < plen) {
+							chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = pal[cv];
+							if (pal[cv] >> 4 == 7) {
+								printf("(%i) bedrock @ %i, %i, %i\n", x, bi & 0x0f, (x * 16) + ((bi & 0xf00) >> 8), (bi & 0xf0) >> 4);
+							}
+							bi++;
+						}
+						cv = 0;
+					}
+				}
+				size -= bs / 8 + (bs % 8);
+				data += bs / 8 + (bs % 8);
 			}
-
+			printf("c 0, 0, 0 = %i\n", getBlockChunk(chunk, 0, 0, 0) >> 4);
+			printf("c 0, 16, 0 = %i\n", getBlockChunk(chunk, 0, 16, 0) >> 4);
+			if (pkt.data.play_server.chunkdata.continuous) {
+				struct chunk* cc = getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
+				if (cc != NULL) {
+					free(cc); //remove chunk does not dereference the chunk
+					removeChunk(gs.world, cc);
+				}
+				addChunk(gs.world, chunk);
+			}
+			//TODO: block light/skylight
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PARTICLE) {
@@ -291,5 +337,6 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYEFFECT) {
 
 		}
+		rcmp: ;
 	}
 }
