@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <fcntl.h>
 
 int running = 0;
 
@@ -174,7 +175,7 @@ void runNetwork(struct conn* conn) {
 			data += rx;
 			size -= rx;
 			bks_l *= 8;
-			struct chunk* chunk = pkt.data.play_server.chunkdata.continuous ? malloc(sizeof(struct chunk)) : getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
+			struct chunk* chunk = pkt.data.play_server.chunkdata.continuous ? newChunk(pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z) : getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
 			size_t bo = 0;
 			for (int32_t x = 0; x < 16; x++) { // could be more!
 				if (!(pkt.data.play_server.chunkdata.bitMask & (1 << x))) {
@@ -205,9 +206,6 @@ void runNetwork(struct conn* conn) {
 							chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = cv;
 						} else if (plen > 0 && cv < plen) {
 							chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = pal[cv];
-							if (pal[cv] >> 4 == 7) {
-								printf("(%i) bedrock @ %i, %i, %i\n", x, bi & 0x0f, (x * 16) + ((bi & 0xf00) >> 8), (bi & 0xf0) >> 4);
-							}
 						}
 						bi++;
 						cv = 0;
@@ -216,8 +214,44 @@ void runNetwork(struct conn* conn) {
 				bo = bs % 8;
 				size -= bs / 8;
 				data += bs / 8;
+				for (size_t i = 0; i < 4096; i++) {
+					unsigned char lb = data[0];
+					if (i % 2 == 0) {
+						lb >>= 4;
+					} else {
+						lb &= 0x0f;
+					}
+					if (i % 2 == 0) {
+						chunk->blockLight[i & 0x0f][(i & 0xf0) >> 4][(x * 8) + ((i & 0xf00) >> 8)] = lb << 4;
+					} else {
+						chunk->blockLight[i & 0x0f][(i & 0xf0) >> 4][(x * 8) + ((i & 0xf00) >> 9)] |= lb & 0x0f;
+					}
+					if (i % 2 == 1) {
+						data++;
+						size--;
+					}
+				}
+				if (gs.world->dimension == 0) {
+					chunk->skyLight = malloc(2048);
+					for (size_t i = 0; i < 4096; i++) {
+						unsigned char lb = data[0];
+						if (i % 2 == 0) {
+							lb >>= 4;
+						} else {
+							lb &= 0x0f;
+						}
+						if (i % 2 == 0) {
+							chunk->skyLight[i / 2] = lb << 4;
+						} else {
+							chunk->skyLight[i / 2] |= lb & 0x0f;
+						}
+						if (i % 2 == 1) {
+							data++;
+							size--;
+						}
+					}
+				}
 			}
-			printf("c 0, 0, 0 = %i\n", getBlockChunk(chunk, 0, 0, 0) >> 4);
 			if (pkt.data.play_server.chunkdata.continuous) {
 				struct chunk* cc = getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
 				if (cc != NULL) {
@@ -226,7 +260,6 @@ void runNetwork(struct conn* conn) {
 				}
 				addChunk(gs.world, chunk);
 			}
-			//TODO: block light/skylight
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PARTICLE) {
@@ -239,6 +272,7 @@ void runNetwork(struct conn* conn) {
 			gs.reducedDebugInfo = pkt.data.play_server.joingame.reducedDebugInfo;
 			gs.world = newWorld();
 			gs.world->levelType = pkt.data.play_server.joingame.levelType;
+			gs.world->dimension = pkt.data.play_server.joingame.dimension;
 		} else if (pkt.id == PKT_PLAY_SERVER_MAP) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYRELMOVE) {

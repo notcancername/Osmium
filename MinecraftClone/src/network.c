@@ -553,7 +553,7 @@ int loginToServer(struct conn* conn, char* ip, uint16_t port, char* username, st
 	pkt.id = PKT_HANDSHAKE_CLIENT_HANDSHAKE;
 	pkt.data.handshake_client.handshake.ip = ip;
 	pkt.data.handshake_client.handshake.port = port;
-	pkt.data.handshake_client.handshake.protocol_version = 107;
+	pkt.data.handshake_client.handshake.protocol_version = 108;
 	pkt.data.handshake_client.handshake.state = 2;
 	if (writePacket(conn, &pkt)) return -1;
 	conn->state = STATE_LOGIN;
@@ -649,9 +649,8 @@ int readPacket(struct conn* conn, struct packet* packet) {
 		}
 	} else {
 		readVarInt_stream(&pktlen, conn->fd);
-		printf("pktl = %i\n", pktlen);
 		if (pktlen > 0) {
-			pktbuf = malloc(sizeof(pktlen));
+			pktbuf = malloc(pktlen);
 			size_t r = 0;
 			while (r < pktlen) {
 				ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
@@ -663,6 +662,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			}
 		}
 	}
+	if (pktbuf == NULL) return 0;
 	unsigned char* pbuf = (unsigned char*) pktbuf;
 	size_t ps = pktlen;
 	int32_t id = 0;
@@ -1403,9 +1403,9 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			packet->data.play_server.joingame.gamemode = pbuf[0];
 			pbuf++;
 			ps--;
-			packet->data.play_server.joingame.dimension = pbuf[0];
-			pbuf++;
-			ps--;
+			memcpy(&packet->data.play_server.joingame.dimension, pbuf, 4);
+			pbuf += 4;
+			ps -= 4;
 			packet->data.play_server.joingame.difficulty = pbuf[0];
 			pbuf++;
 			ps--;

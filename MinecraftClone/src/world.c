@@ -57,9 +57,9 @@ block getBlockWorld(struct world* world, int32_t x, uint8_t y, int32_t z) {
 
 struct chunk* newChunk(int16_t x, int16_t z) {
 	struct chunk* chunk = malloc(sizeof(struct chunk));
+	memset(chunk, 0, sizeof(struct chunk));
 	chunk->x = x;
 	chunk->z = z;
-	memset(chunk->blocks, 0, 65536 * sizeof(uint16_t));
 	return chunk;
 }
 
@@ -79,10 +79,7 @@ void setBlockWorld(struct world* world, block blk, int32_t x, int32_t y, int32_t
 
 struct world* newWorld() {
 	struct world* world = malloc(sizeof(struct world));
-	world->entity_count = 0;
-	world->entities = NULL;
-	world->chunks = NULL;
-	world->chunk_count = 0;
+	memset(world, 0, sizeof(struct world));
 	return world;
 }
 

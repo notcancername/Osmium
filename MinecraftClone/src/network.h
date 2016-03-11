@@ -667,7 +667,7 @@ struct pkt_play_server_particles {
 struct pkt_play_server_joingame {
 		int32_t eid;
 		unsigned char gamemode;
-		signed char dimension;
+		int32_t dimension;
 		unsigned char difficulty;
 		unsigned char maxPlayers;
 		char* levelType;

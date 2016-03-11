@@ -21,6 +21,8 @@ struct chunk {
 		int16_t z;
 		block blocks[16][16][256]; // x, z, y?
 		unsigned char biomes[16][16]; // x, z?
+		unsigned char blockLight[16][16][128]; // x, z, y(4-bit)
+		unsigned char* skyLight; // if non-NULL, points to a 2048-byte nibble-array.
 };
 
 struct world {
@@ -30,6 +32,7 @@ struct world {
 		size_t chunk_count;
 		char* levelType;
 		struct encpos spawnpos;
+		int32_t dimension;
 };
 
 struct chunk* getChunk(struct world* world, int16_t x, int16_t z);
