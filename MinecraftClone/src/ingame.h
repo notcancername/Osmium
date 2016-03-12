@@ -22,8 +22,12 @@ struct gamestate {
 
 struct gamestate gs;
 
+void loadIngame();
+
 void runNetwork(struct conn* conn);
 
 void ingame_tick();
+
+void drawIngame(float partialTick);
 
 #endif /* INGAME_H_ */

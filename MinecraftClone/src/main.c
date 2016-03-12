@@ -81,8 +81,9 @@ void displayCallback() {
 		tick();
 	}
 	if (ms2 > lf + 1000.) {
+		double t = ms2 - lf;
 		lf = ms2;
-		//printf("FPS: %i\n", frames);
+		printf("FPS: %f\n", (float) frames / (t / 1000.));
 		frames = 0;
 	}
 
@@ -145,6 +146,10 @@ void displayCallback() {
 		} else if (error == GL_INVALID_FRAMEBUFFER_OPERATION) {
 			es = "GL_INVALID_FRAMEBUFFER_OPERATION";
 #endif
+		} else if (error == GL_STACK_OVERFLOW) {
+			es = "GL_STACK_OVERFLOW";
+		} else if (error == GL_STACK_UNDERFLOW) {
+			es = "GL_STACK_UNDERFLOW";
 		} else if (error == GL_OUT_OF_MEMORY) {
 			es = "GL_OUT_OF_MEMORY";
 		} else es = "UNKNOWN";
@@ -158,21 +163,30 @@ void displayCallback() {
 	//printf("render-time: %f\n", ((double) ts2.tv_sec * 1000. + (double) ts2.tv_nsec / 1000000.) - ms2);
 }
 
+int moc = 0;
+
 void mouseMotionCallback(int x, int y) {
-	if (mouse_claimed) {
+	if (gs.player != NULL && spawnedIn) {
+		if (!moc) {
+			moc = 1;
+			claimMouse();
+		}
 		if (lmx >= 0) {
 			int dx = lmx - x;
 			int dy = lmy - y;
-			//ourPlayer->pitch -= dy * 0.1;
-			//if (ourPlayer->pitch > 89.9) ourPlayer->pitch = 89.9;
-			//if (ourPlayer->pitch < -89.9) ourPlayer->pitch = -89.9;
-			//ourPlayer->yaw -= dx * 0.1;
+			gs.player->pitch -= dy * 0.01;
+			if (gs.player->pitch > 89.9) gs.player->pitch = 89.9;
+			if (gs.player->pitch < -89.9) gs.player->pitch = -89.9;
+			gs.player->yaw -= dx * 0.01;
 			if (dx * dx + dy * dy > 0.) {
 				glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 			}
 		}
 		lmx = glutGet(GLUT_WINDOW_WIDTH) / 2;
 		lmy = glutGet(GLUT_WINDOW_HEIGHT) / 2;
+	} else if (moc) {
+		moc = 0;
+		unclaimMouse();
 	}
 	mouseX = x / (csf == 0 ? 1 : csf);
 	mouseY = y / (csf == 0 ? 1 : csf);
@@ -200,7 +214,6 @@ int main(int argc, char *argv[]) {
 #endif
 	width = 800;
 	height = 600;
-	mouse_claimed = 0;
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB | GLUT_MULTISAMPLE);
 	glutInitWindowSize(800, 600);
@@ -220,10 +233,10 @@ int main(int argc, char *argv[]) {
 	glEnable (GL_MULTISAMPLE_ARB);
 	glEnable (GL_DEPTH_TEST);
 	printf("Loading... [FROM=%s]\n", INSTALLDIR);
-	loadTexturePNG(INSTALLDIR "stone.png", TX_WOOD, 1);
 	loadTexturePNG(INSTALLDIR "floor.png", TX_FLOOR, 0);
 	loadTexturePNG(INSTALLDIR "crosshair.png", TX_CROSSHAIR, 0);
 	loadGUI();
+	loadIngame();
 	struct vertex_tex floorv[4];
 	virtTexCoord2f(&floorv[0], 0., 0.);
 	virtVertex3f(&floorv[0], -1000., 0., -1000.);
@@ -234,7 +247,10 @@ int main(int argc, char *argv[]) {
 	virtTexCoord2f(&floorv[3], 0.0, 6000.0);
 	virtVertex3f(&floorv[3], -1000, 0, 1000);
 	createVAO(floorv, 4, &mod_floor, 1);
-	createTexCube(0.125, &mod_cube);
+	createTexCube(0.5, &mod_cube);
+	int bw = 0;
+	int bh = 0;
+	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", 32, &bw, &bh, TX_DEFAULT, 0);
 	//world = newWorld();
 	//setBlockWorld(world, BLK_WOOD, 0, 0, 0);
 	//setBlockWorld(world, BLK_WOOD, 2, 0, 0);

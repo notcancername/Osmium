@@ -17,6 +17,8 @@ struct vao mod_cube;
 
 int loadTexturePNG(char* path, int id, int s);
 
+int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s);
+
 void loadTextureData(int id, size_t width, size_t height, void* data, int s);
 
 #endif /* MODELS_H_ */

@@ -8,8 +8,6 @@
 #ifndef GUI_H_
 #define GUI_H_
 
-int mouse_claimed;
-
 void drawGUI(float partialTick);
 
 void gui_tick();

@@ -525,6 +525,8 @@ void drawGUI(float partialTick) {
 		drawDirectConnect(partialTick);
 	} else if (guistate == GSTATE_CONNECTING) {
 		drawConnecting(partialTick);
+	} else if (guistate == GSTATE_INGAME) {
+		drawIngame(partialTick);
 	}
 }
 
@@ -578,10 +580,8 @@ void gui_speckeydown(int key) {
 
 void claimMouse() {
 	glutSetCursor (GLUT_CURSOR_NONE);
-	mouse_claimed = 1;
 }
 
 void unclaimMouse() {
 	glutSetCursor (GLUT_CURSOR_INHERIT);
-	mouse_claimed = 0;
 }

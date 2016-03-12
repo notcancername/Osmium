@@ -1,9 +1,13 @@
 src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
- ../src/network.h ../src/nbt.h
+ ../src/render.h ../src/models.h ../src/network.h ../src/nbt.h
 
 ../src/world.h:
 
 ../src/entity.h:
+
+../src/render.h:
+
+../src/models.h:
 
 ../src/network.h:
 

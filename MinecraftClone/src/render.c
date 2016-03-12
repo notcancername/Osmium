@@ -15,6 +15,8 @@
 #include "xstring.h"
 #include <math.h>
 #include "world.h"
+#include <time.h>
+#include "block.h"
 
 void virtVertex3f(union uvertex* vert, float x, float y, float z) {
 	vert->vert.x = x;
@@ -42,65 +44,74 @@ void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int text
 	vao->vertex_count = count;
 }
 
+void createSubCube(float size, struct vertex_tex* vrt, int faceMask) {
+	if (faceMask & 0x01) {
+		virtTexCoord2f(&vrt[0], 0.0, 0.0);
+		virtVertex3f(&vrt[0], -size, -size, size);
+		virtTexCoord2f(&vrt[1], 1.0, 0.0);
+		virtVertex3f(&vrt[1], size, -size, size);
+		virtTexCoord2f(&vrt[2], 1.0, 1.0);
+		virtVertex3f(&vrt[2], size, size, size);
+		virtTexCoord2f(&vrt[3], 0.0, 1.0);
+		virtVertex3f(&vrt[3], -size, size, size);
+	}
+	if (faceMask & 0x02) {
+		virtTexCoord2f(&vrt[4], 0.0, 0.0);
+		virtVertex3f(&vrt[4], -size, -size, -size);
+		virtTexCoord2f(&vrt[5], 1.0, 0.0);
+		virtVertex3f(&vrt[5], size, -size, -size);
+		virtTexCoord2f(&vrt[6], 1.0, 1.0);
+		virtVertex3f(&vrt[6], size, size, -size);
+		virtTexCoord2f(&vrt[7], 0.0, 1.0);
+		virtVertex3f(&vrt[7], -size, size, -size);
+	}
+	//
+	if (faceMask & 0x04) {
+		virtTexCoord2f(&vrt[8], 0.0, 0.0);
+		virtVertex3f(&vrt[8], -size, size, -size);
+		virtTexCoord2f(&vrt[9], 0.0, 1.0);
+		virtVertex3f(&vrt[9], -size, size, size);
+		virtTexCoord2f(&vrt[10], 1.0, 1.0);
+		virtVertex3f(&vrt[10], size, size, size);
+		virtTexCoord2f(&vrt[11], 1.0, 0.0);
+		virtVertex3f(&vrt[11], size, size, -size);
+	}
+	if (faceMask & 0x08) {
+		virtTexCoord2f(&vrt[12], 0.0, 0.0);
+		virtVertex3f(&vrt[12], -size, -size, -size);
+		virtTexCoord2f(&vrt[13], 1.0, 0.0);
+		virtVertex3f(&vrt[13], size, -size, -size);
+		virtTexCoord2f(&vrt[14], 1.0, 1.0);
+		virtVertex3f(&vrt[14], size, -size, size);
+		virtTexCoord2f(&vrt[15], 0.0, 1.0);
+		virtVertex3f(&vrt[15], -size, -size, size);
+	}
+	//
+	if (faceMask & 0x10) {
+		virtTexCoord2f(&vrt[16], 0.0, 0.0);
+		virtVertex3f(&vrt[16], size, -size, -size);
+		virtTexCoord2f(&vrt[17], 1.0, 0.0);
+		virtVertex3f(&vrt[17], size, size, -size);
+		virtTexCoord2f(&vrt[18], 1.0, 1.0);
+		virtVertex3f(&vrt[18], size, size, size);
+		virtTexCoord2f(&vrt[19], 0.0, 1.0);
+		virtVertex3f(&vrt[19], size, -size, size);
+	}
+	if (faceMask & 0x20) {
+		virtTexCoord2f(&vrt[20], 0.0, 0.0);
+		virtVertex3f(&vrt[20], -size, -size, -size);
+		virtTexCoord2f(&vrt[21], 1.0, 0.0);
+		virtVertex3f(&vrt[21], -size, size, -size);
+		virtTexCoord2f(&vrt[22], 1.0, 1.0);
+		virtVertex3f(&vrt[22], -size, size, size);
+		virtTexCoord2f(&vrt[23], 0.0, 1.0);
+		virtVertex3f(&vrt[23], -size, -size, size);
+	}
+}
+
 void createTexCube(float size, struct vao* vao) {
 	struct vertex_tex vrt[24];
-	virtTexCoord2f(&vrt[0], 0.0, 0.0);
-	virtVertex3f(&vrt[0], -size, -size, size);
-	virtTexCoord2f(&vrt[1], 1.0, 0.0);
-	virtVertex3f(&vrt[1], size, -size, size);
-	virtTexCoord2f(&vrt[2], 1.0, 1.0);
-	virtVertex3f(&vrt[2], size, size, size);
-	virtTexCoord2f(&vrt[3], 0.0, 1.0);
-	virtVertex3f(&vrt[3], -size, size, size);
-
-	virtTexCoord2f(&vrt[4], 0.0, 0.0);
-	virtVertex3f(&vrt[4], -size, -size, -size);
-	virtTexCoord2f(&vrt[5], 1.0, 0.0);
-	virtVertex3f(&vrt[5], size, -size, -size);
-	virtTexCoord2f(&vrt[6], 1.0, 1.0);
-	virtVertex3f(&vrt[6], size, size, -size);
-	virtTexCoord2f(&vrt[7], 0.0, 1.0);
-	virtVertex3f(&vrt[7], -size, size, -size);
-
-	//
-
-	virtTexCoord2f(&vrt[8], 0.0, 0.0);
-	virtVertex3f(&vrt[8], -size, size, -size);
-	virtTexCoord2f(&vrt[9], 1.0, 0.0);
-	virtVertex3f(&vrt[9], size, size, -size);
-	virtTexCoord2f(&vrt[10], 1.0, 1.0);
-	virtVertex3f(&vrt[10], size, size, size);
-	virtTexCoord2f(&vrt[11], 0.0, 1.0);
-	virtVertex3f(&vrt[11], -size, size, size);
-
-	virtTexCoord2f(&vrt[12], 0.0, 0.0);
-	virtVertex3f(&vrt[12], -size, -size, -size);
-	virtTexCoord2f(&vrt[13], 1.0, 0.0);
-	virtVertex3f(&vrt[13], size, -size, -size);
-	virtTexCoord2f(&vrt[14], 1.0, 1.0);
-	virtVertex3f(&vrt[14], size, -size, size);
-	virtTexCoord2f(&vrt[15], 0.0, 1.0);
-	virtVertex3f(&vrt[15], -size, -size, size);
-
-	//
-
-	virtTexCoord2f(&vrt[16], 0.0, 0.0);
-	virtVertex3f(&vrt[16], size, -size, -size);
-	virtTexCoord2f(&vrt[17], 1.0, 0.0);
-	virtVertex3f(&vrt[17], size, size, -size);
-	virtTexCoord2f(&vrt[18], 1.0, 1.0);
-	virtVertex3f(&vrt[18], size, size, size);
-	virtTexCoord2f(&vrt[19], 0.0, 1.0);
-	virtVertex3f(&vrt[19], size, -size, size);
-
-	virtTexCoord2f(&vrt[20], 0.0, 0.0);
-	virtVertex3f(&vrt[20], -size, -size, -size);
-	virtTexCoord2f(&vrt[21], 1.0, 0.0);
-	virtVertex3f(&vrt[21], -size, size, -size);
-	virtTexCoord2f(&vrt[22], 1.0, 1.0);
-	virtVertex3f(&vrt[22], -size, size, size);
-	virtTexCoord2f(&vrt[23], 0.0, 1.0);
-	virtVertex3f(&vrt[23], -size, -size, size);
+	createSubCube(size, vrt, 0xFF);
 	createVAO(vrt, 24, vao, 1);
 }
 
@@ -138,37 +149,68 @@ void drawCube() {
 	glBindVertexArray(0);
 }
 
-void drawChunk(struct chunk* chunk) {
-	glEnable (GL_TEXTURE_2D);
-	glPushMatrix();
-	glTranslatef(0., 0.125, 0.);
-	for (uint16_t x = 0; x < 16; x++) {
-		glPushMatrix();
-		for (uint16_t z = 0; z < 16; z++) {
-			glPushMatrix();
-			for (uint16_t y = 0; y < 256; y++) {
-				block blk = chunk->blocks[(x << 12) | (z << 8) | y];
-				if (blk == BLK_WOOD) {
-					glBindTexture(GL_TEXTURE_2D, TX_WOOD);
-					drawCube();
+int updateChunk(struct chunk* chunk) {
+	const int ccs = 16;
+	if (chunk->needsUpdate) {
+		chunk->needsUpdate = 0;
+		for (int i = 0; i < 256 / ccs; i++) {
+			int y = i * ccs;
+			for (uint16_t x = 0; x < 16; x++) {
+				for (uint16_t z = 0; z < 16; z++) {
+					for (uint16_t y = 0; y < 2; y++) {
+						block blk = chunk->blocks[x][z][y];
+						if (blk == BLK_AIR) {
+
+						} else {
+							glTranslatef(x + 0.5, y + 0.5, z + 0.5);
+							drawCube();
+						}
+					}
 				}
-				glTranslatef(0., 0.25, 0.);
 			}
-			glPopMatrix();
-			glTranslatef(0., 0., 0.25);
 		}
-		glPopMatrix();
-		glTranslatef(0.25, 0., 0.);
 	}
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);
+}
+
+void drawChunk(struct chunk* chunk) {
+	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	double ms2 = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
+	//glPushMatrix();
+	//glTranslatef(0.5, 0.5, 0.5);
+	for (uint16_t x = 0; x < 16; x++) {
+		//glPushMatrix();
+		for (uint16_t z = 0; z < 16; z++) {
+			//glPushMatrix();
+			for (uint16_t y = 0; y < 2; y++) {
+				block blk = chunk->blocks[x][z][y];
+				if (blk != BLK_AIR) {
+					glPushMatrix();
+					glTranslatef(x + 0.5, y + 0.5, z + 0.5);
+					drawCube();
+					glPopMatrix();
+					//glTranslatef(0., 1., 0.);
+				}
+			}
+			//glPopMatrix();
+			//glTranslatef(0., 0., 1.);
+		}
+		//glPopMatrix();
+		//glTranslatef(1., 0., 0.);
+	}
+	//glPopMatrix();
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
+	printf("chunk took: %f\n", ms2);
 }
 
 void drawWorld(struct world* world) {
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
+			//printf("Drawing chunk: %i, %i\n", world->chunks[i]->x, world->chunks[i]->z);
 			glPushMatrix();
-			glTranslatef((float) (world->chunks[i]->x << 4) * 0.25, 0., (float) (world->chunks[i]->z << 4) * 0.25);
+			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
 			drawChunk(world->chunks[i]);
 			glPopMatrix();
 		}

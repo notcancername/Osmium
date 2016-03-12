@@ -42,7 +42,7 @@ struct vao {
 };
 
 #define TX_NONE 0
-#define TX_WOOD 1
+#define TX_DEFAULT 1
 #define TX_FLOOR 2
 #define TX_CROSSHAIR 3
 #define TX_WIDGETS 4

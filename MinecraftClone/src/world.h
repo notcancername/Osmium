@@ -9,20 +9,21 @@
 #define WORLD_H_
 
 #include "entity.h"
+#include "render.h"
 #include <stdlib.h>
 #include "network.h"
 
 typedef uint16_t block;
 
-#define BLK_WOOD 1
-
 struct chunk {
 		int16_t x;
 		int16_t z;
+		struct vao *vaos;
 		block blocks[16][16][256]; // x, z, y?
 		unsigned char biomes[16][16]; // x, z?
 		unsigned char blockLight[16][16][128]; // x, z, y(4-bit)
 		unsigned char* skyLight; // if non-NULL, points to a 2048-byte nibble-array.
+		int needsUpdate;
 };
 
 struct world {
@@ -46,6 +47,8 @@ block getBlockChunk(struct chunk* chunk, uint8_t x, uint8_t y, uint8_t z);
 block getBlockWorld(struct world* world, int32_t x, uint8_t y, int32_t z);
 
 struct chunk* newChunk(int16_t x, int16_t z);
+
+void freeChunk(struct chunk* chunk);
 
 void setBlockChunk(struct chunk* chunk, block blk, uint8_t x, uint8_t y, uint8_t z);
 
