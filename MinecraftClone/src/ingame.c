@@ -155,7 +155,7 @@ while (1) {
 	} else if (pkt.id == PKT_PLAY_SERVER_BLOCKACTION) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_BLOCKCHANGE) {
-
+		setBlockWorld(gs.world, pkt.data.play_server.blockchange.blockID, pkt.data.play_server.blockchange.pos.x, pkt.data.play_server.blockchange.pos.y, pkt.data.play_server.blockchange.pos.z);
 	} else if (pkt.id == PKT_PLAY_SERVER_BOSSBAR) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_SERVERDIFFICULTY) {
@@ -165,7 +165,16 @@ while (1) {
 	} else if (pkt.id == PKT_PLAY_SERVER_CHATMESSAGE) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_MULTIBLOCKCHANGE) {
-
+		struct chunk* ch = getChunk(gs.world, pkt.data.play_server.multiblockchange.x, pkt.data.play_server.multiblockchange.z);
+		if (ch == NULL) {
+			free(pkt.data.play_server.multiblockchange.records);
+			continue;
+		}
+		for (size_t i = 0; i < pkt.data.play_server.multiblockchange.record_count; i++) {
+			struct mbc_record* mbcr = &pkt.data.play_server.multiblockchange.records[i];
+			setBlockChunk(ch, mbcr->blockID, mbcr->x, mbcr->y, mbcr->z);
+		}
+		free(pkt.data.play_server.multiblockchange.records);
 	} else if (pkt.id == PKT_PLAY_SERVER_CONFIRMTRANSACTION) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_CLOSEWINDOW) {
@@ -189,9 +198,20 @@ while (1) {
 	} else if (pkt.id == PKT_PLAY_SERVER_ENTITYSTATUS) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_EXPLOSION) {
-
+		for (size_t i = 0; i < pkt.data.play_server.explosion.record_count; i++) {
+			struct exp_record* expr = &pkt.data.play_server.explosion.records[i];
+			setBlockWorld(gs.world, 0, expr->x + (int32_t) pkt.data.play_server.explosion.x, expr->y + (int32_t) pkt.data.play_server.explosion.y, expr->z + (int32_t) pkt.data.play_server.explosion.z);
+		}
+		free(pkt.data.play_server.explosion.records);
+		gs.player->motX += pkt.data.play_server.explosion.velX;
+		gs.player->motY += pkt.data.play_server.explosion.velY;
+		gs.player->motZ += pkt.data.play_server.explosion.velZ;
 	} else if (pkt.id == PKT_PLAY_SERVER_UNLOADCHUNK) {
-
+		struct chunk* ch = getChunk(gs.world, pkt.data.play_server.unloadchunk.chunkX, pkt.data.play_server.unloadchunk.chunkZ);
+		if (ch != NULL) {
+			removeChunk(gs.world, ch);
+			freeChunk(ch);
+		}
 	} else if (pkt.id == PKT_PLAY_SERVER_CHANGEGAMESTATE) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_KEEPALIVE) {

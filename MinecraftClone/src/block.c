@@ -55,3 +55,14 @@ int doesBlockCollide(block block) {
 	return block != BLK_AIR;
 }
 
+struct boundingbox bb_cube;
+
+struct boundingbox* getBlockCollision(block block) {
+	return &bb_cube;
+}
+
+void loadBlocks() {
+	bb_cube.maxX = 1.;
+	bb_cube.maxY = 1.;
+	bb_cube.maxZ = 1.;
+}

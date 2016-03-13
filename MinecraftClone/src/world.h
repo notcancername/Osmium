@@ -13,6 +13,15 @@
 #include <stdlib.h>
 #include "network.h"
 
+struct boundingbox {
+		double minX;
+		double maxX;
+		double minY;
+		double maxY;
+		double minZ;
+		double maxZ;
+};
+
 typedef uint16_t block;
 
 struct chunk {

@@ -26,6 +26,7 @@
 #endif
 #include "network.h"
 #include "ingame.h"
+#include "block.h"
 
 #define HEIGHT 0.4
 
@@ -237,6 +238,7 @@ int main(int argc, char *argv[]) {
 	loadTexturePNG(INSTALLDIR "crosshair.png", TX_CROSSHAIR, 0);
 	loadGUI();
 	loadIngame();
+	loadBlocks();
 	struct vertex_tex floorv[4];
 	virtTexCoord2f(&floorv[0], 0., 0.);
 	virtVertex3f(&floorv[0], -1000., 0., -1000.);

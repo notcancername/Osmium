@@ -161,6 +161,7 @@ int updateChunk(struct chunk* chunk) {
 	for (int i = 0; i < 16; i++) {
 		if (chunk->needsUpdate[i]) {
 			chunk->needsUpdate[i] = 0;
+			//printf("Updating section: %i, %i, %i\n", chunk->x, i, chunk->z);
 			int y = i * 16;
 			struct vertex_tex* vts = NULL;
 			size_t vtsx = 0;
@@ -168,13 +169,6 @@ int updateChunk(struct chunk* chunk) {
 				for (uint16_t z = 0; z < 16; z++) {
 					for (uint16_t sy = 0; sy < 16; sy++) {
 						block blk = getBlockChunk(chunk, x, y + sy, z);
-						if ((chunk->x << 4 | x) == 1051 && (chunk->z << 4 | z) == 1198) {
-							if (blk != BLK_AIR) {
-								printf("%i = %i\n", y + sy, blk);
-							}
-						} else if (blk == BLK_POLISHEDGRANITE) {
-							printf("%i, %i, %i = polished granite\n", (chunk->x << 4 | x), y + sy, (chunk->z << 4 | z));
-						}
 						if (blk == BLK_AIR) {
 
 						} else {
@@ -261,7 +255,6 @@ void drawChunk(struct chunk* chunk) {
 void drawWorld(struct world* world) {
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
-			//printf("Drawing chunk: %i, %i\n", world->chunks[i]->x, world->chunks[i]->z);
 			glPushMatrix();
 			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
 			drawChunk(world->chunks[i]);

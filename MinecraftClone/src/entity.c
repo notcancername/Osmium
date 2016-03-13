@@ -24,6 +24,9 @@ struct entity* newEntity(uint32_t id, float x, float y, float z, uint8_t type, f
 	e->pitch = pitch;
 	e->lpitch = pitch;
 	e->onGround = 1;
+	e->motX = 0.;
+	e->motY = 0.;
+	e->motZ = 0.;
 	return e;
 }
 

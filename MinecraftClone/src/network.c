@@ -860,6 +860,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.spawnpainting.loc, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.spawnpainting.loc, sizeof(struct encpos));
 			packet->data.play_server.spawnpainting.direction = pbuf[0];
 			pbuf++;
 			ps--;
@@ -932,6 +933,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.blockbreakanimation.pos, pbuf, sizeof(struct encpos));
 			ps -= sizeof(struct encpos);
 			pbuf += sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.blockbreakanimation.pos, sizeof(struct encpos));
 			packet->data.play_server.blockbreakanimation.stage = pbuf[0];
 			pbuf++;
 			ps--;
@@ -943,6 +945,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.updateblockentity.pos, pbuf, sizeof(struct encpos));
 			ps -= sizeof(struct encpos);
 			pbuf += sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.updateblockentity.pos, sizeof(struct encpos));
 			if (ps < 2) {
 				free(pktbuf);
 				return -1;
@@ -959,6 +962,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.blockaction.pos, pbuf, sizeof(struct encpos));
 			ps -= sizeof(struct encpos);
 			pbuf += sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.blockaction.pos, sizeof(struct encpos));
 			if (ps < 2) {
 				free(pktbuf);
 				return -1;
@@ -980,6 +984,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.blockchange.pos, pbuf, sizeof(struct encpos));
 			ps -= sizeof(struct encpos);
 			pbuf += sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.blockchange.pos, sizeof(struct encpos));
 			int rx = readVarInt(&packet->data.play_server.blockchange.blockID, pbuf, ps);
 			ps -= rx;
 			pbuf += rx;
@@ -1086,11 +1091,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.multiblockchange.x, pbuf, 4);
 			pbuf += 4;
 			ps -= 4;
-			swapEndian(packet->data.play_server.multiblockchange.x, 4);
+			swapEndian(&packet->data.play_server.multiblockchange.x, 4);
 			memcpy(&packet->data.play_server.multiblockchange.z, pbuf, 4);
 			pbuf += 4;
 			ps -= 4;
-			swapEndian(packet->data.play_server.multiblockchange.z, 4);
+			swapEndian(&packet->data.play_server.multiblockchange.z, 4);
 			int rx = readVarInt(&packet->data.play_server.multiblockchange.record_count, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
@@ -1400,6 +1405,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.effect.pos, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.effect.pos, sizeof(struct encpos));
 			memcpy(&packet->data.play_server.effect.data, pbuf, 4);
 			pbuf += 4;
 			ps -= 4;
@@ -1680,6 +1686,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.opensigneditor.pos, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.opensigneditor.pos, sizeof(struct encpos));
 		} else if (id == PKT_PLAY_SERVER_PLAYERABILITIES) {
 			if (ps < 9) {
 				free(pktbuf);
@@ -1884,6 +1891,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.usebed.pos, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.usebed.pos, sizeof(struct encpos));
 		} else if (id == PKT_PLAY_SERVER_DESTROYENTITIES) {
 			int rx = readVarInt(&packet->data.play_server.destroyentities.count, pbuf, ps);
 			pbuf += rx;
@@ -2265,6 +2273,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.spawnposition.pos, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.spawnposition.pos, sizeof(struct encpos));
 		} else if (id == PKT_PLAY_SERVER_TIMEUPDATE) {
 			if (ps < 16) {
 				free(pktbuf);
@@ -2316,6 +2325,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&packet->data.play_server.updatesign.pos, pbuf, sizeof(struct encpos));
 			pbuf += sizeof(struct encpos);
 			ps -= sizeof(struct encpos);
+			swapEndian(&packet->data.play_server.updatesign.pos, sizeof(struct encpos));
 			int rx = readString(&packet->data.play_server.updatesign.line1, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
@@ -2558,6 +2568,7 @@ int writePacket(struct conn* conn, struct packet* packet) {
 			pktbuf[pi++] = packet->data.play_client.tabcomplete.haspos;
 			if (packet->data.play_client.tabcomplete.haspos) {
 				memcpy(pktbuf + pi, &packet->data.play_client.tabcomplete.pos, sizeof(struct encpos));
+				swapEndian(pktbuf + pi, sizeof(struct encpos));
 				pi += sizeof(struct encpos);
 			}
 		} else if (packet->id == PKT_PLAY_CLIENT_CHATMESSAGE) {
@@ -2687,6 +2698,7 @@ int writePacket(struct conn* conn, struct packet* packet) {
 			memcpy(pktbuf + pi, &packet->data.play_client.playerdig.status, 1);
 			pi++;
 			memcpy(pktbuf + pi, &packet->data.play_client.playerdig.pos, sizeof(struct encpos));
+			swapEndian(pktbuf + pi, sizeof(struct encpos));
 			pi += sizeof(struct encpos);
 			memcpy(pktbuf + pi, &packet->data.play_client.playerdig.face, 1);
 			pi++;
@@ -2721,6 +2733,7 @@ int writePacket(struct conn* conn, struct packet* packet) {
 			pi += writeSlot(&packet->data.play_client.creativeinventoryaction.clicked, pktbuf + pi, ps - pi);
 		} else if (packet->id == PKT_PLAY_CLIENT_UPDATESIGN) {
 			memcpy(pktbuf + pi, &packet->data.play_client.updatesign.pos, sizeof(struct encpos));
+			swapEndian(pktbuf + pi, sizeof(struct encpos));
 			pi += sizeof(struct encpos);
 			pi += writeString(packet->data.play_client.updatesign.line1, pktbuf + pi, ps - pi);
 			if (pi > ps - 512) {
@@ -2748,6 +2761,7 @@ int writePacket(struct conn* conn, struct packet* packet) {
 			pi += sizeof(struct uuid);
 		} else if (packet->id == PKT_PLAY_CLIENT_PLAYERPLACE) {
 			memcpy(pktbuf + pi, &packet->data.play_client.playerplace.loc, sizeof(struct encpos));
+			swapEndian(pktbuf + pi, sizeof(struct encpos));
 			pi += sizeof(struct encpos);
 			pi += writeVarInt(packet->data.play_client.playerplace.face, pktbuf + pi);
 			pi += writeVarInt(packet->data.play_client.playerplace.hand, pktbuf + pi);

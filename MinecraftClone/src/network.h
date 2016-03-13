@@ -31,9 +31,9 @@ struct conn {
 };
 
 struct __attribute__((__packed__)) encpos {
-		int32_t x :26;
-		int32_t y :12;
 		int32_t z :26;
+		int32_t y :12;
+		int32_t x :26;
 };
 
 struct __attribute__((__packed__)) uuid {

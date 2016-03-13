@@ -27,6 +27,9 @@ struct entity {
 		float pitch;
 		float lpitch;
 		int onGround;
+		float motX;
+		float motY;
+		float motZ;
 };
 
 struct entity* newEntity(uint32_t id, float x, float y, float z, uint8_t type, float yaw, float pitch);
