@@ -132,7 +132,7 @@ void displayCallback() {
 	//glLoadIdentity();
 	//glDisable (GL_DEPTH_TEST);
 	drawGUI(partialTick);
-	//glEnable(GL_DEPTH_TEST);
+	//
 	size_t error = glGetError();
 	if (error) {
 		char* es;
@@ -174,10 +174,10 @@ void mouseMotionCallback(int x, int y) {
 		if (lmx >= 0) {
 			int dx = lmx - x;
 			int dy = lmy - y;
-			gs.player->pitch -= dy * 0.01;
+			gs.player->pitch -= dy * 0.1;
 			if (gs.player->pitch > 89.9) gs.player->pitch = 89.9;
 			if (gs.player->pitch < -89.9) gs.player->pitch = -89.9;
-			gs.player->yaw -= dx * 0.01;
+			gs.player->yaw -= dx * 0.1;
 			if (dx * dx + dy * dy > 0.) {
 				glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
 			}
@@ -246,11 +246,10 @@ int main(int argc, char *argv[]) {
 	virtVertex3f(&floorv[2], 1000, 0, 1000);
 	virtTexCoord2f(&floorv[3], 0.0, 6000.0);
 	virtVertex3f(&floorv[3], -1000, 0, 1000);
-	createVAO(floorv, 4, &mod_floor, 1);
+	createVAO(floorv, 4, &mod_floor, 1, 0);
 	createTexCube(0.5, &mod_cube);
-	int bw = 0;
-	int bh = 0;
-	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", 32, &bw, &bh, TX_DEFAULT, 0);
+	def_wrap = 32;
+	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", def_wrap, &def_width, &def_height, TX_DEFAULT, 1);
 	//world = newWorld();
 	//setBlockWorld(world, BLK_WOOD, 0, 0, 0);
 	//setBlockWorld(world, BLK_WOOD, 2, 0, 0);

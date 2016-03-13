@@ -23,7 +23,7 @@ struct chunk {
 		unsigned char biomes[16][16]; // x, z?
 		unsigned char blockLight[16][16][128]; // x, z, y(4-bit)
 		unsigned char* skyLight; // if non-NULL, points to a 2048-byte nibble-array.
-		int needsUpdate;
+		int needsUpdate[16];
 };
 
 struct world {

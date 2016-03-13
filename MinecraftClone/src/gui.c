@@ -74,7 +74,7 @@ void loadGUI() {
 	virtTexCoord2f(&vt[2], 1., 1.);
 	virtVertex3f(&vt[3], -1., 1., 1.);
 	virtTexCoord2f(&vt[3], 0., 1.);
-	createVAO(vt, 4, &mod_pan, 1);
+	createVAO(vt, 4, &mod_pan, 1, 0);
 	for (int32_t i = 0; i < 32; i++) {
 		int32_t v6 = (i >> 3 & 1) * 85;
 		int32_t v7 = (i >> 2 & 1) * 170 + v6;
@@ -452,7 +452,7 @@ void drawConnecting(float partialTick) {
 				prt[0] = 0;
 				prt++;
 			}
-			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "nignogerrino", NULL, NULL)) cgs = 5;
+			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player1024", NULL, NULL)) cgs = 5;
 			else cgs = 6;
 		}
 		drawString("Logging In...", swidth / 2 - stringWidth("Logging In...") / 2, sheight / 2 - 54, 16777215);

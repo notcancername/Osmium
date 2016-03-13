@@ -390,9 +390,8 @@
 
 #include "world.h"
 #include "render.h"
-#include <GL/gl.h>
 
-void drawBlock(block block);
+void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char faceMask, float x, float y, float z);
 
 int isBlockOpaque(block block);
 

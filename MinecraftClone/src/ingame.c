@@ -18,6 +18,7 @@
 #include "globals.h"
 #include "render.h"
 #include "gui.h"
+#include "block.h"
 
 int running = 0;
 
@@ -83,10 +84,13 @@ for (size_t i = 0; i < gs.world->entity_count; i++) {
 }
 }
 
+//struct vao tb;
+//int tbx = 0;
+
 void drawIngame(float partialTick) {
 glMatrixMode (GL_PROJECTION);
 glLoadIdentity();
-gluPerspective((sprinting && moveForward > 0) ? 105 : 95., (double) width / (double) height, 0.01, 10.);
+gluPerspective((sprinting && moveForward > 0) ? 90 : 70., (double) width / (double) height, 0.05, 16. * 25.);
 glMatrixMode (GL_MODELVIEW);
 glLoadIdentity();
 float ppitch = gs.player->pitch * (1. - partialTick) + gs.player->lpitch * partialTick;
@@ -102,6 +106,19 @@ float lx = px + v4 * v5;
 float lz = pz + v3 * v5;
 gluLookAt(px, py + 1.62, pz, lx, ly + 1.62, lz, 0., 1., 0.);
 //printf("lookat: %f, %f\n", gs.player->pitch, gs.player->yaw);
+//glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
+//if (!tbx) {
+//	struct vertex_tex *vt = NULL;
+//	size_t vts = 0;
+//	drawBlock(&vt, &vts, 1, 0xFF, 0., 0., 0.);
+//	createVAO(vt, vts, &tb, 1, 0);
+//}
+//tbx++;
+//glPushMatrix();
+//glTranslatef(px + 2., py + 1., pz + 1.);
+//glRotatef(tbx, 0., 1., 0.);
+//drawQuads(&tb);
+//glPopMatrix();
 drawWorld(gs.world);
 }
 
@@ -223,6 +240,9 @@ while (1) {
 				if (pkt.data.play_server.chunkdata.continuous) free(chunk);
 				goto rcmp;
 			}
+			for (size_t i = 0; i < bks_l; i += 8) {
+				swapEndian(data + i, 8);
+			}
 			size_t bs = 4096 * bpbr;
 			size_t tx = (bs + (bs % 8) + bo);
 			if (tx / 8 + (tx % 8 > 0 ? 1 : 0) > bks_l) {
@@ -243,6 +263,8 @@ while (1) {
 						chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = cv;
 					} else if (plen > 0 && cv < plen) {
 						chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = pal[cv];
+					} else {
+						chunk->blocks[bi & 0x0f][(bi & 0xf0) >> 4][(x * 16) + ((bi & 0xf00) >> 8)] = 0;
 					}
 					bi++;
 					cv = 0;
@@ -275,31 +297,6 @@ while (1) {
 					if (i % 2 == 0) {
 						lb >>= 4;
 					} else {
-						if (size < 1) continue;
-						unsigned char bpb = data[0];
-						unsigned char bpbr = bpb;
-						data++;
-						size--;
-						int32_t plen = 0;
-						int32_t* pal = NULL;
-						if (bpb == 0) {
-							bpbr = 13;
-						} else {
-							int rx = readVarInt(&plen, data, size);
-							data += rx;
-							size -= rx;
-							pal = malloc(sizeof(int32_t) * plen);
-							for (int32_t i = 0; i < plen; i++) {
-								rx = readVarInt(&pal[i], data, size);
-								data += rx;
-								size -= rx;
-							}
-						}
-						int32_t bks_l;
-						int rx = readVarInt(&bks_l, data, size);
-						data += rx;
-						size -= rx;
-						bks_l *= 8;
 						lb &= 0x0f;
 					}
 					if (i % 2 == 0) {
@@ -322,6 +319,7 @@ while (1) {
 			}
 			addChunk(gs.world, chunk);
 		}
+		free(pkt.data.play_server.chunkdata.data);
 	} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
 	} else if (pkt.id == PKT_PLAY_SERVER_PARTICLE) {
@@ -370,6 +368,9 @@ while (1) {
 		gs.player->x = ((pkt.data.play_server.playerposlook.flags & 0x01) == 0x01 ? gs.player->x : 0.) + pkt.data.play_server.playerposlook.x;
 		gs.player->y = ((pkt.data.play_server.playerposlook.flags & 0x02) == 0x02 ? gs.player->y : 0.) + pkt.data.play_server.playerposlook.y;
 		gs.player->z = ((pkt.data.play_server.playerposlook.flags & 0x04) == 0x04 ? gs.player->z : 0.) + pkt.data.play_server.playerposlook.z;
+		gs.player->lx = gs.player->x;
+		gs.player->ly = gs.player->y;
+		gs.player->lz = gs.player->z;
 		gs.player->pitch = ((pkt.data.play_server.playerposlook.flags & 0x08) == 0x08 ? gs.player->pitch : 0.) + pkt.data.play_server.playerposlook.y;
 		gs.player->yaw = ((pkt.data.play_server.playerposlook.flags & 0x10) == 0x10 ? gs.player->yaw : 0.) + pkt.data.play_server.playerposlook.z;
 

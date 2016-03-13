@@ -60,11 +60,11 @@ struct chunk* newChunk(int16_t x, int16_t z) {
 	memset(chunk, 0, sizeof(struct chunk));
 	chunk->x = x;
 	chunk->z = z;
-	chunk->needsUpdate = 1;
 	chunk->vaos = malloc(sizeof(struct vao) * 16);
 	for (int i = 0; i < 16; i++) {
 		chunk->vaos[i].vao = -1;
 		chunk->vaos[i].vbo = -1;
+		chunk->needsUpdate[i] = 1;
 	}
 	return chunk;
 }

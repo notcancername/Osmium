@@ -1738,20 +1738,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				free(pktbuf);
 				return -1;
 			}
-			size_t ts = packet->data.play_server.playerlistitem.player_count * sizeof(struct uuid);
-			if (packet->data.play_server.playerlistitem.action == 0) {
-				ts += packet->data.play_server.playerlistitem.player_count * sizeof(struct li_add);
-			} else if (packet->data.play_server.playerlistitem.action == 1) {
-				ts += packet->data.play_server.playerlistitem.player_count * 4;
-			} else if (packet->data.play_server.playerlistitem.action == 2) {
-				ts += packet->data.play_server.playerlistitem.player_count * 4;
-			} else if (packet->data.play_server.playerlistitem.action == 3) {
-				ts += packet->data.play_server.playerlistitem.player_count * sizeof(char*);
-			} else {
+			if (packet->data.play_server.playerlistitem.action < 0 || packet->data.play_server.playerlistitem.action > 3) {
 				free(pktbuf);
 				return -1;
 			}
-			packet->data.play_server.playerlistitem.players = malloc(ts);
+			packet->data.play_server.playerlistitem.players = malloc(sizeof(struct li_player) * packet->data.play_server.playerlistitem.player_count);
 			for (int32_t i = 0; i < packet->data.play_server.playerlistitem.player_count; i++) {
 				struct li_player* lp = &packet->data.play_server.playerlistitem.players[i];
 				if (ps < sizeof(struct uuid)) {

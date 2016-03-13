@@ -61,7 +61,11 @@ void virtVertex3f(union uvertex* vert, float x, float y, float z);
 
 void virtTexCoord2f(struct vertex_tex* vert, float x, float y);
 
-void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures);
+void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite);
+
+void deleteVAO(struct vao* vao);
+
+void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float tx1, float ty1, float tx2, float ty2);
 
 void createTexCube(float size, struct vao* vao);
 

@@ -16,6 +16,9 @@ int mouseX;
 int mouseY;
 int mouseButton;
 int csf;
+int def_width;
+int def_height;
+int def_wrap;
 #define PI 3.141592653589793
 
 #ifdef __MINGW32__

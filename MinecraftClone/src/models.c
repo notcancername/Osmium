@@ -98,14 +98,15 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s) {
 			eh += ct;
 			if (eh - rc * wrap > 0) {
 				if (tpngd == NULL) {
-					tpngd = malloc((rh * 4 * wrap * rw) * ((eh / wrap) + 1) * 100);
+					tpngd = malloc((rh * 4 * wrap * rw) * ((eh / wrap) + 1));
 				} else {
-					tpngd = realloc(tpngd, (rh * 4 * wrap * rw) * ((eh / wrap) + 1) * 100);
+					tpngd = realloc(tpngd, (rh * 4 * wrap * rw) * ((eh / wrap) + 1));
 				}
 			}
 			png_bytep* row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
 			int rx = peh % wrap;
 			int ry = peh / wrap;
+			//printf("%s is at %i, %i\n", de->d_name, rx, ry);
 			int bry = 0;
 			for (int y = 0; y < height; y++) {
 				if (y >= rh) {
