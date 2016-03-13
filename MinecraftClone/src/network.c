@@ -28,7 +28,16 @@ int connectToServer(struct conn* conn, char* ip, uint16_t port) {
 	conn->state = STATE_HANDSHAKE;
 	pthread_mutex_init(&conn->writeMutex, NULL);
 #ifdef __MINGW32__
-
+	conn->fd = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+	if(conn->fd == INVALID_SOCKET) return -1;
+	struct sockaddr_in sin;
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(port);
+	sin.sin_addr.s_addr = inet_addr(ip);
+	if(connect(conn->fd, (struct sockaddr *)&sin, sizeof(sin))) {
+		closesocket(conn->fd);
+		return -1;
+	}
 #else
 	conn->fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (conn->fd < 0) return -1;
@@ -85,12 +94,24 @@ int writeVarLong(int64_t input, unsigned char* buffer) {
 	return i;
 }
 
-int writeVarInt_stream(int32_t input, int fd) {
+int writeVarInt_stream(int32_t input,
+#ifdef __MINGW32__
+		SOCKET
+#else
+		int
+#endif
+		fd) {
 	int i = 0;
 	unsigned char n = 0;
 	while ((input & -128) != 0) {
 		n = (input & 127) | 128;
-		if (write(fd, &n, 1) != 1) return -1;
+#ifdef __MINGW32__
+		if (send(fd, &n, 1, 0) != 1) {
+#else
+		if (write(fd, &n, 1) != 1) {
+#endif
+			return -1;
+		}
 		input >>= 7;
 	}
 	if (write(fd, &input, 1) != 1) return -1;
@@ -123,12 +144,24 @@ int readVarLong(int64_t* output, unsigned char* buffer, size_t buflen) {
 	return v2;
 }
 
-int readVarInt_stream(int32_t* output, int fd) {
+int readVarInt_stream(int32_t* output,
+#ifdef __MINGW32__
+		SOCKET
+#else
+		int
+#endif
+		fd) {
 	*output = 0;
 	int v2 = 0;
 	signed char v3;
 	do {
-		if (read(fd, &v3, 1) != 1) return v2;
+#ifdef __MINGW32__
+		if (recv(fd, &v3, 1, 0) != 1) {
+#else
+		if (read(fd, &v3, 1) != 1) {
+#endif
+			return v2;
+		}
 		*output |= (v3 & 127) << (v2++ * 7);
 		if (v2 > 5) return v2;
 	} while ((v3 & 128) == 128);
@@ -609,7 +642,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				pktbuf = malloc(pktlen);
 				size_t r = 0;
 				while (r < pktlen) {
+#ifdef __MINGW32__
+					ssize_t x = recv(conn->fd, pktbuf + r, pktlen - r, 0);
+#else
 					ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
+#endif
 					if (x <= 0) {
 						free(pktbuf);
 						return -1;
@@ -622,7 +659,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				void* cmppkt = malloc(pl);
 				size_t r = 0;
 				while (r < pl) {
+#ifdef __MINGW32__
+					ssize_t x = recv(conn->fd, cmppkt + r, pl - r, 0);
+#else
 					ssize_t x = read(conn->fd, cmppkt + r, pl - r);
+#endif
 					if (x <= 0) {
 						free(cmppkt);
 						return -1;
@@ -666,7 +707,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			pktbuf = malloc(pktlen);
 			size_t r = 0;
 			while (r < pktlen) {
+#ifdef __MINGW32__
+				ssize_t x = recv(conn->fd, pktbuf + r, pktlen - r, 0);
+#else
 				ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
+#endif
 				if (x <= 0) {
 					free(pktbuf);
 					return -1;
@@ -2546,7 +2591,9 @@ int readPacket(struct conn* conn, struct packet* packet) {
 }
 
 int writePacket(struct conn* conn, struct packet* packet) {
+	//printf("attempt write %i\n", packet->id);
 	pthread_mutex_lock(&conn->writeMutex);
+	//printf("write locked\n");
 	if (conn->obuf == NULL) {
 		conn->obuf = malloc(1024);
 	}
@@ -2865,7 +2912,11 @@ int writePacket(struct conn* conn, struct packet* packet) {
 //TODO: encrypt
 	size_t wi = 0;
 	while (wi < wrt_s) {
+#ifdef __MINGW32__
+		ssize_t v = send(conn->fd, wrt + wi, wrt_s - wi, 0);
+#else
 		ssize_t v = write(conn->fd, wrt + wi, wrt_s - wi);
+#endif
 		if (v < 1) {
 			if (frp) free(wrt);
 			if (v == 0) errno = ECONNRESET;

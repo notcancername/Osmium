@@ -163,7 +163,9 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/stralign.h \
  /usr/share/mingw-w64/include/sec_api/stralign_s.h \
  /usr/share/mingw-w64/include/winsvc.h /usr/share/mingw-w64/include/mcx.h \
- /usr/share/mingw-w64/include/imm.h ../src/xstring.h
+ /usr/share/mingw-w64/include/imm.h ../src/xstring.h \
+ /usr/share/mingw-w64/include/dirent.h /usr/share/mingw-w64/include/io.h \
+ /usr/share/mingw-w64/include/sec_api/io_s.h
 
 ../src/models.h:
 
@@ -524,3 +526,9 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/imm.h:
 
 ../src/xstring.h:
+
+/usr/share/mingw-w64/include/dirent.h:
+
+/usr/share/mingw-w64/include/io.h:
+
+/usr/share/mingw-w64/include/sec_api/io_s.h:

@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GLFW/glfw3.h>
 #include "render.h"
 #include "models.h"
 #include <math.h>
@@ -15,7 +16,6 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <png.h>
-#include <GL/glut.h>
 #include "network.h"
 #include "ingame.h"
 
@@ -56,6 +56,7 @@ void gui_tick() {
 }
 
 void loadGUI() {
+	printf("2.1.1\n");
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_0.png", TX_PAN0, 0);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_1.png", TX_PAN1, 0);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_2.png", TX_PAN2, 0);
@@ -65,6 +66,7 @@ void loadGUI() {
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/minecraft.png", TX_TITLE, 1);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/widgets.png", TX_WIDGETS, 1);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/options_background.png", TX_OPTIONSBG, 1);
+	printf("2.1.2\n");
 	struct vertex_tex vt[4];
 	virtVertex3f(&vt[0], -1., -1., 1.);
 	virtTexCoord2f(&vt[0], 0., 0.);
@@ -74,7 +76,9 @@ void loadGUI() {
 	virtTexCoord2f(&vt[2], 1., 1.);
 	virtVertex3f(&vt[3], -1., 1., 1.);
 	virtTexCoord2f(&vt[3], 0., 1.);
+	printf("2.1.2.1\n");
 	createVAO(vt, 4, &mod_pan, 1, 0);
+	printf("2.1.3\n");
 	for (int32_t i = 0; i < 32; i++) {
 		int32_t v6 = (i >> 3 & 1) * 85;
 		int32_t v7 = (i >> 2 & 1) * 170 + v6;
@@ -92,6 +96,7 @@ void loadGUI() {
 		fontColors[i][1] = v8;
 		fontColors[i][2] = v9;
 	}
+	printf("2.1.4\n");
 	FILE* fd = fopen(INSTALLDIR "assets/minecraft/textures/font/ascii.png", "rb");
 	if (!fd) goto ppn;
 	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -156,6 +161,7 @@ void loadGUI() {
 	loadTextureData(TX_ASCII, width, height, pngd, 1);
 	free(pngd);
 	fclose (fd);
+	printf("2.1.5\n");
 	ppn: ;
 }
 
@@ -370,7 +376,7 @@ void drawMultiplayer(float partialTick) {
 	}
 }
 
-char dc_tc_text[256] = { 0 };
+char dc_tc_text[257] = { 0 };
 int dc_tc_curpos = 0;
 int tb_focus = 0;
 char* connectTo = NULL;
@@ -452,7 +458,7 @@ void drawConnecting(float partialTick) {
 				prt[0] = 0;
 				prt++;
 			}
-			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player1024", NULL, NULL)) cgs = 5;
+			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player4096", NULL, NULL)) cgs = 5;
 			else cgs = 6;
 		}
 		drawString("Logging In...", swidth / 2 - stringWidth("Logging In...") / 2, sheight / 2 - 54, 16777215);
@@ -530,28 +536,68 @@ void drawGUI(float partialTick) {
 	}
 }
 
-void gui_keydown(char key) {
+void gui_keyboardCallback(int key, int scancode, int action, int mods) {
 	if (guistate == GSTATE_DIRECTCONNECT) {
-		if (tb_focus == 0) {
-			if (key == '\b') {
+		if (tb_focus == 0 && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+			if (key == GLFW_KEY_BACKSPACE) {
 				size_t tl = strlen(dc_tc_text);
 				if (dc_tc_curpos > 0) {
 					memmove(dc_tc_text + dc_tc_curpos - 1, dc_tc_text + dc_tc_curpos, tl - dc_tc_curpos + 1);
 					dc_tc_curpos--;
 				}
-			} else if (key == 127) {
+			} else if (key == GLFW_KEY_DELETE) {
 				size_t tl = strlen(dc_tc_text);
 				if (dc_tc_curpos < tl) {
 					memmove(dc_tc_text + dc_tc_curpos, dc_tc_text + dc_tc_curpos + 1, tl - dc_tc_curpos);
 				}
-			} else {
+			} else if (key == GLFW_KEY_LEFT) {
+				dc_tc_curpos--;
+				if (dc_tc_curpos < 0) dc_tc_curpos = 0;
+			} else if (key == GLFW_KEY_RIGHT) {
+				dc_tc_curpos++;
+				if (dc_tc_curpos > strlen(dc_tc_text)) dc_tc_curpos--;
+			} else if (key == GLFW_KEY_HOME) {
+				dc_tc_curpos = 0;
+			} else if (key == GLFW_KEY_END) {
+				dc_tc_curpos = strlen(dc_tc_text);
+			} else if (key == GLFW_KEY_ENTER) {
+				connectTo = dc_tc_text;
+				guistate = GSTATE_CONNECTING;
+			} else if (key == GLFW_KEY_V && (mods & GLFW_MOD_CONTROL)) {
+				size_t tl = strlen(dc_tc_text);
+				const char* ins = glfwGetClipboardString(window);
+				if (ins != NULL) {
+					size_t insl = strlen(ins);
+					if (tl + insl < 256) {
+						if (dc_tc_curpos == tl) {
+							memcpy(dc_tc_text + dc_tc_curpos, ins, insl);
+							dc_tc_text[tl + insl] = 0;
+						} else if (dc_tc_curpos < tl) {
+							memmove(dc_tc_text + dc_tc_curpos + insl, dc_tc_text + dc_tc_curpos, tl - dc_tc_curpos);
+							memcpy(dc_tc_text + dc_tc_curpos, ins, insl);
+							dc_tc_text[tl + insl + 1] = 0;
+						}
+						dc_tc_curpos += insl;
+					}
+				}
+			}
+		}
+	} else if (guistate == GSTATE_INGAME) {
+		ingame_keyboardCallback(key, scancode, action, mods);
+	}
+}
+
+void gui_textCallback(unsigned int codepoint) {
+	if (guistate == GSTATE_DIRECTCONNECT) {
+		if (tb_focus == 0) {
+			if (codepoint <= 255) {
 				size_t tl = strlen(dc_tc_text);
 				if (tl + 1 < 256) {
 					if (dc_tc_curpos == tl) {
-						dc_tc_text[tl] = key;
+						dc_tc_text[tl] = codepoint;
 					} else if (dc_tc_curpos < tl) {
 						memmove(dc_tc_text + dc_tc_curpos + 1, dc_tc_text + dc_tc_curpos, tl - dc_tc_curpos);
-						dc_tc_text[dc_tc_curpos] = key;
+						dc_tc_text[dc_tc_curpos] = codepoint;
 					}
 					dc_tc_curpos++;
 				}
@@ -560,28 +606,16 @@ void gui_keydown(char key) {
 	}
 }
 
-void gui_speckeydown(int key) {
-	if (guistate == GSTATE_DIRECTCONNECT) {
-		if (tb_focus == 0) {
-			if (key == GLUT_KEY_LEFT) {
-				dc_tc_curpos--;
-				if (dc_tc_curpos < 0) dc_tc_curpos = 0;
-			} else if (key == GLUT_KEY_RIGHT) {
-				dc_tc_curpos++;
-				if (dc_tc_curpos > strlen(dc_tc_text)) dc_tc_curpos--;
-			} else if (key == GLUT_KEY_HOME) {
-				dc_tc_curpos = 0;
-			} else if (key == GLUT_KEY_END) {
-				dc_tc_curpos = strlen(dc_tc_text);
-			}
-		}
+void gui_mouseMotionCallback(double x, double y) {
+	if (guistate == GSTATE_INGAME) {
+		ingame_mouseMotionCallback(x, y);
 	}
 }
 
 void claimMouse() {
-	glutSetCursor (GLUT_CURSOR_NONE);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void unclaimMouse() {
-	glutSetCursor (GLUT_CURSOR_INHERIT);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }

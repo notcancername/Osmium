@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include "nbt.h"
 #include <pthread.h>
+#ifdef __MINGW32__
+# include <winsock2.h>
+#endif
 
 #define STATE_HANDSHAKE 0
 #define STATE_STATUS 1
@@ -23,7 +26,11 @@ void swapEndian(void* dou, size_t ss);
 int readVarInt(int32_t* output, unsigned char* buffer, size_t buflen);
 
 struct conn {
+#ifdef __MINGW32__
+		SOCKET fd;
+#else
 		int fd;
+#endif
 		unsigned char* obuf;
 		ssize_t compthres;
 		int state;

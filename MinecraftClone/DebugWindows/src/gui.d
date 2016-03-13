@@ -143,14 +143,14 @@ src/gui.d: ../src/gui.c ../src/gui.h \
  /usr/share/mingw-w64/include/sec_api/stralign_s.h \
  /usr/share/mingw-w64/include/winsvc.h /usr/share/mingw-w64/include/mcx.h \
  /usr/share/mingw-w64/include/imm.h /usr/share/mingw-w64/include/GL/glu.h \
+ /mingw/include/GLFW/glfw3.h /usr/share/mingw-w64/include/stddef.h \
  ../src/render.h ../src/models.h /usr/share/mingw-w64/include/stdio.h \
  /usr/share/mingw-w64/include/_mingw_print_push.h \
  /usr/share/mingw-w64/include/_mingw_off_t.h \
  /usr/share/mingw-w64/include/sec_api/stdio_s.h \
  /usr/share/mingw-w64/include/_mingw_print_pop.h ../src/world.h \
- ../src/entity.h /usr/share/mingw-w64/include/stdint.h \
- /usr/share/mingw-w64/include/stddef.h ../src/network.h ../src/nbt.h \
- /usr/share/mingw-w64/include/pthread.h \
+ ../src/entity.h /usr/share/mingw-w64/include/stdint.h ../src/network.h \
+ ../src/nbt.h /usr/share/mingw-w64/include/pthread.h \
  /usr/share/mingw-w64/include/errno.h \
  /usr/share/mingw-w64/include/sys/types.h \
  /usr/share/mingw-w64/include/process.h \
@@ -167,7 +167,6 @@ src/gui.d: ../src/gui.c ../src/gui.h \
  /usr/share/mingw-w64/include/time.h \
  /usr/share/mingw-w64/include/sec_api/time_s.h \
  /usr/share/mingw-w64/include/pthread_time.h /mingw/include/pngconf.h \
- /mingw/include/GL/glut.h /mingw/include/GL/freeglut_std.h \
  ../src/ingame.h
 
 ../src/gui.h:
@@ -472,6 +471,10 @@ src/gui.d: ../src/gui.c ../src/gui.h \
 
 /usr/share/mingw-w64/include/GL/glu.h:
 
+/mingw/include/GLFW/glfw3.h:
+
+/usr/share/mingw-w64/include/stddef.h:
+
 ../src/render.h:
 
 ../src/models.h:
@@ -491,8 +494,6 @@ src/gui.d: ../src/gui.c ../src/gui.h \
 ../src/entity.h:
 
 /usr/share/mingw-w64/include/stdint.h:
-
-/usr/share/mingw-w64/include/stddef.h:
 
 ../src/network.h:
 
@@ -541,9 +542,5 @@ src/gui.d: ../src/gui.c ../src/gui.h \
 /usr/share/mingw-w64/include/pthread_time.h:
 
 /mingw/include/pngconf.h:
-
-/mingw/include/GL/glut.h:
-
-/mingw/include/GL/freeglut_std.h:
 
 ../src/ingame.h:

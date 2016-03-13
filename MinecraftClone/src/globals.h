@@ -8,6 +8,8 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
+#include <GLFW/glfw3.h>
+
 int width;
 int height;
 int swidth;
@@ -19,6 +21,9 @@ int csf;
 int def_width;
 int def_height;
 int def_wrap;
+int hasMouse;
+GLFWwindow* window;
+
 #define PI 3.141592653589793
 
 #ifdef __MINGW32__

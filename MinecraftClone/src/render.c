@@ -137,26 +137,6 @@ void drawSkeleton(struct vao* vao) {
 	glBindVertexArray(0);
 }
 
-void drawCube() {
-	glBindVertexArray(mod_cube.vao);
-	GLsizei count[6];
-	count[0] = 4;
-	count[1] = 4;
-	count[2] = 4;
-	count[3] = 4;
-	count[4] = 4;
-	count[5] = 4;
-	GLint first[6];
-	first[0] = 0;
-	first[1] = 4;
-	first[2] = 8;
-	first[3] = 12;
-	first[4] = 16;
-	first[5] = 20;
-	glMultiDrawArrays(GL_QUADS, first, count, 6);
-	glBindVertexArray(0);
-}
-
 int updateChunk(struct chunk* chunk) {
 	for (int i = 0; i < 16; i++) {
 		if (chunk->needsUpdate[i]) {

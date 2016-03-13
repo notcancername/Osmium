@@ -18,8 +18,10 @@ void claimMouse();
 
 void unclaimMouse();
 
-void gui_keydown(char key);
+void gui_keyboardCallback(int key, int scancode, int action, int mods);
 
-void gui_speckeydown(int key);
+void gui_textCallback(unsigned int codepoint);
+
+void gui_mouseMotionCallback(double x, double y);
 
 #endif /* GUI_H_ */

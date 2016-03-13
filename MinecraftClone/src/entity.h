@@ -13,6 +13,10 @@
 #define ENTITY_OURPLAYER 1
 #define ENTITY_MPPLAYER 2
 
+union entity_data {
+
+};
+
 struct entity {
 		uint32_t id;
 		double x;
@@ -27,9 +31,11 @@ struct entity {
 		float pitch;
 		float lpitch;
 		int onGround;
-		float motX;
-		float motY;
-		float motZ;
+		double motX;
+		double motY;
+		double motZ;
+		union entity_data data;
+		float health;
 };
 
 struct entity* newEntity(uint32_t id, float x, float y, float z, uint8_t type, float yaw, float pitch);

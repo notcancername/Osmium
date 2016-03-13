@@ -164,7 +164,7 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
  /usr/share/mingw-w64/include/sec_api/stralign_s.h \
  /usr/share/mingw-w64/include/winsvc.h /usr/share/mingw-w64/include/mcx.h \
  /usr/share/mingw-w64/include/imm.h /usr/share/mingw-w64/include/GL/glu.h \
- ../src/globals.h ../src/gui.h
+ /mingw/include/GLFW/glfw3.h ../src/globals.h ../src/gui.h ../src/block.h
 
 ../src/ingame.h:
 
@@ -522,6 +522,10 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
 
 /usr/share/mingw-w64/include/GL/glu.h:
 
+/mingw/include/GLFW/glfw3.h:
+
 ../src/globals.h:
 
 ../src/gui.h:
+
+../src/block.h:

@@ -1,14 +1,15 @@
-#include "gui.h"
-#include "globals.h"
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef __MINGW32__
 #define GLEW_STATIC
 #include <GL/glew.h>
 #endif
+#include "gui.h"
+#include "globals.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
+#include <GL/glext.h>
+#include <GLFW/glfw3.h>
 #include <pthread.h>
 #include <time.h>
 #include <png.h>
@@ -18,7 +19,6 @@
 #include <errno.h>
 #include "render.h"
 #include "models.h"
-#include <GL/glext.h>
 #ifdef __MINGW32__
 # include <winsock2.h>
 #else
@@ -28,32 +28,23 @@
 #include "ingame.h"
 #include "block.h"
 
-#define HEIGHT 0.4
-
 int fr = 30;
 int rr = 0;
 int b1d = 0;
 float chx = 0.;
 float chy = 0.;
 
-int lmx = -1;
-int lmy = -1;
-
 void tick() {
 	gui_tick();
 	ingame_tick();
 }
 
-void keyboardCallback(unsigned char key, int x, int y) {
-	gui_keydown(key);
+void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	gui_keyboardCallback(key, scancode, action, mods);
 }
 
-void keyboardSpecCallback(unsigned char key, int x, int y) {
-	gui_speckeydown(key);
-}
-
-void keyboardUpCallback(unsigned char key, int x, int y) {
-
+void textCallback(GLFWwindow* window, unsigned int codepoint) {
+	gui_textCallback(codepoint);
 }
 
 struct timespec ts;
@@ -63,8 +54,7 @@ int frames;
 
 void displayCallback() {
 	frames++;
-	width = glutGet(GLUT_WINDOW_WIDTH);
-	height = glutGet(GLUT_WINDOW_HEIGHT);
+	glfwGetFramebufferSize(window, &width, &height);
 	int v5 = 1000;
 	int sf = 1;
 	swidth = width;
@@ -91,7 +81,7 @@ void displayCallback() {
 	//struct timespec ts2;
 	//clock_gettime(CLOCK_MONOTONIC, &ts2);
 	//printf("tick-time: %f\n", ((double) ts2.tv_sec * 1000. + (double) ts2.tv_nsec / 1000000.) - ms2);
-	float partialTick = (ms2 - lt) / 50.;
+	float partialTick = 1. - ((ms2 - lt) / 50.);
 	//ppitch = ourPlayer->pitch * (1. - partialTick) + ourPlayer->lpitch * partialTick;
 	//pyaw = ourPlayer->yaw * (1. - partialTick) + ourPlayer->lyaw * partialTick;
 	//px = ourPlayer->x * (1. - partialTick) + ourPlayer->lx * partialTick;
@@ -157,45 +147,20 @@ void displayCallback() {
 		printf("GLError: %s\n", es);
 	}
 	glFlush();
-	glutSwapBuffers();
-	glutPostRedisplay();
 	mouseButton = -1;
 	//clock_gettime(CLOCK_MONOTONIC, &ts2);
 	//printf("render-time: %f\n", ((double) ts2.tv_sec * 1000. + (double) ts2.tv_nsec / 1000000.) - ms2);
 }
 
-int moc = 0;
-
-void mouseMotionCallback(int x, int y) {
-	if (gs.player != NULL && spawnedIn) {
-		if (!moc) {
-			moc = 1;
-			claimMouse();
-		}
-		if (lmx >= 0) {
-			int dx = lmx - x;
-			int dy = lmy - y;
-			gs.player->pitch -= dy * 0.1;
-			if (gs.player->pitch > 89.9) gs.player->pitch = 89.9;
-			if (gs.player->pitch < -89.9) gs.player->pitch = -89.9;
-			gs.player->yaw -= dx * 0.1;
-			if (dx * dx + dy * dy > 0.) {
-				glutWarpPointer(glutGet(GLUT_WINDOW_WIDTH) / 2, glutGet(GLUT_WINDOW_HEIGHT) / 2);
-			}
-		}
-		lmx = glutGet(GLUT_WINDOW_WIDTH) / 2;
-		lmy = glutGet(GLUT_WINDOW_HEIGHT) / 2;
-	} else if (moc) {
-		moc = 0;
-		unclaimMouse();
-	}
+void mouseMotionCallback(GLFWwindow* window, double x, double y) {
+	gui_mouseMotionCallback(x, y);
 	mouseX = x / (csf == 0 ? 1 : csf);
 	mouseY = y / (csf == 0 ? 1 : csf);
 }
 
-void mouseCallback(int button, int state, int x, int y) {
+void mouseCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (button == 3 || button == 4) {
-		if (state == GLUT_UP) return;
+		//if (state == GLUT_UP) return;
 		//if (button == 3) {
 		//	heldItem++;
 		//	if (heldItem == 9) heldItem = 0;
@@ -204,7 +169,15 @@ void mouseCallback(int button, int state, int x, int y) {
 		//	if (heldItem == -1) heldItem = 8;
 		//}
 	}
-	if (state == GLUT_DOWN) mouseButton = button;
+	if (action == GLFW_PRESS) mouseButton = button;
+}
+
+void error_callback(int error, const char* description) {
+	printf("GLFW error: %s\n", description);
+}
+
+void cursorEnterCallback(GLFWwindow* window, int entered) {
+	hasMouse = entered;
 }
 
 int main(int argc, char *argv[]) {
@@ -213,58 +186,68 @@ int main(int argc, char *argv[]) {
 	WSADATA wsaData;
 	WSAStartup(versionWanted, &wsaData);
 #endif
+	printf("Loading... [FROM=%s]\n", INSTALLDIR);
 	width = 800;
 	height = 600;
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB | GLUT_MULTISAMPLE);
-	glutInitWindowSize(800, 600);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Minecraft 1.9 (C Version)");
+	if (!glfwInit()) return -1;
+	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+	glfwSetErrorCallback(error_callback);
+	window = glfwCreateWindow(800, 600, "Minecraft 1.9 (C Version)", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent (window);
 #ifdef __MINGW32__
-	glewInit();
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if(err != GLEW_OK) {
+		printf("GLEW Init error: %s\n", glewGetErrorString(err));
+		glfwTerminate();
+		return -1;
+	}
+	if(!glewIsSupported("GL_VERSION_2_1") || !glewIsSupported("GL_ARB_vertex_program")) {
+		printf("OpenGL version 2.1+ or GL_ARB_vertex_program not satisfied.\n");
+		glfwTerminate();
+		return -1;
+	}
 #endif
-	glutKeyboardFunc(keyboardCallback);
-	glutKeyboardUpFunc(keyboardUpCallback);
-	glutSpecialFunc(keyboardSpecCallback);
-	glutDisplayFunc(displayCallback);
-	glutMotionFunc(mouseMotionCallback);
-	glutMouseFunc(mouseCallback);
-	glutPassiveMotionFunc(mouseMotionCallback);
+	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 	glEnable (GL_MULTISAMPLE);
 	glEnable (GL_MULTISAMPLE_ARB);
 	glEnable (GL_DEPTH_TEST);
-	printf("Loading... [FROM=%s]\n", INSTALLDIR);
-	loadTexturePNG(INSTALLDIR "floor.png", TX_FLOOR, 0);
-	loadTexturePNG(INSTALLDIR "crosshair.png", TX_CROSSHAIR, 0);
+	glEnable (GL_TEXTURE_2D);
 	loadGUI();
 	loadIngame();
 	loadBlocks();
-	struct vertex_tex floorv[4];
-	virtTexCoord2f(&floorv[0], 0., 0.);
-	virtVertex3f(&floorv[0], -1000., 0., -1000.);
-	virtTexCoord2f(&floorv[1], 6000.0, 0.0);
-	virtVertex3f(&floorv[1], 1000, 0, -1000);
-	virtTexCoord2f(&floorv[2], 6000.0, 6000.0);
-	virtVertex3f(&floorv[2], 1000, 0, 1000);
-	virtTexCoord2f(&floorv[3], 0.0, 6000.0);
-	virtVertex3f(&floorv[3], -1000, 0, 1000);
-	createVAO(floorv, 4, &mod_floor, 1, 0);
-	createTexCube(0.5, &mod_cube);
 	def_wrap = 32;
 	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", def_wrap, &def_width, &def_height, TX_DEFAULT, 1);
-	//world = newWorld();
-	//setBlockWorld(world, BLK_WOOD, 0, 0, 0);
-	//setBlockWorld(world, BLK_WOOD, 2, 0, 0);
-	//setBlockWorld(world, BLK_WOOD, 0, 0, 2);
-	//setBlockWorld(world, BLK_WOOD, 2, 0, 2);
-	//setBlockWorld(world, BLK_WOOD, -1, 0, 0);
-	//setBlockWorld(world, BLK_WOOD, 0, 0, -1);
-	//setBlockWorld(world, BLK_WOOD, -1, 0, -1);
-	//ourPlayer = newEntity(0, 0., HEIGHT, 3., ENTITY_OURPLAYER, 0., 0.);
-	//spawnEntity(world, ourPlayer);
-	printf("Loaded.\n");
 	clock_gettime(CLOCK_MONOTONIC, &ts);
 	lt = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
 	lf = lt;
-	glutMainLoop();
+	glfwSetKeyCallback(window, keyboardCallback);
+	glfwSetCursorEnterCallback(window, cursorEnterCallback);
+	glfwSetCharCallback(window, textCallback);
+	glfwSetCursorPosCallback(window, mouseMotionCallback);
+	glfwSetMouseButtonCallback(window, mouseCallback);
+	printf("Loaded.\n");
+	while (!glfwWindowShouldClose(window)) {
+		displayCallback();
+		glfwSwapBuffers(window);
+		glfwSwapInterval(1);
+		glfwPollEvents();
+	}
+	glfwTerminate();
+	return 0;
+//glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB | GLUT_MULTISAMPLE);
+
+//glutKeyboardFunc(keyboardCallback);
+//glutKeyboardUpFunc(keyboardUpCallback);
+//glutSpecialFunc(keyboardSpecCallback);
+//glutDisplayFunc(displayCallback);
+//glutMotionFunc(mouseMotionCallback);
+//glutMouseFunc(mouseCallback);
+//glutPassiveMotionFunc(mouseMotionCallback);
+//glutSetKeyRepeat (GLUT_KEY_REPEAT_OFF);
 }

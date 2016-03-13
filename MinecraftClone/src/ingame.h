@@ -17,8 +17,26 @@ struct gamestate {
 		int gamemode;
 		int maxPlayers;
 		int reducedDebugInfo;
+		int moveForward;
+		int moveBackward;
+		int moveLeft;
+		int moveRight;
+		int sprinting;
+		int jumping;
+		int crouching;
+		int jumpTicks;
+		int usingItem;
+		int flying;
+		float moveSpeed;
+		int isCollidedHorizontally;
+		int isCollidedVertically;
+		struct entity* riding;
 		struct conn* conn;
 };
+
+void ingame_keyboardCallback(int key, int scancode, int action, int mods);
+
+void ingame_mouseMotionCallback(double x, double y);
 
 struct gamestate gs;
 

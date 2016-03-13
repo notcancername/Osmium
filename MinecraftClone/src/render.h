@@ -43,8 +43,6 @@ struct vao {
 
 #define TX_NONE 0
 #define TX_DEFAULT 1
-#define TX_FLOOR 2
-#define TX_CROSSHAIR 3
 #define TX_WIDGETS 4
 #define TX_OPTIONSBG 5
 //#define TX_HOTBARH 5
@@ -74,8 +72,6 @@ void drawSkeleton(struct vao* vao);
 void drawTriangles(struct vao* vao);
 
 void drawQuads(struct vao* vao);
-
-void drawCube();
 
 void drawChunk(struct chunk* chunk);
 

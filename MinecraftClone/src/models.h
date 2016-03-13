@@ -12,9 +12,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct vao mod_floor;
-struct vao mod_cube;
-
 int loadTexturePNG(char* path, int id, int s);
 
 int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s);
