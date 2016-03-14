@@ -96,23 +96,89 @@ void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z
 	}
 	//
 	if (faceMask & 0x10) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
+		virtTexCoord2f(&vrt[vx], tx2, ty2);
 		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
 		virtTexCoord2f(&vrt[vx], tx2, ty1);
 		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
+		virtTexCoord2f(&vrt[vx], tx1, ty1);
 		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
 		virtTexCoord2f(&vrt[vx], tx1, ty2);
 		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
 	}
 	if (faceMask & 0x20) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
+		virtTexCoord2f(&vrt[vx], tx2, ty2);
 		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
 		virtTexCoord2f(&vrt[vx], tx1, ty2);
 		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
+		virtTexCoord2f(&vrt[vx], tx1, ty1);
 		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
 		virtTexCoord2f(&vrt[vx], tx2, ty1);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+	}
+}
+
+void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
+	int vx = 0;
+	if (faceMask & 0x01) {
+		virtTexCoord2f(&vrt[vx], tx2[2], ty2[2]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1[2], ty2[2]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1[2], ty1[2]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx2[2], ty1[2]);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+	}
+	if (faceMask & 0x02) {
+		virtTexCoord2f(&vrt[vx], tx2[3], ty2[3]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx2[3], ty1[3]);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1[3], ty1[3]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1[3], ty2[3]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+	}
+	//
+	if (faceMask & 0x04) {
+		virtTexCoord2f(&vrt[vx], tx1[0], ty1[0]);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1[0], ty2[0]);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx2[0], ty2[0]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx2[0], ty1[0]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+	}
+	if (faceMask & 0x08) {
+		virtTexCoord2f(&vrt[vx], tx1[1], ty1[1]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx2[1], ty1[1]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx2[1], ty2[1]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1[1], ty2[1]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+	}
+	//
+	if (faceMask & 0x10) {
+		virtTexCoord2f(&vrt[vx], tx2[4], ty2[4]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx2[4], ty1[4]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1[4], ty1[4]);
+		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1[4], ty2[4]);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+	}
+	if (faceMask & 0x20) {
+		virtTexCoord2f(&vrt[vx], tx2[5], ty2[5]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1[5], ty2[5]);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1[5], ty1[5]);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx2[5], ty1[5]);
 		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
 	}
 }

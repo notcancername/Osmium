@@ -160,6 +160,9 @@ src/gui.d: ../src/gui.c ../src/gui.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
  /usr/share/mingw-w64/include/pthread_unistd.h \
+ /usr/share/mingw-w64/include/winsock2.h \
+ /usr/share/mingw-w64/include/psdk_inc/_ws1_undef.h \
+ /usr/share/mingw-w64/include/ws2def.h /usr/share/mingw-w64/include/qos.h \
  /usr/share/mingw-w64/include/math.h ../src/globals.h \
  /usr/share/mingw-w64/include/fcntl.h /usr/share/mingw-w64/include/io.h \
  /usr/share/mingw-w64/include/sec_api/io_s.h /mingw/include/png.h \
@@ -518,6 +521,14 @@ src/gui.d: ../src/gui.c ../src/gui.h \
 /usr/share/mingw-w64/include/pthread_compat.h:
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
+
+/usr/share/mingw-w64/include/winsock2.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_ws1_undef.h:
+
+/usr/share/mingw-w64/include/ws2def.h:
+
+/usr/share/mingw-w64/include/qos.h:
 
 /usr/share/mingw-w64/include/math.h:
 

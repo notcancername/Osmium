@@ -23,18 +23,8 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
  /usr/share/mingw-w64/include/pthread_unistd.h \
- /usr/share/mingw-w64/include/stdio.h \
- /usr/share/mingw-w64/include/_mingw_print_push.h \
- /usr/share/mingw-w64/include/sec_api/stdio_s.h \
- /usr/share/mingw-w64/include/_mingw_print_pop.h /mingw/include/png.h \
- /mingw/include/pnglibconf.h /usr/share/mingw-w64/include/setjmp.h \
- /usr/share/mingw-w64/include/time.h \
- /usr/share/mingw-w64/include/_timeval.h \
- /usr/share/mingw-w64/include/sec_api/time_s.h \
- /usr/share/mingw-w64/include/pthread_time.h /mingw/include/pngconf.h \
- /usr/share/mingw-w64/include/string.h \
- /usr/share/mingw-w64/include/sec_api/string_s.h \
- /usr/share/mingw-w64/include/GL/gl.h \
+ /usr/share/mingw-w64/include/winsock2.h \
+ /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
  /usr/share/mingw-w64/include/sdkddkver.h \
  /usr/share/mingw-w64/include/excpt.h \
@@ -45,12 +35,13 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/winapifamily.h \
  /usr/share/mingw-w64/include/specstrings.h \
  /usr/share/mingw-w64/include/sal.h /usr/share/mingw-w64/include/winnt.h \
- /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/ctype.h \
  /usr/share/mingw-w64/include/apiset.h \
  /usr/share/mingw-w64/include/psdk_inc/intrin-impl.h \
  /usr/share/mingw-w64/include/basetsd.h \
  /usr/share/mingw-w64/include/guiddef.h \
+ /usr/share/mingw-w64/include/string.h \
+ /usr/share/mingw-w64/include/sec_api/string_s.h \
  /usr/share/mingw-w64/include/pshpack4.h \
  /usr/share/mingw-w64/include/poppack.h \
  /usr/share/mingw-w64/include/pshpack4.h \
@@ -121,15 +112,6 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/shellapi.h \
  /usr/share/mingw-w64/include/winperf.h \
  /usr/share/mingw-w64/include/winsock.h \
- /usr/share/mingw-w64/include/_bsd_types.h \
- /usr/share/mingw-w64/include/inaddr.h \
- /usr/share/mingw-w64/include/psdk_inc/_socket_types.h \
- /usr/share/mingw-w64/include/psdk_inc/_fd_types.h \
- /usr/share/mingw-w64/include/psdk_inc/_ip_types.h \
- /usr/share/mingw-w64/include/psdk_inc/_ip_mreq1.h \
- /usr/share/mingw-w64/include/psdk_inc/_wsadata.h \
- /usr/share/mingw-w64/include/psdk_inc/_xmitfile.h \
- /usr/share/mingw-w64/include/psdk_inc/_wsa_errnos.h \
  /usr/share/mingw-w64/include/wincrypt.h \
  /usr/share/mingw-w64/include/bcrypt.h \
  /usr/share/mingw-w64/include/ncrypt.h \
@@ -163,7 +145,26 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/stralign.h \
  /usr/share/mingw-w64/include/sec_api/stralign_s.h \
  /usr/share/mingw-w64/include/winsvc.h /usr/share/mingw-w64/include/mcx.h \
- /usr/share/mingw-w64/include/imm.h ../src/xstring.h \
+ /usr/share/mingw-w64/include/imm.h \
+ /usr/share/mingw-w64/include/psdk_inc/_ws1_undef.h \
+ /usr/share/mingw-w64/include/_timeval.h \
+ /usr/share/mingw-w64/include/_bsd_types.h \
+ /usr/share/mingw-w64/include/inaddr.h \
+ /usr/share/mingw-w64/include/psdk_inc/_socket_types.h \
+ /usr/share/mingw-w64/include/psdk_inc/_fd_types.h \
+ /usr/share/mingw-w64/include/psdk_inc/_ip_types.h \
+ /usr/share/mingw-w64/include/psdk_inc/_wsadata.h \
+ /usr/share/mingw-w64/include/ws2def.h \
+ /usr/share/mingw-w64/include/psdk_inc/_wsa_errnos.h \
+ /usr/share/mingw-w64/include/qos.h /usr/share/mingw-w64/include/stdio.h \
+ /usr/share/mingw-w64/include/_mingw_print_push.h \
+ /usr/share/mingw-w64/include/sec_api/stdio_s.h \
+ /usr/share/mingw-w64/include/_mingw_print_pop.h /mingw/include/png.h \
+ /mingw/include/pnglibconf.h /usr/share/mingw-w64/include/setjmp.h \
+ /usr/share/mingw-w64/include/time.h \
+ /usr/share/mingw-w64/include/sec_api/time_s.h \
+ /usr/share/mingw-w64/include/pthread_time.h /mingw/include/pngconf.h \
+ /usr/share/mingw-w64/include/GL/gl.h ../src/xstring.h \
  /usr/share/mingw-w64/include/dirent.h /usr/share/mingw-w64/include/io.h \
  /usr/share/mingw-w64/include/sec_api/io_s.h
 
@@ -227,35 +228,9 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
 
-/usr/share/mingw-w64/include/stdio.h:
+/usr/share/mingw-w64/include/winsock2.h:
 
-/usr/share/mingw-w64/include/_mingw_print_push.h:
-
-/usr/share/mingw-w64/include/sec_api/stdio_s.h:
-
-/usr/share/mingw-w64/include/_mingw_print_pop.h:
-
-/mingw/include/png.h:
-
-/mingw/include/pnglibconf.h:
-
-/usr/share/mingw-w64/include/setjmp.h:
-
-/usr/share/mingw-w64/include/time.h:
-
-/usr/share/mingw-w64/include/_timeval.h:
-
-/usr/share/mingw-w64/include/sec_api/time_s.h:
-
-/usr/share/mingw-w64/include/pthread_time.h:
-
-/mingw/include/pngconf.h:
-
-/usr/share/mingw-w64/include/string.h:
-
-/usr/share/mingw-w64/include/sec_api/string_s.h:
-
-/usr/share/mingw-w64/include/GL/gl.h:
+/usr/share/mingw-w64/include/_mingw_unicode.h:
 
 /usr/share/mingw-w64/include/windows.h:
 
@@ -279,8 +254,6 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 
 /usr/share/mingw-w64/include/winnt.h:
 
-/usr/share/mingw-w64/include/_mingw_unicode.h:
-
 /usr/share/mingw-w64/include/ctype.h:
 
 /usr/share/mingw-w64/include/apiset.h:
@@ -290,6 +263,10 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/basetsd.h:
 
 /usr/share/mingw-w64/include/guiddef.h:
+
+/usr/share/mingw-w64/include/string.h:
+
+/usr/share/mingw-w64/include/sec_api/string_s.h:
 
 /usr/share/mingw-w64/include/pshpack4.h:
 
@@ -437,24 +414,6 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 
 /usr/share/mingw-w64/include/winsock.h:
 
-/usr/share/mingw-w64/include/_bsd_types.h:
-
-/usr/share/mingw-w64/include/inaddr.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_socket_types.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_fd_types.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_ip_types.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_ip_mreq1.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_wsadata.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_xmitfile.h:
-
-/usr/share/mingw-w64/include/psdk_inc/_wsa_errnos.h:
-
 /usr/share/mingw-w64/include/wincrypt.h:
 
 /usr/share/mingw-w64/include/bcrypt.h:
@@ -524,6 +483,52 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/mcx.h:
 
 /usr/share/mingw-w64/include/imm.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_ws1_undef.h:
+
+/usr/share/mingw-w64/include/_timeval.h:
+
+/usr/share/mingw-w64/include/_bsd_types.h:
+
+/usr/share/mingw-w64/include/inaddr.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_socket_types.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_fd_types.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_ip_types.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_wsadata.h:
+
+/usr/share/mingw-w64/include/ws2def.h:
+
+/usr/share/mingw-w64/include/psdk_inc/_wsa_errnos.h:
+
+/usr/share/mingw-w64/include/qos.h:
+
+/usr/share/mingw-w64/include/stdio.h:
+
+/usr/share/mingw-w64/include/_mingw_print_push.h:
+
+/usr/share/mingw-w64/include/sec_api/stdio_s.h:
+
+/usr/share/mingw-w64/include/_mingw_print_pop.h:
+
+/mingw/include/png.h:
+
+/mingw/include/pnglibconf.h:
+
+/usr/share/mingw-w64/include/setjmp.h:
+
+/usr/share/mingw-w64/include/time.h:
+
+/usr/share/mingw-w64/include/sec_api/time_s.h:
+
+/usr/share/mingw-w64/include/pthread_time.h:
+
+/mingw/include/pngconf.h:
+
+/usr/share/mingw-w64/include/GL/gl.h:
 
 ../src/xstring.h:
 

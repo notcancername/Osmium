@@ -114,7 +114,11 @@ int writeVarInt_stream(int32_t input,
 		}
 		input >>= 7;
 	}
+#ifdef __MINGW32__
+	if (send(fd, &input, 1, 0) != 1) return -1;
+#else
 	if (write(fd, &input, 1) != 1) return -1;
+#endif
 	return i;
 }
 
@@ -634,8 +638,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 	if (conn->compthres >= 0) {
 		int32_t pl = 0;
 		int32_t dl = 0;
+		//printf("reading pl\n");
 		readVarInt_stream(&pl, conn->fd);
+		//printf("pl = %i\n", pl);
 		pl -= readVarInt_stream(&dl, conn->fd);
+		//printf("dl = %i\n", dl);
 		if (dl == 0) {
 			pktlen = pl;
 			if (pktlen > 0) {
@@ -648,6 +655,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 					ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
 #endif
 					if (x <= 0) {
+						printf("read error: %s\n", strerror(errno));
 						free(pktbuf);
 						return -1;
 					}
@@ -665,6 +673,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 					ssize_t x = read(conn->fd, cmppkt + r, pl - r);
 #endif
 					if (x <= 0) {
+						printf("read error: %s\n", strerror(errno));
 						free(cmppkt);
 						return -1;
 					}
@@ -681,6 +690,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				if ((dr = inflateInit(&strm)) != Z_OK) {
 					free(pktbuf);
 					free(cmppkt);
+					printf("Compression initialization error!\n");
 					return -1;
 				}
 				strm.avail_in = pl;
@@ -692,6 +702,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 					if (dr == Z_STREAM_ERROR) {
 						free(pktbuf);
 						free(cmppkt);
+						printf("Compression Read Error\n");
 						return -1;
 					}
 					strm.avail_out = pktlen - strm.total_out;
@@ -699,10 +710,15 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				} while (strm.avail_in > 0 || strm.total_out < pktlen);
 				inflateEnd(&strm);
 				free(cmppkt);
-			} else return -1;
+			} else {
+				printf("Incoherent Compression Data!\n");
+				return -1;
+			}
 		}
 	} else {
+		printf("reading pktlen\n");
 		readVarInt_stream(&pktlen, conn->fd);
+		printf("pktlen = %i\n", pktlen);
 		if (pktlen > 0) {
 			pktbuf = malloc(pktlen);
 			size_t r = 0;
@@ -712,7 +728,9 @@ int readPacket(struct conn* conn, struct packet* packet) {
 #else
 				ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
 #endif
+				printf("read = %i\n", x);
 				if (x <= 0) {
+					printf("read error: %s\n", strerror(errno));
 					free(pktbuf);
 					return -1;
 				}
@@ -721,10 +739,12 @@ int readPacket(struct conn* conn, struct packet* packet) {
 		}
 	}
 	if (pktbuf == NULL) return 0;
+
 	unsigned char* pbuf = (unsigned char*) pktbuf;
 	size_t ps = pktlen;
 	int32_t id = 0;
 	size_t t = readVarInt(&id, pbuf, ps);
+	//printf("pktid = %i\n", id);
 	pbuf += t;
 	ps -= t;
 	packet->id = id;
@@ -2920,12 +2940,14 @@ int writePacket(struct conn* conn, struct packet* packet) {
 		if (v < 1) {
 			if (frp) free(wrt);
 			if (v == 0) errno = ECONNRESET;
+			printf("err: %s\n", strerror(errno));
 			pthread_mutex_unlock(&conn->writeMutex);
 			return -1;
 		}
 		wi += v;
 	}
 	if (frp) free(wrt);
+	//printf("write success\n");
 	pthread_mutex_unlock(&conn->writeMutex);
 	return 0;
 }

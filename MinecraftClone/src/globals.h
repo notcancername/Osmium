@@ -23,6 +23,9 @@ int def_height;
 int def_wrap;
 int hasMouse;
 GLFWwindow* window;
+char** blockMap;
+int* blockSizeMap;
+int blockMapLength;
 
 #define PI 3.141592653589793
 

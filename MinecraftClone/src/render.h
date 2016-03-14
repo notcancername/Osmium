@@ -65,6 +65,8 @@ void deleteVAO(struct vao* vao);
 
 void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float tx1, float ty1, float tx2, float ty2);
 
+void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2);
+
 void createTexCube(float size, struct vao* vao);
 
 void drawSkeleton(struct vao* vao);

@@ -44,7 +44,7 @@ C_DEPS += \
 src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	i686-w64-mingw32-gcc -std=gnu11 -I/mingw/include/ -I/usr/share/mingw-w64/include -O0 -g3 -Wall -c -fmessage-length=0 -m32 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	i686-w64-mingw32-gcc -std=gnu11 -I/mingw/include/ -I/usr/share/mingw-w64/include -O0 -g3 -Wall -c -fmessage-length=0 -m32  -mno-ms-bitfields -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

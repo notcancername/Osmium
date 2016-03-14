@@ -25,7 +25,6 @@
 int running = 0;
 
 void loadIngame() {
-	loadTexturePNG(INSTALLDIR "floor.png", TX_DEFAULT, 0);
 	gs.moveSpeed = .1;
 }
 

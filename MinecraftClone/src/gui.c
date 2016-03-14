@@ -56,7 +56,6 @@ void gui_tick() {
 }
 
 void loadGUI() {
-	printf("2.1.1\n");
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_0.png", TX_PAN0, 0);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_1.png", TX_PAN1, 0);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/background/panorama_2.png", TX_PAN2, 0);
@@ -66,7 +65,6 @@ void loadGUI() {
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/title/minecraft.png", TX_TITLE, 1);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/widgets.png", TX_WIDGETS, 1);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/gui/options_background.png", TX_OPTIONSBG, 1);
-	printf("2.1.2\n");
 	struct vertex_tex vt[4];
 	virtVertex3f(&vt[0], -1., -1., 1.);
 	virtTexCoord2f(&vt[0], 0., 0.);
@@ -76,9 +74,7 @@ void loadGUI() {
 	virtTexCoord2f(&vt[2], 1., 1.);
 	virtVertex3f(&vt[3], -1., 1., 1.);
 	virtTexCoord2f(&vt[3], 0., 1.);
-	printf("2.1.2.1\n");
 	createVAO(vt, 4, &mod_pan, 1, 0);
-	printf("2.1.3\n");
 	for (int32_t i = 0; i < 32; i++) {
 		int32_t v6 = (i >> 3 & 1) * 85;
 		int32_t v7 = (i >> 2 & 1) * 170 + v6;
@@ -96,7 +92,6 @@ void loadGUI() {
 		fontColors[i][1] = v8;
 		fontColors[i][2] = v9;
 	}
-	printf("2.1.4\n");
 	FILE* fd = fopen(INSTALLDIR "assets/minecraft/textures/font/ascii.png", "rb");
 	if (!fd) goto ppn;
 	png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -161,7 +156,6 @@ void loadGUI() {
 	loadTextureData(TX_ASCII, width, height, pngd, 1);
 	free(pngd);
 	fclose (fd);
-	printf("2.1.5\n");
 	ppn: ;
 }
 
