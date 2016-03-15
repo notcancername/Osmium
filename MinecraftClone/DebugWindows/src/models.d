@@ -166,7 +166,8 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/pthread_time.h /mingw/include/pngconf.h \
  /usr/share/mingw-w64/include/GL/gl.h ../src/xstring.h \
  /usr/share/mingw-w64/include/dirent.h /usr/share/mingw-w64/include/io.h \
- /usr/share/mingw-w64/include/sec_api/io_s.h
+ /usr/share/mingw-w64/include/sec_api/io_s.h \
+ /usr/share/mingw-w64/include/math.h
 
 ../src/models.h:
 
@@ -537,3 +538,5 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/io.h:
 
 /usr/share/mingw-w64/include/sec_api/io_s.h:
+
+/usr/share/mingw-w64/include/math.h:

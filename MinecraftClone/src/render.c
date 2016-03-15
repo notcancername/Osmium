@@ -54,23 +54,23 @@ void deleteVAO(struct vao* vao) {
 void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float tx1, float ty1, float tx2, float ty2) {
 	int vx = 0;
 	if (faceMask & 0x01) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
 		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
 		virtTexCoord2f(&vrt[vx], tx1, ty2);
+		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx1, ty1);
+		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtTexCoord2f(&vrt[vx], tx2, ty1);
 		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
 	}
 	if (faceMask & 0x02) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
 		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
 		virtTexCoord2f(&vrt[vx], tx2, ty1);
+		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1, ty1);
+		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtTexCoord2f(&vrt[vx], tx1, ty2);
 		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
 	}
 	//

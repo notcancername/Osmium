@@ -76,9 +76,9 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 		png_init_io(png, fd);
 		png_read_info(png, info);
 		int width = png_get_image_width(png, info);
-		if (rw == 0) rw = width;
+		if (rw == 0) rw = width + (2 * TEXTURE_BUFFER);
 		int height = png_get_image_height(png, info);
-		if (rh == 0) rh = height;
+		if (rh == 0) rh = height + (2 * TEXTURE_BUFFER);
 		if (tpngd == NULL) {
 			tpngd = malloc((rh * 4 * rw) * maps);
 		}
@@ -95,12 +95,15 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 		png_byte** row_pointers = (png_byte**) malloc(sizeof(png_byte*) * height);
 		int rx = mo % wrap;
 		int ry = mo / wrap;
+		int prx = rx;
+		int pry = ry;
 		mo++;
 		int bry = 0;
-		for (int y = 0; y < height; y++) {
-			if (y >= rh) {
-				height -= rh;
-				y = 0;
+		int ph = height;
+		for (int y = TEXTURE_BUFFER; y < height + TEXTURE_BUFFER; y++) {
+			if (y >= rh - TEXTURE_BUFFER) {
+				height -= rh - (2 * TEXTURE_BUFFER);
+				y = TEXTURE_BUFFER;
 				rx++;
 				if (rx >= wrap) {
 					rx = 0;
@@ -114,13 +117,59 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				tpngd = realloc(tpngd, *h * *w * 4);
 			}
 			//printf("ri = %i size = %i len = %i\n", (ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4), (rh * 4 * rw) * (maps + (mo - (mi - 1))), png_get_rowbytes(png, info));
-			row_pointers[bry] = (png_byte*) ((ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4));
+			row_pointers[bry] = (png_byte*) ((ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4)) + (4 * TEXTURE_BUFFER);
 			bry++;
 		}
+		height = ph;
 		for (int y = 0; y < bry; y++) {
 			row_pointers[y] = (uint64_t) row_pointers[y] + (uint64_t) tpngd;
 		}
 		png_read_image(png, row_pointers);
+		rx = prx;
+		ry = pry;
+		for (int y = 0; y < height + (2 * TEXTURE_BUFFER); y++) {
+			if (y >= rh) {
+				height -= rh;
+				y = 0;
+				rx++;
+				if (rx >= wrap) {
+					rx = 0;
+					ry++;
+				}
+			}
+			unsigned char* row = tpngd + ((ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4));
+			if (y < TEXTURE_BUFFER) {
+				unsigned char* nrow = tpngd + ((ry * rw * 4 * rh * wrap) + (TEXTURE_BUFFER * 4 * rw * wrap) + (rx * rw * 4));
+				memcpy(row + (4 * TEXTURE_BUFFER), nrow + (4 * TEXTURE_BUFFER), (rw - (2 * TEXTURE_BUFFER)) * 4);
+				for (int i = 0; i < TEXTURE_BUFFER; i++) {
+					memcpy(row + (i * 4), row + (4 * TEXTURE_BUFFER), 4);
+					memcpy(row + (rw - 1 - i) * 4, row + (rw - 1 - TEXTURE_BUFFER) * 4, 4);
+				}
+			} else if (y >= rh - TEXTURE_BUFFER) {
+				unsigned char* prow = tpngd + ((ry * rw * 4 * rh * wrap) + ((rh - 1 - TEXTURE_BUFFER) * 4 * rw * wrap) + (rx * rw * 4));
+				memcpy(row + (4 * TEXTURE_BUFFER), prow + (4 * TEXTURE_BUFFER), (rw - (2 * TEXTURE_BUFFER)) * 4);
+				for (int i = 0; i < TEXTURE_BUFFER; i++) {
+					memcpy(row + (i * 4), row + (4 * TEXTURE_BUFFER), 4);
+					memcpy(row + (rw - 1 - i) * 4, row + (rw - 1 - TEXTURE_BUFFER) * 4, 4);
+				}
+			} else {
+				for (int i = 0; i < TEXTURE_BUFFER; i++) {
+					memcpy(row + (i * 4), row + (4 * TEXTURE_BUFFER), 4);
+					memcpy(row + (rw - 1 - i) * 4, row + (rw - 1 - TEXTURE_BUFFER) * 4, 4);
+				}
+			}
+		}
+		/*if (streq(me, "grass_top.png")) { // TODO: implement dynamic textures better than this
+		 for (int y = 0; y < bry; y++) {
+		 uint32_t* pix = row_pointers[y];
+		 for (int x = 0; x < rw; x++) {
+		 pix[x] &= 0x00FFFFFF;
+		 pix[x] |= 0xFF000000;
+		 pix[x] |= 0x000000FF;
+		 pix[x] = (71) | (205 << 8) | (51 << 16) | (0);
+		 }
+		 }
+		 }*/
 		free(row_pointers);
 		png_destroy_read_struct(&png, &info, (png_infopp) 0);
 		fclose(fd);
@@ -166,13 +215,16 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 void loadTextureData(int id, size_t width, size_t height, void* data, int s) {
 	glBindTexture(GL_TEXTURE_2D, id);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+//glGenerateMipmap (GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, s ? GL_NEAREST : GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 #ifdef GL_TEXTURE_MAX_ANISOTROPY_EXT
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4.0);
 #endif
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }

@@ -335,7 +335,7 @@ void ingame_tick() {
 void drawIngame(float partialTick) {
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective((gs.sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70., (double) width / (double) height, 0.05, 16. * 25.);
+	gluPerspective((gs.sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70., (double) width / (double) height, 0.1, 16. * 25.);
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity();
 	float ppitch = gs.player->pitch * (1. - partialTick) + gs.player->lpitch * partialTick;

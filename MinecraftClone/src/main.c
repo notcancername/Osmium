@@ -191,6 +191,7 @@ int main(int argc, char *argv[]) {
 	height = 600;
 	if (!glfwInit()) return -1;
 	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwSetErrorCallback(error_callback);
 	window = glfwCreateWindow(800, 600, "Minecraft 1.9 (C Version)", NULL, NULL);
 	if (!window) {

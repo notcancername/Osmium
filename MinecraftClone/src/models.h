@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define TEXTURE_BUFFER 4
+
 int loadTexturePNG(char* path, int id, int s);
 
 int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** map, int maps, int* smap);

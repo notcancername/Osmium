@@ -262,8 +262,8 @@ void drawMainMenu(float partialTick) {
 		float v9 = ((((float) i) / 8.) / 7.5) / 64.;
 		glTranslatef(v8, v9, 0.);
 		glRotatef(-90., 0., 0., 1.);
-		glRotatef((sin((mm_pantimer + partialTick) / 400.) * 25.) + 20., 1., 0., 0.);
-		glRotatef(-(mm_pantimer + partialTick) * 0.1, 0., 1., 0.);
+		glRotatef((sin((mm_pantimer + (1. - partialTick)) / 400.) * 25.) + 20., 1., 0., 0.);
+		glRotatef(-(mm_pantimer + (1. - partialTick)) * 0.1, 0., 1., 0.);
 		for (int x = 0; x < 6; x++) {
 			glPushMatrix();
 			if (x == 0) {
@@ -452,7 +452,7 @@ void drawConnecting(float partialTick) {
 				prt[0] = 0;
 				prt++;
 			}
-			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player4096", NULL, NULL)) cgs = 5;
+			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player8192", NULL, NULL)) cgs = 5;
 			else cgs = 6;
 		}
 		drawString("Logging In...", swidth / 2 - stringWidth("Logging In...") / 2, sheight / 2 - 54, 16777215);

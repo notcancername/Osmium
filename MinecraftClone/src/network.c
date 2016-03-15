@@ -739,7 +739,6 @@ int readPacket(struct conn* conn, struct packet* packet) {
 		}
 	}
 	if (pktbuf == NULL) return 0;
-
 	unsigned char* pbuf = (unsigned char*) pktbuf;
 	size_t ps = pktlen;
 	int32_t id = 0;
