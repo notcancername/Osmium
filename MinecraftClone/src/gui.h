@@ -24,4 +24,6 @@ void gui_textCallback(unsigned int codepoint);
 
 void gui_mouseMotionCallback(double x, double y);
 
+int drawButton(int x, int y, int width, int height, char* text, int disabled);
+
 #endif /* GUI_H_ */

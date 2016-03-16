@@ -117,70 +117,74 @@ void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z
 	}
 }
 
-void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
+void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
 	int vx = 0;
 	if (faceMask & 0x01) {
 		virtTexCoord2f(&vrt[vx], tx2[2], ty2[2]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[2], ty2[2]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[2], ty1[2]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[2], ty1[2]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 	}
 	if (faceMask & 0x02) {
 		virtTexCoord2f(&vrt[vx], tx2[3], ty2[3]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[3], ty1[3]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[3], ty1[3]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[3], ty2[3]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 	}
 	//
 	if (faceMask & 0x04) {
 		virtTexCoord2f(&vrt[vx], tx1[0], ty1[0]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[0], ty2[0]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[0], ty2[0]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[0], ty1[0]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 	}
 	if (faceMask & 0x08) {
 		virtTexCoord2f(&vrt[vx], tx1[1], ty1[1]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[1], ty1[1]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[1], ty2[1]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[1], ty2[1]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 	}
 	//
 	if (faceMask & 0x10) {
 		virtTexCoord2f(&vrt[vx], tx2[4], ty2[4]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[4], ty1[4]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[4], ty1[4]);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[4], ty2[4]);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 	}
 	if (faceMask & 0x20) {
 		virtTexCoord2f(&vrt[vx], tx2[5], ty2[5]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[5], ty2[5]);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[5], ty1[5]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[5], ty1[5]);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 	}
+}
+
+void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
+	createMultSub(size, size, size, vrt, x, y, z, faceMask, tx1, ty1, tx2, ty2);
 }
 
 void createTexCube(float size, struct vao* vao) {
@@ -219,23 +223,25 @@ int updateChunk(struct chunk* chunk) {
 
 						} else {
 							unsigned char fm = 0x3F;
-							if (sy + y > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy - 1, z))) {
-								fm ^= 0x08;
-							}
-							if (sy + y < 255 && isBlockOpaque(getBlockChunk(chunk, x, y + sy + 1, z))) {
-								fm ^= 0x04;
-							}
-							if (x > 0 && isBlockOpaque(getBlockChunk(chunk, x - 1, y + sy, z))) {
-								fm ^= 0x20;
-							}
-							if (x < 15 && isBlockOpaque(getBlockChunk(chunk, x + 1, y + sy, z))) {
-								fm ^= 0x10;
-							}
-							if (z > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z - 1))) {
-								fm ^= 0x02;
-							}
-							if (z < 15 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z + 1))) {
-								fm ^= 0x01;
+							if (isBlockOpaque(blk)) {
+								if (sy + y > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy - 1, z))) {
+									fm ^= 0x08;
+								}
+								if (sy + y < 255 && isBlockOpaque(getBlockChunk(chunk, x, y + sy + 1, z))) {
+									fm ^= 0x04;
+								}
+								if (x > 0 && isBlockOpaque(getBlockChunk(chunk, x - 1, y + sy, z))) {
+									fm ^= 0x20;
+								}
+								if (x < 15 && isBlockOpaque(getBlockChunk(chunk, x + 1, y + sy, z))) {
+									fm ^= 0x10;
+								}
+								if (z > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z - 1))) {
+									fm ^= 0x02;
+								}
+								if (z < 15 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z + 1))) {
+									fm ^= 0x01;
+								}
 							}
 							drawBlock(&vts, &vtsx, blk, fm, (float) x, (float) sy, (float) z);
 						}

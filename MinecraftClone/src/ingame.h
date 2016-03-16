@@ -32,6 +32,7 @@ struct gamestate {
 		int isCollidedVertically;
 		struct entity* riding;
 		struct conn* conn;
+		int inMenu;
 };
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);

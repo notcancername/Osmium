@@ -29,26 +29,30 @@ void loadIngame() {
 }
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
-	if (key == GLFW_KEY_W) {
-		gs.moveForward = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_S) {
-		gs.moveBackward = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_A) {
-		gs.moveLeft = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_D) {
-		gs.moveRight = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_SPACE) {
-		gs.jumping = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_LEFT_CONTROL) {
-		gs.sprinting = action == GLFW_PRESS || action == GLFW_REPEAT;
-	}
-	if (key == GLFW_KEY_LEFT_SHIFT) {
-		gs.crouching = action == GLFW_PRESS || action == GLFW_REPEAT;
+	if (gs.inMenu) {
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+			gs.inMenu = 0;
+		}
+	} else {
+		if (key == GLFW_KEY_W) {
+			gs.moveForward = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_S) {
+			gs.moveBackward = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_A) {
+			gs.moveLeft = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_D) {
+			gs.moveRight = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_SPACE) {
+			gs.jumping = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_LEFT_CONTROL) {
+			gs.sprinting = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_LEFT_SHIFT) {
+			gs.crouching = action == GLFW_PRESS || action == GLFW_REPEAT;
+		} else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+			gs.inMenu = 1;
+			gs.crouching = 0;
+			gs.sprinting = 0;
+		}
 	}
 }
 
@@ -57,7 +61,7 @@ double lmx = 0.;
 double lmy = 0.;
 
 void ingame_mouseMotionCallback(double x, double y) {
-	if (gs.player != NULL && spawnedIn && hasMouse) {
+	if (gs.player != NULL && spawnedIn && hasMouse && !gs.inMenu) {
 		if (!moc) {
 			moc = 1;
 			claimMouse();
@@ -365,6 +369,46 @@ void drawIngame(float partialTick) {
 //drawQuads(&tb);
 //glPopMatrix();
 	drawWorld(gs.world);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0., swidth, sheight, 0., -1., 1.);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear (GL_DEPTH_BUFFER_BIT);
+	if (gs.inMenu) {
+		glDisable (GL_TEXTURE_2D);
+		glDisable (GL_DEPTH_TEST);
+		glDepthMask (GL_FALSE);
+		glColor4f(0.0625, 0.0625, 0.0625, 0.75);
+		glBegin (GL_QUADS);
+		glVertex3f(0., sheight, 0.);
+		glVertex3f(swidth, sheight, 0.);
+		glVertex3f(swidth, 0., 0.);
+		glVertex3f(0., 0., 0.);
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
+		drawString("Game menu", swidth / 2 - stringWidth("Game menu") / 2, 36, 16777215);
+		glColor4f(1., 1., 1., 1.);
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask (GL_TRUE);
+		if (drawButton(swidth / 2 - 100, sheight / 4 + 120 - 16, 200, 20, "Disconnect", 1) && mouseButton == 0) {
+
+		}
+		if (drawButton(swidth / 2 - 100, sheight / 4 + 24 - 16, 200, 20, "Back to Game", 0) && mouseButton == 0) {
+			gs.inMenu = 0;
+		}
+		if (drawButton(swidth / 2 - 100, sheight / 4 + 96 - 16, 98, 20, "Options", 1) && mouseButton == 0) {
+
+		}
+		drawButton(swidth / 2 + 2, sheight / 4 + 96 - 16, 98, 20, "Open to LAN", 1);
+		if (drawButton(swidth / 2 - 100, sheight / 4 + 48 - 16, 98, 20, "Achievements", 1) && mouseButton == 0) {
+
+		}
+		if (drawButton(swidth / 2 + 2, sheight / 4 + 48 - 16, 98, 20, "Statistics", 1) && mouseButton == 0) {
+
+		}
+	}
+	glColor4f(1., 1., 1., 1.);
 }
 
 void runNetwork(struct conn* conn) {

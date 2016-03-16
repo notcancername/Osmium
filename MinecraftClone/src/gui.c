@@ -161,12 +161,10 @@ void loadGUI() {
 
 int drawButton(int x, int y, int width, int height, char* text, int disabled) { // state  is 0 for disabled, 1 for normal, 2 for hovering
 	glBindTexture(GL_TEXTURE_2D, TX_WIDGETS);
-	glColor4f(1., 1., 1., 1.);
-	glEnable (GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable (GL_DEPTH_TEST);
 	int state = disabled ? 0 : ((mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height) ? 2 : 1);
+	glColor4f(1., 1., 1., 1.);
 	drawTexturedModalRect(x, y, 0, 0, 46 + state * 20, width / 2, height);
+	glColor4f(1., 1., 1., 1.);
 	drawTexturedModalRect(x + width / 2, y, 0, 200 - width / 2, 46 + state * 20, width / 2, height);
 	uint32_t color = -1;
 	if (state == 0) {
@@ -176,8 +174,8 @@ int drawButton(int x, int y, int width, int height, char* text, int disabled) { 
 	} else {
 		color = 14737632;
 	}
+	glColor4f(1., 1., 1., 1.);
 	drawString(text, x + width / 2 - stringWidth(text) / 2, y + height / 2 - 4, color);
-	glEnable(GL_DEPTH_TEST);
 	return state == 2;
 }
 
@@ -517,6 +515,13 @@ void drawIngameGUI(float partialTick) {
 }
 
 void drawGUI(float partialTick) {
+	if (guistate != GSTATE_INGAME) {
+		glDisable (GL_DEPTH_TEST);
+		glDepthMask (GL_FALSE);
+		glColor4f(1., 1., 1., 1.);
+		glEnable (GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 	if (guistate == GSTATE_MAINMENU) {
 		drawMainMenu(partialTick);
 	} else if (guistate == GSTATE_MULTIPLAYER) {
@@ -526,7 +531,13 @@ void drawGUI(float partialTick) {
 	} else if (guistate == GSTATE_CONNECTING) {
 		drawConnecting(partialTick);
 	} else if (guistate == GSTATE_INGAME) {
+		glEnable (GL_DEPTH_TEST);
+		glDepthMask (GL_TRUE);
 		drawIngame(partialTick);
+	}
+	if (guistate != GSTATE_INGAME) {
+		glEnable (GL_DEPTH_TEST);
+		glDepthMask (GL_TRUE);
 	}
 }
 
