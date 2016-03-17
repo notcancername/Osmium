@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
 	height = 600;
 	if (!glfwInit()) return -1;
 	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
-	//glfwWindowHint(GLFW_SAMPLES, 4); TODO: use shaders and a 2D texture array so we can antialias.
+	//glfwWindowHint(GLFW_SAMPLES, 4); //TODO: use shaders and a 2D texture array so we can antialias.
 	glfwSetErrorCallback(error_callback);
 	window = glfwCreateWindow(800, 600, "Minecraft 1.9 (C Version)", NULL, NULL);
 	if (!window) {
@@ -637,12 +637,6 @@ int main(int argc, char *argv[]) {
 	blockMap[409] = "glass_blue.png";
 	blockSizeMap = malloc(blockMapLength * sizeof(int));
 	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", def_wrap, &def_width, &def_height, TX_DEFAULT, 1, blockMap, 410, blockSizeMap);
-	for (int tci = 0; tci < blockMapLength; tci++) {
-		char* tc = blockMap[tci];
-		int tx = blockSizeMap[tci] % def_wrap;
-		int ty = blockSizeMap[tci] / def_wrap;
-		printf("\"%s\" %i, %i\n", tc, tx, ty);
-	}
 	clock_gettime(CLOCK_MONOTONIC, &ts);
 	lt = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
 	lf = lt;

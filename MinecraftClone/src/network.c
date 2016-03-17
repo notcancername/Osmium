@@ -1450,7 +1450,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			pbuf += rx;
 			ps -= rx;
 			if (packet->data.play_server.chunkdata.continuous) packet->data.play_server.chunkdata.size -= 256;
-			if (packet->data.play_server.chunkdata.size <= 0 || packet->data.play_server.chunkdata.size >= ps) {
+			if (packet->data.play_server.chunkdata.size <= 0 || packet->data.play_server.chunkdata.size > ps) {
 				free(pktbuf);
 				return -1;
 			}

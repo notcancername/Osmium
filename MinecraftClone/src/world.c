@@ -67,9 +67,12 @@ struct chunk* newChunk(int16_t x, int16_t z) {
 	chunk->x = x;
 	chunk->z = z;
 	chunk->vaos = malloc(sizeof(struct vao) * 16);
+	chunk->tvaos = malloc(sizeof(struct vao) * 16);
 	for (int i = 0; i < 16; i++) {
 		chunk->vaos[i].vao = -1;
 		chunk->vaos[i].vbo = -1;
+		chunk->tvaos[i].vao = -1;
+		chunk->tvaos[i].vbo = -1;
 		chunk->needsUpdate[i] = 1;
 	}
 	return chunk;

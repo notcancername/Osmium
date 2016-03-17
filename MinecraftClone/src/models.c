@@ -159,17 +159,38 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				}
 			}
 		}
-		/*if (streq(me, "grass_top.png")) { // TODO: implement dynamic textures better than this
-		 for (int y = 0; y < bry; y++) {
-		 uint32_t* pix = row_pointers[y];
-		 for (int x = 0; x < rw; x++) {
-		 pix[x] &= 0x00FFFFFF;
-		 pix[x] |= 0xFF000000;
-		 pix[x] |= 0x000000FF;
-		 pix[x] = (71) | (205 << 8) | (51 << 16) | (0);
-		 }
-		 }
-		 }*/
+		if (streq(me, "grass_top.png")) { // TODO: implement dynamic textures better than this
+			for (int y = 0; y < bry; y++) {
+				uint32_t* pix = row_pointers[y];
+				for (int x = 0; x < rw; x++) {
+					printf("%08X", pix[x]);
+					int cc = (pix[x] & 0xFF);
+					int r = 71 * ((float) cc / 255.);
+					int g = 205 * ((float) cc / 255.);
+					int b = 51 * ((float) cc / 255.);
+					if (r > 255 || g > 255 || b > 255) {
+						int total = r + g + b;
+						int h = (r >= g && r >= b) ? r : ((g >= b) ? g : b);
+						if (total < 765) {
+							float m = (float) (765 - total) / (float) (3 * h - total);
+							int g = 255 - m * (float) h;
+							r = g + m * r;
+							g = g + m * g;
+							b = g + m * b;
+						} else {
+							r = 255;
+							g = 255;
+							b = 255;
+						}
+					}
+					if (r < 0) r = 0;
+					if (g < 0) g = 0;
+					if (b < 0) b = 0;
+					pix[x] = r | (g << 8) | (b << 16) | (255 << 24);
+				}
+				printf("\n");
+			}
+		}
 		free(row_pointers);
 		png_destroy_read_struct(&png, &info, (png_infopp) 0);
 		fclose(fd);

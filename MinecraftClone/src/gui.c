@@ -450,7 +450,7 @@ void drawConnecting(float partialTick) {
 				prt[0] = 0;
 				prt++;
 			}
-			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player8192", NULL, NULL)) cgs = 5;
+			if (loginToServer(cg_conn, connectTo, prt == NULL ? 25565 : atoi(prt), "Player8193", NULL, NULL)) cgs = 5;
 			else cgs = 6;
 		}
 		drawString("Logging In...", swidth / 2 - stringWidth("Logging In...") / 2, sheight / 2 - 54, 16777215);

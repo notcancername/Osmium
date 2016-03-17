@@ -14,8 +14,10 @@
 #include "models.h"
 
 void getTextureCoordinates(int tx, int ty, float* tx1, float* ty1, float* tx2, float* ty2) {
-	static float tw = 1. / (float) def_wrap;
-	static float th = 1. / ((float) def_height / ((float) def_width / (float) def_wrap));
+	static float tw;
+	if (!tw) tw = 1. / (float) def_wrap;
+	static float th;
+	if (!th) th = 1. / ((float) def_height / ((float) def_width / (float) def_wrap));
 	*tx1 = tw * tx + ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
 	*ty1 = th * ty + ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
 	*tx2 = tw * (tx + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
@@ -129,12 +131,12 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 		float tx2[6];
 		float ty1[6];
 		float ty2[6];
-		getTextureCoordinates("dirt.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+		getTextureCoordinates(2, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 		tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 		ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 		tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
 		ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1] - (dof / (float) def_wrap);
-		getTextureCoordinates(meta ? "farmland_wet.png" : "farmland_dry.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+		getTextureCoordinates(meta ? 0, 19 : 30, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 		createMultSub(0.5, (dof * 15.) / 2., 0.5, &((*vex)[*vexs]), x + 0.5, y + 0.5 - (dof / 2.), z + 0.5, 0xFF, tx1, ty1, tx2, ty2);
 		*vexs += 6 * 4;
 	} else if (block == BLK_SIGNBLOCK) {
@@ -450,323 +452,472 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 	} else if (block == BLK_WOODENSTAIRSDARKOAK) {
 
 	} else {
-		char* tn = NULL;
+		int tx = -1;
+		int ty = -1;
 		if (block == BLK_AIR) {
-
+			return;
 		} else if (block == BLK_STONE) {
-			tn = "stone.png";
+			tx = 31;
+			ty = 13;
 		} else if (block == BLK_GRANITE) {
-			tn = "stone_granite.png";
+			tx = 14;
+			ty = 14;
 		} else if (block == BLK_POLISHEDGRANITE) {
-			tn = "stone_granite_polished.png";
+			tx = 9;
+			ty = 7;
 		} else if (block == BLK_DIORITE) {
-			tn = "stone_diorite.png";
+			tx = 21;
+			ty = 0;
 		} else if (block == BLK_POLISHEDDIORITE) {
-			tn = "stone_diorite_polished.png";
+			tx = 13;
+			ty = 17;
 		} else if (block == BLK_ANDESITE) {
-			tn = "stone_andesite.png";
+			tx = 3;
+			ty = 14;
 		} else if (block == BLK_POLISHEDANDESITE) {
-			tn = "stone_andesite_polished.png";
+			tx = 11;
+			ty = 1;
 		} else if (block == BLK_DIRT) {
-			tn = "dirt.png";
+			tx = 2;
+			ty = 1;
 		} else if (block == BLK_COARSEDIRT) {
-			tn = "coarse_dirt.png";
+			tx = 28;
+			ty = 18;
 		} else if (block == BLK_COBBLESTONE || block == BLK_COBBLESTONESLABDOUBLE) {
-			tn = "cobblestone.png";
+			tx = 19;
+			ty = 8;
 		} else if (block == BLK_WOODENPLANKOAK || block == BLK_WOODENSLABDOUBLE || block == BLK_OAK_WOODSLABDOUBLE) {
-			tn = "planks_oak.png";
+			tx = 30;
+			ty = 19;
 		} else if (block == BLK_WOODENPLANKSPRUCE || block == BLK_SPRUCE_WOODSLABDOUBLE) {
-			tn = "planks_spruce.png";
+			tx = 20;
+			ty = 19;
 		} else if (block == BLK_WOODENPLANKBIRCH || block == BLK_BIRCH_WOODSLABDOUBLE) {
-			tn = "planks_birch.png";
+			tx = 27;
+			ty = 19;
 		} else if (block == BLK_WOODENPLANKJUNGLE || block == BLK_JUNGLE_WOODSLABDOUBLE) {
-			tn = "planks_jungle.png";
+			tx = 3;
+			ty = 2;
 		} else if (block == BLK_WOODENPLANKACACIA || block == BLK_ACACIAWOODSLABDOUBLE) {
-			tn = "planks_acacia.png";
+			tx = 25;
+			ty = 11;
 		} else if (block == BLK_WOODENPLANKDARKOAK || block == BLK_DARKOAKWOODSLABDOUBLE) {
-			tn = "planks_big_oak.png";
+			tx = 9;
+			ty = 1;
 		} else if (block == BLK_BEDROCK) {
-			tn = "bedrock.png";
+			tx = 13;
+			ty = 5;
 		} else if (block == BLK_SAND) {
-			tn = "sand.png";
+			tx = 23;
+			ty = 17;
 		} else if (block == BLK_REDSAND) {
-			tn = "red_sand.png";
+			tx = 1;
+			ty = 18;
 		} else if (block == BLK_GRAVEL) {
-			tn = "gravel.png";
+			tx = 22;
+			ty = 17;
 		} else if (block == BLK_GOLDORE) {
-			tn = "gold_ore.png";
+			tx = 1;
+			ty = 9;
 		} else if (block == BLK_IRONORE) {
-			tn = "iron_ore.png";
+			tx = 13;
+			ty = 0;
 		} else if (block == BLK_COALORE) {
-			tn = "coal_ore.png";
+			tx = 22;
+			ty = 5;
 		} else if (block >> 4 == BLK_LEAVESOAK >> 4) {
 			int meta = block & 0x0f;
 			meta &= 0x03;
-			if (meta == 0) tn = "leaves_oak.png";
-			else if (meta == 1) tn = "leaves_spruce.png";
-			else if (meta == 2) tn = "leaves_birch.png";
-			else if (meta == 3) tn = "leaves_jungle.png";
+			if (meta == 0) {
+				tx = 31;
+				ty = 16;
+			} else if (meta == 1) {
+				tx = 4;
+				ty = 9;
+			} else if (meta == 2) {
+				tx = 28;
+				ty = 2;
+			} else if (meta == 3) {
+				tx = 5;
+				ty = 14;
+			}
 		} else if (block == BLK_SPONGE) {
-			tn = "sponge.png";
+			tx = 6;
+			ty = 9;
 		} else if (block == BLK_WETSPONGE) {
-			tn = "sponge_wet.png";
+			tx = 0;
+			ty = 14;
 		} else if (block == BLK_GLASS) {
-			tn = "glass.png";
+			tx = 18;
+			ty = 15;
 		} else if (block == BLK_NOTEBLOCK) {
-			tn = "noteblock.png";
+			tx = 21;
+			ty = 11;
 		} else if (block == BLK_BRICK || block == BLK_BRICKSLABDOUBLE) {
-			tn = "brick.png";
+			tx = 28;
+			ty = 14;
 		} else if (block == BLK_OBSIDIAN) {
-			tn = "obsidian.png";
+			tx = 5;
+			ty = 21;
 		} else if (block == BLK_MOBSPAWNER) {
-			tn = "mob_spawner.png";
+			tx = 18;
+			ty = 19;
 		} else if (block == BLK_DIAMONDORE) {
-			tn = "diamond_ore.png";
+			tx = 19;
+			ty = 7;
 		} else if (block == BLK_REDSTONEORE) { //TODO: activated
-			tn = "redstone_ore.png";
+			tx = 2;
+			ty = 9;
 		} else if (block == BLK_ICE) {
-			tn = "ice.png";
+			tx = 1;
+			ty = 10;
 		} else if (block == BLK_NETHERRACK) {
-			tn = "netherrack.png";
+			tx = 9;
+			ty = 2;
 		} else if (block == BLK_SOULSAND) {
-			tn = "netherrack.png";
+			tx = 9;
+			ty = 2;
 		} else if (block == BLK_GLOWSTONE) {
-			tn = "soul_sand.png";
+			tx = 0;
+			ty = 21;
 		} else if (block == BLK_NETHERBRICK || block == BLK_NETHERBRICKSLABDOUBLE) {
-			tn = "nether_brick.png";
+			tx = 3;
+			ty = 11;
 		} else if (block == BLK_ENDSTONE) {
-			tn = "end_stone.png";
+			tx = 31;
+			ty = 2;
 		} else if (block == BLK_REDSTONELAMP) {
-			tn = "redstone_lamp_off.png";
+			tx = 17;
+			ty = 18;
 		} else if (block == BLK_REDSTONELAMPON) {
-			tn = "redstone_lamp_on.png";
+			tx = 17;
+			ty = 15;
 		} else if (block == BLK_EMERALDORE) {
-			tn = "emerald_ore.png";
+			tx = 4;
+			ty = 17;
 		} else if (block == BLK_PRISMARINEBRICKS) {
-			tn = "prismarine_bricks.png";
+			tx = 4;
+			ty = 18;
 		} else if (block == BLK_SEALANTERN) {
-			tn = "sea_lantern.png";
+			tx = 19;
+			ty = 2;
 		} else if (block == BLK_HARDENEDCLAY) {
-			tn = "hardened_clay.png";
+			tx = 31;
+			ty = 5;
 		} else if (block == BLK_HARDENEDCLAY_ORANGE) {
-			tn = "hardened_clay_stained_orange.png";
+			tx = 22;
+			ty = 9;
 		} else if (block == BLK_HARDENEDCLAY_MAGENTA) {
-			tn = "hardened_clay_stained_magenta.png";
+			tx = 5;
+			ty = 1;
 		} else if (block == BLK_HARDENEDCLAY_LIGHTBLUE) {
-			tn = "hardened_clay_stained_light_blue.png";
+			tx = 18;
+			ty = 7;
 		} else if (block == BLK_HARDENEDCLAY_YELLOW) {
-			tn = "hardened_clay_stained_yellow.png";
+			tx = 21;
+			ty = 18;
 		} else if (block == BLK_HARDENEDCLAY_LIME) {
-			tn = "hardened_clay_stained_lime.png";
+			tx = 6;
+			ty = 3;
 		} else if (block == BLK_HARDENEDCLAY_PINK) {
-			tn = "hardened_clay_stained_pink.png";
+			tx = 5;
+			ty = 15;
 		} else if (block == BLK_HARDENEDCLAY_GRAY) {
-			tn = "hardened_clay_stained_gray.png";
+			tx = 26;
+			ty = 11;
 		} else if (block == BLK_HARDENEDCLAY_LIGHTGRAY) {
-			tn = "hardened_clay_stained_silver.png";
+			tx = 21;
+			ty = 14;
 		} else if (block == BLK_HARDENEDCLAY_CYAN) {
-			tn = "hardened_clay_stained_cyan.png";
+			tx = 19;
+			ty = 11;
 		} else if (block == BLK_HARDENEDCLAY_PURPLE) {
-			tn = "hardened_clay_stained_purple.png";
+			tx = 20;
+			ty = 5;
 		} else if (block == BLK_HARDENEDCLAY_BLUE) {
-			tn = "hardened_clay_stained_blue.png";
+			tx = 18;
+			ty = 8;
 		} else if (block == BLK_HARDENEDCLAY_BROWN) {
-			tn = "hardened_clay_stained_brown.png";
+			tx = 12;
+			ty = 9;
 		} else if (block == BLK_HARDENEDCLAY_GREEN) {
-			tn = "hardened_clay_stained_green.png";
+			tx = 2;
+			ty = 15;
 		} else if (block == BLK_HARDENEDCLAY_RED) {
-			tn = "hardened_clay_stained_red.png";
+			tx = 16;
+			ty = 2;
 		} else if (block == BLK_HARDENEDCLAY_BLACK) {
-			tn = "hardened_clay_stained_black.png";
+			tx = 5;
+			ty = 19;
 		} else if (block == BLK_PURPURBLOCK) {
-			tn = "purpur_block.png";
+			tx = 6;
+			ty = 18;
 		} else if (block == BLK_LAPISLAZULIORE) {
-			tn = "lapis_block.png";
+			tx = 6;
+			ty = 19;
 		} else if (block == BLK_LAPISLAZULIBLOCK) {
-			tn = "lapis_ore.png";
+			tx = 31;
+			ty = 18;
 		} else if (block == BLK_WOOL) {
-			tn = "wool_colored_white.png";
+			tx = 10;
+			ty = 19;
 		} else if (block == BLK_ORANGEWOOL) {
-			tn = "wool_colored_orange.png";
+			tx = 23;
+			ty = 19;
 		} else if (block == BLK_MAGENTAWOOL) {
-			tn = "wool_colored_magenta.png";
+			tx = 19;
+			ty = 6;
 		} else if (block == BLK_LIGHTBLUEWOOL) {
-			tn = "wool_colored_light_blue.png";
+			tx = 29;
+			ty = 5;
 		} else if (block == BLK_YELLOWWOOL) {
-			tn = "wool_colored_yellow.png";
+			tx = 12;
+			ty = 18;
 		} else if (block == BLK_LIMEWOOL) {
-			tn = "wool_colored_lime.png";
+			tx = 11;
+			ty = 7;
 		} else if (block == BLK_PINKWOOL) {
-			tn = "wool_colored_pink.png";
+			tx = 19;
+			ty = 18;
 		} else if (block == BLK_GRAYWOOL) {
-			tn = "wool_colored_gray.png";
+			tx = 31;
+			ty = 19;
 		} else if (block == BLK_LIGHTGRAYWOOL) {
-			tn = "wool_colored_silber.png";
+			tx = 22;
+			ty = 1;
 		} else if (block == BLK_CYANWOOL) {
-			tn = "wool_colored_cyan.png";
+			tx = 14;
+			ty = 0;
 		} else if (block == BLK_PURPLEWOOL) {
-			tn = "wool_colored_purple.png";
+			tx = 26;
+			ty = 5;
 		} else if (block == BLK_BLUEWOOL) {
-			tn = "wool_colored_blue.png";
+			tx = 21;
+			ty = 5;
 		} else if (block == BLK_BROWNWOOL) {
-			tn = "wool_colored_brown.png";
+			tx = 21;
+			ty = 8;
 		} else if (block == BLK_GREENWOOL) {
-			tn = "wool_colored_green.png";
+			tx = 29;
+			ty = 16;
 		} else if (block == BLK_REDWOOL) {
-			tn = "wool_colored_red.png";
+			tx = 25;
+			ty = 18;
 		} else if (block == BLK_BLACKWOOL) {
-			tn = "wool_colored_black.png";
+			tx = 24;
+			ty = 16;
 		} else if (block == BLK_BLOCKOFGOLD) {
-			tn = "gold_block.png";
+			tx = 15;
+			ty = 15;
 		} else if (block == BLK_BLOCKOFIRON) {
-			tn = "iron_block.png";
+			tx = 8;
+			ty = 9;
 		} else if (block == BLK_MOSSSTONE) {
-			tn = "cobblestone_mossy.png";
+			tx = 21;
+			ty = 19;
 		} else if (block == BLK_BLOCKOFDIAMOND) {
-			tn = "diamond_block.png";
+			tx = 15;
+			ty = 9;
 		} else if (block == BLK_REDSTONEOREGLOWING) {
-			tn = "redstone_ore.png"; // TODO glow effect?
+			tx = 2;
+			ty = 9;
+			// TODO glow effect?
 		} else if (block == BLK_SNOWBLOCK) {
-			tn = "snow.png";
+			tx = 7;
+			ty = 9;
 		} else if (block == BLK_CLAYBLOCK) {
-			tn = "clay.png";
+			tx = 1;
+			ty = 1;
 		} else if (block == BLK_STAINEDGLASSWHITE) {
-			tn = "glass.png";
+			tx = 18;
+			ty = 15;
 		} else if (block == BLK_STAINEDGLASSORANGE) {
-			tn = "glass_orange.png";
+			tx = 26;
+			ty = 17;
 		} else if (block == BLK_STAINEDGLASSMAGENTA) {
-			tn = "glass_magenta.png";
+			tx = 12;
+			ty = 5;
 		} else if (block == BLK_STAINEDGLASSLIGHTBLUE) {
-			tn = "glass_light_blue.png";
+			tx = 5;
+			ty = 11;
 		} else if (block == BLK_STAINEDGLASSYELLOW) {
-			tn = "glass_yellow.png";
+			tx = 0;
+			ty = 7;
 		} else if (block == BLK_STAINEDGLASSLIME) {
-			tn = "glass_lime.png";
+			tx = 31;
+			ty = 6;
 		} else if (block == BLK_STAINEDGLASSPINK) {
-			tn = "glass_pink.png";
+			tx = 18;
+			ty = 6;
 		} else if (block == BLK_STAINEDGLASSGRAY) {
-			tn = "glass_gray.png";
+			tx = 27;
+			ty = 7;
 		} else if (block == BLK_STAINEDGLASSLIGHTGREY) {
-			tn = "glass_silver.png";
+			tx = 29;
+			ty = 2;
 		} else if (block == BLK_STAINEDGLASSCYAN) {
-			tn = "glass_cyan.png";
+			tx = 24;
+			ty = 0;
 		} else if (block == BLK_STAINEDGLASSPURPLE) {
-			tn = "glass_purple.png";
+			tx = 25;
+			ty = 2;
 		} else if (block == BLK_STAINEDGLASSBLUE) {
-			tn = "glass_blue.png";
+			tx = 17;
+			ty = 21;
 		} else if (block == BLK_STAINEDGLASSBROWN) {
-			tn = "glass_brown.png";
+			tx = 16;
+			ty = 15;
 		} else if (block == BLK_STAINEDGLASSGREEN) {
-			tn = "glass_green.png";
+			tx = 13;
+			ty = 14;
 		} else if (block == BLK_STAINEDGLASSRED) {
-			tn = "glass_red.png";
+			tx = 10;
+			ty = 0;
 		} else if (block == BLK_STAINEDGLASSBLACK) {
-			tn = "glass_black.png";
+			tx = 26;
+			ty = 9;
 		} else if (block == BLK_MONSTEREGGSTONE) {
-			tn = "stone.png";
+			tx = 31;
+			ty = 13;
 		} else if (block == BLK_MONSTEREGGCOBBLESTONE) {
-			tn = "cobblestone.png";
+			tx = 19;
+			ty = 8;
 		} else if (block == BLK_MONSTEREGGSTONEBRICK) {
-			tn = "stonebrick.png";
+			tx = 16;
+			ty = 11;
 		} else if (block == BLK_MONSTEREGGMOSSYSTONEBRICK) {
-			tn = "stonebrick_mossy.png";
+			tx = 11;
+			ty = 18;
 		} else if (block == BLK_MONSTEREGGCRACKEDSTONE) {
-			tn = "stonebrick_cracked.png";
+			tx = 6;
+			ty = 1;
 		} else if (block == BLK_MONSTEREGGCHISELEDSTONE) {
-			tn = "stonebrick_carved.png";
+			tx = 8;
+			ty = 4;
 		} else if (block == BLK_STONEBRICKS || block == BLK_STONEBRICKSLABDOUBLE) {
-			tn = "stonebrick.png";
+			tx = 16;
+			ty = 11;
 		} else if (block == BLK_MOSSYSTONEBRICKS) {
-			tn = "stonebrick_mossy.png";
+			tx = 11;
+			ty = 18;
 		} else if (block == BLK_CRACKEDSTONEBRICKS) {
-			tn = "stonebrick_cracked.png";
+			tx = 6;
+			ty = 1;
 		} else if (block == BLK_CHISELEDSTONEBRICK) {
-			tn = "stonebrick_carved.png";
+			tx = 8;
+			ty = 4;
 		} else if (block == BLK_BLOCKOFEMERALD) {
-			tn = "emerald_block.png";
+			tx = 30;
+			ty = 2;
 		} else if (block == BLK_BLOCKOFREDSTONE) {
-			tn = "redstone_block.png";
+			tx = 27;
+			ty = 14;
 		} else if (block == BLK_NETHERQUARTZORE) {
-			tn = "quartz_ore.png";
+			tx = 10;
+			ty = 9;
 		} else if (block == BLK_STAINEDCLAYWHITE) {
-			tn = "hardened_clay_stained_white.png";
+			tx = 20;
+			ty = 11;
 		} else if (block == BLK_STAINEDCLAYORANGE) {
-			tn = "hardened_clay_stained_orange.png";
+			tx = 22;
+			ty = 9;
 		} else if (block == BLK_STAINEDCLAYMAGENTA) {
-			tn = "hardened_clay_stained_magenta.png";
+			tx = 5;
+			ty = 1;
 		} else if (block == BLK_STAINEDCLAYLIGHTBLUE) {
-			tn = "hardened_clay_stained_light_blue.png";
+			tx = 18;
+			ty = 7;
 		} else if (block == BLK_STAINEDCLAYYELLOW) {
-			tn = "hardened_clay_stained_yellow.png";
+			tx = 21;
+			ty = 18;
 		} else if (block == BLK_STAINEDCLAYLIME) {
-			tn = "hardened_clay_stained_lime.png";
+			tx = 6;
+			ty = 3;
 		} else if (block == BLK_STAINEDCLAYPINK) {
-			tn = "hardened_clay_stained_pink.png";
+			tx = 5;
+			ty = 15;
 		} else if (block == BLK_STAINEDCLAYGRAY) {
-			tn = "hardened_clay_stained_gray.png";
+			tx = 26;
+			ty = 11;
 		} else if (block == BLK_STAINEDCLAYLIGHTGRAY) {
-			tn = "hardened_clay_stained_silver.png";
+			tx = 21;
+			ty = 14;
 		} else if (block == BLK_STAINEDCLAYCYAN) {
-			tn = "hardened_clay_stained_cyan.png";
+			tx = 19;
+			ty = 11;
 		} else if (block == BLK_STAINEDCLAYPURPLE) {
-			tn = "hardened_clay_stained_purple.png";
+			tx = 20;
+			ty = 5;
 		} else if (block == BLK_STAINEDCLAYBLUE) {
-			tn = "hardened_clay_stained_blue.png";
+			tx = 18;
+			ty = 8;
 		} else if (block == BLK_STAINEDCLAYBROWN) {
-			tn = "hardened_clay_stained_brown.png";
+			tx = 12;
+			ty = 9;
 		} else if (block == BLK_STAINEDCLAYGREEN) {
-			tn = "hardened_clay_stained_green.png";
+			tx = 2;
+			ty = 15;
 		} else if (block == BLK_STAINEDCLAYRED) {
-			tn = "hardened_clay_stained_red.png";
+			tx = 16;
+			ty = 2;
 		} else if (block == BLK_STAINEDCLAYBLACK) {
-			tn = "hardened_clay_stained_black.png";
+			tx = 5;
+			ty = 19;
 		} else if (block >> 4 == BLK_LEAVESDARKOAK >> 4) {
 			int meta = block & 0x0f;
 			if (meta & 0x01) {
-				tn = "leaves_big_oak.png";
+				tx = 28;
+				ty = 16;
 			} else {
-				tn = "leaves_acacia.png";
+				tx = 28;
+				ty = 17;
 			}
 
 		} else if (block == BLK_SLIMEBLOCK) {
-			tn = "slime.png";
+			tx = 2;
+			ty = 19;
 		} else if (block == BLK_BARRIER) {
 			return;
 		} else if (block == BLK_PRISMARINE) {
-			tn = "prismarine_rough.png"; //TODO: random textures
+			tx = 15;
+			ty = 14; //TODO: random textures
 		} else if (block == BLK_DARKPRISMARINE) {
-			tn = "prismarine_dark.png";
+			tx = 9;
+			ty = 9;
 		} else if (block == BLK_BLOCKOFCOAL) {
-			tn = "coal_block.png";
+			tx = 5;
+			ty = 0;
 		} else if (block == BLK_PACKEDICE) {
-			tn = "ice_packed.png";
+			tx = 27;
+			ty = 1;
 		} else if (block == BLK_SMOOTHSTONESLABDOUBLE) {
-			tn = "stone_slab_top.png";
-		} else if (tn == NULL && block != BLK_AIR) {
+			tx = 8;
+			ty = 15;
+		} else if (tx == -1 && ty == -1) {
 			float tx1[6];
 			float ty1[6];
 			float tx2[6];
 			float ty2[6];
 			if (block == BLK_GRASS) {
-				getTextureCoordinates("grass_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("dirt.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("grass_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(28, 9, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(2, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(6, 2, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_PODZOL) {
-				getTextureCoordinates("dirt_podzol_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("dirt.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("dirt_podzol_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(21, 1, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(2, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(24, 19, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_MYCELIUM) {
-				getTextureCoordinates("mycelium_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("dirt.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("mycelium_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(3, 18, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(2, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(30, 16, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
@@ -775,28 +926,38 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 				int meta = block & 0x0f;
 				int bt = meta & 0x03;
 				int dir = (meta & 12) >> 2;
-				char* tt = NULL;
-				char* st = NULL;
+				int ttx = -1;
+				int tty = -1;
+				int stx = -1;
+				int sty = -1;
 				if (bt == 0) { // BLK_WOODOAK
-					tt = "log_oak_top.png";
-					st = "log_oak.png";
+					ttx = 4;
+					tty = 6;
+					stx = 29;
+					sty = 9;
 				} else if (bt == 1) { // BLK_WOODSPRUCE
-					tt = "log_spruce_top.png";
-					st = "log_spruce.png";
+					ttx = 22;
+					tty = 18;
+					stx = 3;
+					sty = 19;
 				} else if (bt == 2) { // BLK_WOODBIRCH
-					tt = "log_birch_top.png";
-					st = "log_birch.png";
+					ttx = 10;
+					tty = 6;
+					stx = 17;
+					sty = 8;
 				} else if (bt == 3) { // BLK_WOODJUNGLE
-					tt = "log_jungle_top.png";
-					st = "log_jungle.png";
+					ttx = 20;
+					tty = 9;
+					stx = 18;
+					sty = 9;
 				}
-				getTextureCoordinates(tt, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(ttx, tty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
 				if (dir == 0) {
-					getTextureCoordinates(st, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2];
@@ -810,7 +971,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 					tx2[3] = tx2[1];
 					ty1[3] = ty1[1];
 					ty2[3] = ty2[1];
-					getTextureCoordinates(st, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[4] = tx1[5] = tx1[0];
 					ty1[1] = ty1[4] = ty1[5] = ty1[0];
 					tx2[1] = tx2[4] = tx2[5] = tx2[0];
@@ -824,13 +985,13 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 					tx2[5] = tx2[1];
 					ty1[5] = ty1[1];
 					ty2[5] = ty2[1];
-					getTextureCoordinates(st, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[3] = tx1[2] = tx1[0];
 					ty1[1] = ty1[3] = ty1[2] = ty1[0];
 					tx2[1] = tx2[3] = tx2[2] = tx2[0];
 					ty2[1] = ty2[3] = ty2[2] = ty2[0];
 				} else if (dir == 3) {
-					getTextureCoordinates(st, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[1] = tx1[0] = tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					ty1[1] = ty1[0] = ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					tx2[1] = tx2[0] = tx2[3] = tx2[4] = tx2[5] = tx2[2];
@@ -840,22 +1001,28 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 				int meta = block & 0x0f;
 				int bt = meta & 0x03;
 				int dir = (meta & 12) >> 2;
-				char* tt = NULL;
-				char* st = NULL;
+				int ttx = -1;
+				int tty = -1;
+				int stx = -1;
+				int sty = -1;
 				if (bt == 0) { // BLK_WOODOAK
-					tt = "log_acacia_top.png";
-					st = "log_acacia.png";
+					ttx = 18;
+					tty = 18;
+					stx = 28;
+					sty = 5;
 				} else if (bt == 1) { // BLK_WOODSPRUCE
-					tt = "log_big_oak_top.png";
-					st = "log_big_oak.png";
+					ttx = 2;
+					tty = 10;
+					stx = 7;
+					sty = 4;
 				}
-				getTextureCoordinates(tt, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(ttx, tty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
 				if (dir == 0) {
-					getTextureCoordinates(st, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2];
@@ -869,7 +1036,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 					tx2[3] = tx2[1];
 					ty1[3] = ty1[1];
 					ty2[3] = ty2[1];
-					getTextureCoordinates(st, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[4] = tx1[5] = tx1[0];
 					ty1[1] = ty1[4] = ty1[5] = ty1[0];
 					tx2[1] = tx2[4] = tx2[5] = tx2[0];
@@ -883,13 +1050,13 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 					tx2[5] = tx2[1];
 					ty1[5] = ty1[1];
 					ty2[5] = ty2[1];
-					getTextureCoordinates(st, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[3] = tx1[2] = tx1[0];
 					ty1[1] = ty1[3] = ty1[2] = ty1[0];
 					tx2[1] = tx2[3] = tx2[2] = tx2[0];
 					ty2[1] = ty2[3] = ty2[2] = ty2[0];
 				} else if (dir == 3) {
-					getTextureCoordinates(st, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[1] = tx1[0] = tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					ty1[1] = ty1[0] = ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					tx2[1] = tx2[0] = tx2[3] = tx2[4] = tx2[5] = tx2[2];
@@ -900,272 +1067,273 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 				int dir = meta & 0x07;
 				int act = meta & 0x08;
 				if (dir == 1) {
-					getTextureCoordinates("dispenser_front_vertical.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-					getTextureCoordinates("furnace_top.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(2, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(27, 13, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[2] = tx1[3] = tx1[4] = tx1[5] = tx1[1];
 					tx2[2] = tx2[3] = tx2[4] = tx2[5] = tx2[1];
 					ty1[2] = ty1[3] = ty1[4] = ty1[5] = ty1[1];
 					ty2[2] = ty2[3] = ty2[4] = ty2[5] = ty2[1];
 				} else if (dir == 0) {
-					getTextureCoordinates("dispenser_front_vertical.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-					getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(2, 2, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[2] = tx1[3] = tx1[4] = tx1[5] = tx1[0];
 					tx2[2] = tx2[3] = tx2[4] = tx2[5] = tx2[0];
 					ty1[2] = ty1[3] = ty1[4] = ty1[5] = ty1[0];
 					ty2[2] = ty2[3] = ty2[4] = ty2[5] = ty2[0];
 				} else {
-					getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[0];
 					tx2[1] = tx2[0];
 					ty1[1] = ty1[0];
 					ty2[1] = ty2[0];
-					getTextureCoordinates("furnace_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(18, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2];
-					if (dir == 2) getTextureCoordinates("dispenser_front_horizontal.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
-					else if (dir == 3) getTextureCoordinates("dispenser_front_horizontal.png", &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
-					else if (dir == 4) getTextureCoordinates("dispenser_front_horizontal.png", &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
-					else if (dir == 5) getTextureCoordinates("dispenser_front_horizontal.png", &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
+					if (dir == 2) getTextureCoordinates(23, 1, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					else if (dir == 3) getTextureCoordinates(23, 1, &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
+					else if (dir == 4) getTextureCoordinates(23, 1, &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
+					else if (dir == 5) getTextureCoordinates(23, 1, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
 				}
 			} else if (block == BLK_SANDSTONE || block == BLK_SANDSTONESLABDOUBLE) {
-				getTextureCoordinates("sandstone_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("sandstone_bottom.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("sandstone_normal.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(27, 17, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(14, 5, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(3, 21, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_PURPURPILLAR) {
-				getTextureCoordinates("purpur_pillar_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(20, 0, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
-				getTextureCoordinates("purpur_pillar.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(27, 8, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_SANDSTONECHISELED) {
-				getTextureCoordinates("sandstone_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("sandstone_bottom.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("sandstone_carved.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(27, 17, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(14, 5, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(7, 0, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_SANDSTONESMOOTH || block == BLK_SMOOTHSANDSTONESLABDOUBLE) {
-				getTextureCoordinates("sandstone_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("sandstone_bottom.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("sandstone_smooth.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(27, 17, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(14, 5, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(8, 17, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_STONESLABDOUBLE) {
-				getTextureCoordinates("stone_slab_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(8, 15, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
-				getTextureCoordinates("stone_slab_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(23, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_TNT) {
-				getTextureCoordinates("tnt_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("tnt_bottom.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("tnt_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(0, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(21, 15, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(13, 21, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_WORKBENCH) {
-				getTextureCoordinates("crafting_table_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("planks_oak.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("crafting_table_front.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(10, 14, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(30, 19, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(4, 14, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[2];
 				ty1[3] = ty1[2];
 				tx2[3] = tx2[2];
 				ty2[3] = ty2[2];
-				getTextureCoordinates("crafting_table_side.png", &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
+				getTextureCoordinates(24, 9, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
 				tx1[4] = tx1[5];
 				ty1[4] = ty1[5];
 				tx2[4] = tx2[5];
 				ty2[4] = ty2[5];
 			} else if (block >> 4 == BLK_FURNACE >> 4) {
 				int dir = (block & 0x0f) & 0x07;
-				getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
-				getTextureCoordinates("furnace_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(18, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
-				if (dir == 3) getTextureCoordinates("furnace_front_off.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
-				else if (dir == 5) getTextureCoordinates("furnace_front_off.png", &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
-				else if (dir == 4) getTextureCoordinates("furnace_front_off.png", &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
-				else getTextureCoordinates("furnace_front_off.png", &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
+				if (dir == 3) getTextureCoordinates(3, 6, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				else if (dir == 5) getTextureCoordinates(3, 6, &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
+				else if (dir == 4) getTextureCoordinates(3, 6, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
+				else getTextureCoordinates(3, 6, &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
 			} else if (block >> 4 == BLK_FURNACESMELTING >> 4) {
 				int dir = (block & 0x0f) & 0x07;
-				getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				tx1[1] = tx1[0];
 				tx2[1] = tx2[0];
 				ty1[1] = ty1[0];
 				ty2[1] = ty2[0];
-				getTextureCoordinates("furnace_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(18, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
-				if (dir == 3) getTextureCoordinates("furnace_front_on.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
-				else if (dir == 5) getTextureCoordinates("furnace_front_on.png", &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
-				else if (dir == 4) getTextureCoordinates("furnace_front_on.png", &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
-				else getTextureCoordinates("furnace_front_on.png", &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
+				if (dir == 3) getTextureCoordinates(14, 21, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				else if (dir == 5) getTextureCoordinates(14, 21, &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
+				else if (dir == 4) getTextureCoordinates(14, 21, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
+				else getTextureCoordinates(14, 21, &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
 			} else if (block == BLK_JUKEBOX) {
-				getTextureCoordinates("jukebox_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("jukebox_side.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(7, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(8, 19, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1];
 			} else if (block >> 4 == BLK_BROWNMUSHROOMBLOCK >> 4 || block >> 4 == BLK_REDMUSHROOMBLOCK >> 4) {
-				const char* txc = (block >> 4) == (BLK_BROWNMUSHROOMBLOCK >> 4) ? "mushroom_block_skin_brown.png" : "mushroom_block_skin_red.png";
+				int txcx = (block >> 4) == (BLK_BROWNMUSHROOMBLOCK >> 4) ? 20 : 22;
+				int txcy = (block >> 4) == (BLK_BROWNMUSHROOMBLOCK >> 4) ? 17 : 19;
 				int meta = block & 0x0f;
 				if (meta == 0) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(19, 9, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1] = tx1[0];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1] = ty1[0];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1] = tx2[0];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1] = ty2[0];
 				} else if (meta == 1) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[4] = tx1[2] = tx1[1];
 					ty1[4] = ty1[2] = ty1[1];
 					tx2[4] = tx2[2] = tx2[1];
 					ty2[4] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[5] = tx1[0];
 					ty1[3] = ty1[5] = ty1[0];
 					tx2[3] = tx2[5] = tx2[0];
 					ty2[3] = ty2[5] = ty2[0];
 				} else if (meta == 2) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[4] = tx1[5] = tx1[2] = tx1[1];
 					ty1[4] = ty1[5] = ty1[2] = ty1[1];
 					tx2[4] = tx2[5] = tx2[2] = tx2[1];
 					ty2[4] = ty2[5] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[0];
 					ty1[3] = ty1[0];
 					tx2[3] = tx2[0];
 					ty2[3] = ty2[0];
 				} else if (meta == 3) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[5] = tx1[2] = tx1[1];
 					ty1[5] = ty1[2] = ty1[1];
 					tx2[5] = tx2[2] = tx2[1];
 					ty2[5] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[4] = tx1[0];
 					ty1[3] = ty1[4] = ty1[0];
 					tx2[3] = tx2[4] = tx2[0];
 					ty2[3] = ty2[4] = ty2[0];
 				} else if (meta == 4) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[4] = tx1[3] = tx1[2] = tx1[1];
 					ty1[4] = ty1[3] = ty1[2] = ty1[1];
 					tx2[4] = tx2[3] = tx2[2] = tx2[1];
 					ty2[4] = ty2[3] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[5] = tx1[0];
 					ty1[5] = ty1[0];
 					tx2[5] = tx2[0];
 					ty2[5] = ty2[0];
 				} else if (meta == 5) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 				} else if (meta == 6) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[3] = tx1[5] = tx1[2] = tx1[1];
 					ty1[3] = ty1[5] = ty1[2] = ty1[1];
 					tx2[3] = tx2[5] = tx2[2] = tx2[1];
 					ty2[3] = ty2[5] = ty2[2] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[4] = tx1[0];
 					ty1[4] = ty1[0];
 					tx2[4] = tx2[0];
 					ty2[4] = ty2[0];
 				} else if (meta == 7) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[4] = tx1[3] = tx1[1];
 					ty1[4] = ty1[3] = ty1[1];
 					tx2[4] = tx2[3] = tx2[1];
 					ty2[4] = ty2[3] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[5] = tx1[2] = tx1[0];
 					ty1[5] = ty1[2] = ty1[0];
 					tx2[5] = tx2[2] = tx2[0];
 					ty2[5] = ty2[2] = ty2[0];
 				} else if (meta == 8) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[3] = tx1[5] = tx1[4] = tx1[1];
 					ty1[3] = ty1[5] = ty1[4] = ty1[1];
 					tx2[3] = tx2[5] = tx2[4] = tx2[1];
 					ty2[3] = ty2[5] = ty2[4] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[2] = tx1[0];
 					ty1[2] = ty1[0];
 					tx2[2] = tx2[0];
 					ty2[2] = ty2[0];
 				} else if (meta == 9) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(19, 9, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[5] = tx1[3] = tx1[1];
 					ty1[5] = ty1[3] = ty1[1];
 					tx2[5] = tx2[3] = tx2[1];
 					ty2[5] = ty2[3] = ty2[1];
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[4] = tx1[2] = tx1[0];
 					ty1[4] = ty1[2] = ty1[0];
 					tx2[4] = tx2[2] = tx2[0];
 					ty2[4] = ty2[2] = ty2[0];
 				} else if (meta == 10) {
-					getTextureCoordinates("mushroom_block_inside.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(19, 9, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[0];
 					tx2[1] = tx2[0];
 					ty1[1] = ty1[0];
 					ty2[1] = ty2[0];
-					getTextureCoordinates("mushroom_block_skin_stem.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(1, 14, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2];
 				} else if (meta == 14) {
-					getTextureCoordinates(txc, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(txcx, txcy, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1] = tx1[0];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1] = ty1[0];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1] = tx2[0];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1] = ty2[0];
 				} else if (meta == 15) {
-					getTextureCoordinates("mushroom_block_skin_stem.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(1, 14, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1] = tx1[0];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1] = ty1[0];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1] = tx2[0];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1] = ty2[0];
 				}
 			} else if (block == BLK_MELONBLOCK) {
-				getTextureCoordinates("melon_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("melon_side.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(20, 14, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(9, 21, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
@@ -1173,23 +1341,23 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 			} else if (block == BLK_COMMANDBLOCK) {
 				return; // TODO:
 			} else if (block == BLK_QUARTZBLOCK || block == BLK_QUARTZSLABDOUBLE) {
-				getTextureCoordinates("quartz_block_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("quartz_block_bottom.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-				getTextureCoordinates("quartz_block_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				getTextureCoordinates(28, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(9, 18, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(3, 15, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_CHISELEDQUARTZBLOCK) {
-				getTextureCoordinates("quartz_block_chiseled_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("quartz_block_chiseled.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(10, 4, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(15, 5, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
 				ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1];
 			} else if (block == BLK_PILLARQUARTZBLOCK) {
-				getTextureCoordinates("quartz_block_lines_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-				getTextureCoordinates("quartz_block_lines.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(23, 15, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(2, 17, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 				tx1[3] = tx1[4] = tx1[5] = tx1[2] = tx1[1];
 				ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 				tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
@@ -1199,34 +1367,34 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 				int dir = meta & 0x07;
 				int act = meta & 0x08;
 				if (dir == 1) {
-					getTextureCoordinates("dropper_front_vertical.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-					getTextureCoordinates("furnace_top.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(27, 18, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(27, 13, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
 					tx1[2] = tx1[3] = tx1[4] = tx1[5] = tx1[1];
 					tx2[2] = tx2[3] = tx2[4] = tx2[5] = tx2[1];
 					ty1[2] = ty1[3] = ty1[4] = ty1[5] = ty1[1];
 					ty2[2] = ty2[3] = ty2[4] = ty2[5] = ty2[1];
 				} else if (dir == 0) {
-					getTextureCoordinates("dropper_front_vertical.png", &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
-					getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(27, 18, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+					getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[2] = tx1[3] = tx1[4] = tx1[5] = tx1[0];
 					tx2[2] = tx2[3] = tx2[4] = tx2[5] = tx2[0];
 					ty1[2] = ty1[3] = ty1[4] = ty1[5] = ty1[0];
 					ty2[2] = ty2[3] = ty2[4] = ty2[5] = ty2[0];
 				} else {
-					getTextureCoordinates("furnace_top.png", &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					getTextureCoordinates(27, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
 					tx1[1] = tx1[0];
 					tx2[1] = tx2[0];
 					ty1[1] = ty1[0];
 					ty2[1] = ty2[0];
-					getTextureCoordinates("furnace_side.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					getTextureCoordinates(18, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
 					tx1[3] = tx1[4] = tx1[5] = tx1[2];
 					tx2[3] = tx2[4] = tx2[5] = tx2[2];
 					ty1[3] = ty1[4] = ty1[5] = ty1[2];
 					ty2[3] = ty2[4] = ty2[5] = ty2[2];
-					if (dir == 2) getTextureCoordinates("ddropper_front_horizontal.png", &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
-					else if (dir == 3) getTextureCoordinates("dropper_front_horizontal.png", &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
-					else if (dir == 4) getTextureCoordinates("dropper_front_horizontal.png", &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
-					else if (dir == 5) getTextureCoordinates("dropper_front_horizontal.png", &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
+					if (dir == 2) getTextureCoordinates(11, 0, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					else if (dir == 3) getTextureCoordinates(11, 0, &tx1[3], &ty1[3], &tx2[3], &ty2[3]);
+					else if (dir == 4) getTextureCoordinates(11, 0, &tx1[4], &ty1[4], &tx2[4], &ty2[4]);
+					else if (dir == 5) getTextureCoordinates(11, 0, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
 				}
 			} else if (block == BLK_HAYBALE) {
 
@@ -1250,7 +1418,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 			*vexs += fc * 4;
 			return;
 		}
-		if (tn != NULL) {
+		if (tx >= 0 && ty >= 0) {
 			float tx1 = 0.;
 			float ty1 = 0.;
 			float tx2 = 1.;
@@ -1261,7 +1429,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 			} else {
 				*vex = realloc(*vex, ((fc * 4) + *vexs) * sizeof(struct vertex_tex));
 			}
-			getTextureCoordinates(tn, &tx1, &ty1, &tx2, &ty2);
+			getTextureCoordinates(tx, ty, &tx1, &ty1, &tx2, &ty2);
 			createSubCube(0.5, &((*vex)[*vexs]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
 			*vexs += fc * 4;
 		}
@@ -1271,8 +1439,8 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 int isBlockOpaque(block block) {
 	int bs = block >> 4;
 	bs <<= 4;
-	return bs == BLK_STONE || bs == BLK_GRASS || bs == BLK_DIRT || bs == BLK_COBBLESTONE || bs == BLK_WOODENPLANKOAK || bs == BLK_BEDROCK || (bs >= BLK_SAND && bs <= BLK_NOTEBLOCK) || bs == BLK_WOOL || bs == BLK_BLOCKOFGOLD || bs == BLK_BLOCKOFIRON || bs == BLK_STONESLABDOUBLE || bs == BLK_BRICK || bs == BLK_TNT || bs == BLK_BOOKSHELF || bs == BLK_MOSSSTONE || bs == BLK_OBSIDIAN || bs == BLK_DIAMONDORE || bs == BLK_BLOCKOFDIAMOND || bs == BLK_WORKBENCH || bs == BLK_FURNACE || bs == BLK_FURNACESMELTING || bs == BLK_REDSTONEORE || bs == BLK_REDSTONEOREGLOWING || bs == BLK_SNOWBLOCK || bs == BLK_CLAYBLOCK || bs == BLK_JUKEBOX || bs == BLK_PUMPKIN || bs == BLK_NETHERRACK || bs == BLK_SOULSAND || bs == BLK_GLOWSTONE || bs == BLK_JACK_O_LANTERN || bs == BLK_MONSTEREGGSTONE || bs == BLK_STONEBRICKS || bs == BLK_MELONBLOCK || bs == BLK_MYCELIUM || bs == BLK_NETHERBRICK || bs == BLK_ENDSTONE || bs == BLK_REDSTONELAMP || bs == BLK_REDSTONELAMPON || bs == BLK_OAK_WOODSLABDOUBLE
-			|| bs == BLK_EMERALDORE || bs == BLK_BLOCKOFEMERALD || bs == BLK_COMMANDBLOCK || bs == BLK_BLOCKOFREDSTONE || bs == BLK_NETHERQUARTZORE || bs == BLK_QUARTZBLOCK || bs == BLK_DROPPER || bs == BLK_STAINEDCLAYWHITE || bs == BLK_DISPENSER || bs == BLK_WOODOAK || bs == BLK_WOODACACIAOAK || bs == BLK_PRISMARINE || bs == BLK_PRISMARINEBRICKS || bs == BLK_DARKPRISMARINE || bs == BLK_SEALANTERN || bs == BLK_HAYBALE || bs == BLK_HARDENEDCLAY || bs == BLK_BLOCKOFCOAL || bs == BLK_PACKEDICE || bs == BLK_REDSANDSTONE || bs == BLK_REDSANDSTONESLABDOUBLE || bs == BLK_PURPURBLOCK || bs == BLK_PURPURPILLAR || bs == BLK_PURPURSLABDOUBLE || bs == BLK_ENDSTONEBRICKS;
+	return bs == BLK_STONE || bs == BLK_GRASS || bs == BLK_DIRT || bs == BLK_COBBLESTONE || bs == BLK_WOODENPLANKOAK || bs == BLK_BEDROCK || (bs >= BLK_SAND && bs <= BLK_WOODOAK) || bs == BLK_SPONGE || bs == BLK_WETSPONGE || (bs >= BLK_LAPISLAZULIORE && bs <= BLK_NOTEBLOCK) || bs == BLK_WOOL || bs == BLK_BLOCKOFGOLD || bs == BLK_BLOCKOFIRON || bs == BLK_STONESLABDOUBLE || bs == BLK_BRICK || bs == BLK_TNT || bs == BLK_BOOKSHELF || bs == BLK_MOSSSTONE || bs == BLK_OBSIDIAN || bs == BLK_DIAMONDORE || bs == BLK_BLOCKOFDIAMOND || bs == BLK_WORKBENCH || bs == BLK_FURNACE || bs == BLK_FURNACESMELTING || bs == BLK_REDSTONEORE || bs == BLK_REDSTONEOREGLOWING || bs == BLK_SNOWBLOCK || bs == BLK_CLAYBLOCK || bs == BLK_JUKEBOX || bs == BLK_PUMPKIN || bs == BLK_NETHERRACK || bs == BLK_SOULSAND || bs == BLK_GLOWSTONE || bs == BLK_JACK_O_LANTERN || bs == BLK_MONSTEREGGSTONE || bs == BLK_STONEBRICKS || bs == BLK_MELONBLOCK || bs == BLK_MYCELIUM || bs == BLK_NETHERBRICK || bs == BLK_ENDSTONE
+			|| bs == BLK_REDSTONELAMP || bs == BLK_REDSTONELAMPON || bs == BLK_OAK_WOODSLABDOUBLE || bs == BLK_EMERALDORE || bs == BLK_BLOCKOFEMERALD || bs == BLK_COMMANDBLOCK || bs == BLK_BLOCKOFREDSTONE || bs == BLK_NETHERQUARTZORE || bs == BLK_QUARTZBLOCK || bs == BLK_DROPPER || bs == BLK_STAINEDCLAYWHITE || bs == BLK_DISPENSER || bs == BLK_WOODOAK || bs == BLK_WOODACACIAOAK || bs == BLK_PRISMARINE || bs == BLK_PRISMARINEBRICKS || bs == BLK_DARKPRISMARINE || bs == BLK_SEALANTERN || bs == BLK_HAYBALE || bs == BLK_HARDENEDCLAY || bs == BLK_BLOCKOFCOAL || bs == BLK_PACKEDICE || bs == BLK_REDSANDSTONE || bs == BLK_REDSANDSTONESLABDOUBLE || bs == BLK_PURPURBLOCK || bs == BLK_PURPURPILLAR || bs == BLK_PURPURSLABDOUBLE || bs == BLK_ENDSTONEBRICKS;
 }
 
 int doesBlockCollide(block block) {

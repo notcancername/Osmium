@@ -77,7 +77,7 @@ void drawTriangles(struct vao* vao);
 
 void drawQuads(struct vao* vao);
 
-void drawChunk(struct chunk* chunk);
+void drawChunk(struct chunk* chunk, int t);
 
 void drawWorld(struct world* world);
 
