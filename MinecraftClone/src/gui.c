@@ -465,6 +465,7 @@ void drawConnecting(float partialTick) {
 			cgs = 7;
 		}
 		if (spawnedIn) {
+			printf("switch state\n");
 			guistate = GSTATE_INGAME;
 		}
 	}

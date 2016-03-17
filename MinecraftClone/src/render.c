@@ -210,44 +210,54 @@ void drawSkeleton(struct vao* vao) {
 int updateChunk(struct chunk* chunk) {
 	for (int i = 0; i < 16; i++) {
 		if (chunk->needsUpdate[i]) {
+			struct timespec ts;
+			clock_gettime(CLOCK_MONOTONIC, &ts);
+			double ms2 = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
 			chunk->needsUpdate[i] = 0;
-			//printf("Updating section: %i, %i, %i\n", chunk->x, i, chunk->z);
+			printf("Updating section: %i, %i, %i\n", chunk->x, i, chunk->z);
 			int y = i * 16;
 			struct vertex_tex* vts = NULL;
 			size_t vtsx = 0;
+			int opaw = 0;
 			for (uint16_t x = 0; x < 16; x++) {
 				for (uint16_t z = 0; z < 16; z++) {
 					for (uint16_t sy = 0; sy < 16; sy++) {
-						block blk = getBlockChunk(chunk, x, y + sy, z);
+						block blk = chunk->blocks[x][z][y + sy];
 						if (blk == BLK_AIR) {
 
 						} else {
 							unsigned char fm = 0x3F;
 							if (isBlockOpaque(blk)) {
-								if (sy + y > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy - 1, z))) {
+								if (sy + y > 0 && isBlockOpaque(chunk->blocks[x][z][y + sy - 1])) {
 									fm ^= 0x08;
 								}
-								if (sy + y < 255 && isBlockOpaque(getBlockChunk(chunk, x, y + sy + 1, z))) {
+								if (sy + y < 255 && isBlockOpaque(chunk->blocks[x][z][y + sy + 1])) {
 									fm ^= 0x04;
 								}
-								if (x > 0 && isBlockOpaque(getBlockChunk(chunk, x - 1, y + sy, z))) {
+								if (x > 0 && isBlockOpaque(chunk->blocks[x - 1][z][y + sy])) {
 									fm ^= 0x20;
 								}
-								if (x < 15 && isBlockOpaque(getBlockChunk(chunk, x + 1, y + sy, z))) {
+								if (x < 15 && isBlockOpaque(chunk->blocks[x + 1][z][y + sy])) {
 									fm ^= 0x10;
 								}
-								if (z > 0 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z - 1))) {
+								if (z > 0 && isBlockOpaque(chunk->blocks[x][z - 1][y + sy])) {
 									fm ^= 0x02;
 								}
-								if (z < 15 && isBlockOpaque(getBlockChunk(chunk, x, y + sy, z + 1))) {
+								if (z < 15 && isBlockOpaque(chunk->blocks[x][z + 1][y + sy])) {
 									fm ^= 0x01;
 								}
 							}
-							drawBlock(&vts, &vtsx, blk, fm, (float) x, (float) sy, (float) z);
+							if (fm > 0) {
+								opaw++;
+								drawBlock(&vts, &vtsx, blk, fm, (float) x, (float) sy, (float) z);
+							}
 						}
 					}
 				}
 			}
+			clock_gettime(CLOCK_MONOTONIC, &ts);
+			ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
+			printf("chunk took: %f opaq = %i/4096\n", ms2, opaw);
 			if (vtsx > 0) {
 				createVAO(vts, vtsx, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1);
 				free(vts);
@@ -264,9 +274,6 @@ int updateChunk(struct chunk* chunk) {
 }
 
 void drawChunk(struct chunk* chunk) {
-	//struct timespec ts;
-	///clock_gettime(CLOCK_MONOTONIC, &ts);
-	//double ms2 = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
 	updateChunk(chunk);
 	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
 	glPushMatrix();
@@ -299,9 +306,6 @@ void drawChunk(struct chunk* chunk) {
 	//}
 	//glPopMatrix();
 
-	//clock_gettime(CLOCK_MONOTONIC, &ts);
-	//ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
-	//printf("chunk took: %f\n", ms2);
 }
 
 void drawWorld(struct world* world) {

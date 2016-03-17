@@ -637,6 +637,12 @@ int main(int argc, char *argv[]) {
 	blockMap[409] = "glass_blue.png";
 	blockSizeMap = malloc(blockMapLength * sizeof(int));
 	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/blocks/", def_wrap, &def_width, &def_height, TX_DEFAULT, 1, blockMap, 410, blockSizeMap);
+	for (int tci = 0; tci < blockMapLength; tci++) {
+		char* tc = blockMap[tci];
+		int tx = blockSizeMap[tci] % def_wrap;
+		int ty = blockSizeMap[tci] / def_wrap;
+		printf("\"%s\" %i, %i\n", tc, tx, ty);
+	}
 	clock_gettime(CLOCK_MONOTONIC, &ts);
 	lt = (double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.;
 	lf = lt;

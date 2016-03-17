@@ -716,9 +716,9 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			}
 		}
 	} else {
-		printf("reading pktlen\n");
+		//printf("reading pktlen\n");
 		readVarInt_stream(&pktlen, conn->fd);
-		printf("pktlen = %i\n", pktlen);
+		//printf("pktlen = %i\n", pktlen);
 		if (pktlen > 0) {
 			pktbuf = malloc(pktlen);
 			size_t r = 0;
@@ -728,7 +728,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 #else
 				ssize_t x = read(conn->fd, pktbuf + r, pktlen - r);
 #endif
-				printf("read = %i\n", x);
+				//printf("read = %i\n", x);
 				if (x <= 0) {
 					printf("read error: %s\n", strerror(errno));
 					free(pktbuf);
@@ -743,7 +743,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 	size_t ps = pktlen;
 	int32_t id = 0;
 	size_t t = readVarInt(&id, pbuf, ps);
-	//printf("pktid = %i\n", id);
+	//printf("pktid = %02X\n", id);
 	pbuf += t;
 	ps -= t;
 	packet->id = id;
@@ -1163,15 +1163,25 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			int rx = readVarInt(&packet->data.play_server.multiblockchange.record_count, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
-			size_t px = sizeof(struct mbc_record) * packet->data.play_server.multiblockchange.record_count;
-			if (ps < px) {
-				free(pktbuf);
-				return -1;
+			packet->data.play_server.multiblockchange.records = malloc(sizeof(struct mbc_record) * packet->data.play_server.multiblockchange.record_count);
+			for (int i = 0; i < packet->data.play_server.multiblockchange.record_count; i++) {
+				if (ps < 3) {
+					free(packet->data.play_server.multiblockchange.records);
+					free(pktbuf);
+					return -1;
+				}
+				unsigned char hpos = pbuf[0];
+				pbuf++;
+				ps--;
+				packet->data.play_server.multiblockchange.records[i].x = (hpos & 0xF0) >> 4;
+				packet->data.play_server.multiblockchange.records[i].z = (hpos & 0x0F);
+				packet->data.play_server.multiblockchange.records[i].y = pbuf[0];
+				pbuf++;
+				ps--;
+				rx = readVarInt(&packet->data.play_server.multiblockchange.records[i].blockID, pbuf, ps);
+				pbuf += rx;
+				ps -= rx;
 			}
-			packet->data.play_server.multiblockchange.records = malloc(px);
-			memcpy(&packet->data.play_server.multiblockchange.records, pbuf, px);
-			pbuf += px;
-			ps -= px;
 		} else if (id == PKT_PLAY_SERVER_CONFIRMTRANSACTION) {
 			if (ps < 4) {
 				free(pktbuf);

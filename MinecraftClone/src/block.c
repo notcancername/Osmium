@@ -13,19 +13,9 @@
 #include "xstring.h"
 #include "models.h"
 
-void getTextureCoordinates(const char* name, float* tx1, float* ty1, float* tx2, float* ty2) {
-	float tw = 1. / (float) def_wrap;
-	float th = 1. / ((float) def_height / ((float) def_width / (float) def_wrap));
-	float tx = 2.;
-	float ty = 1.;
-	for (int tci = 0; tci < blockMapLength; tci++) {
-		char* tc = blockMap[tci];
-		if (streq_nocase(tc, name)) {
-			tx = blockSizeMap[tci] % def_wrap;
-			ty = blockSizeMap[tci] / def_wrap;
-			break;
-		}
-	}
+void getTextureCoordinates(int tx, int ty, float* tx1, float* ty1, float* tx2, float* ty2) {
+	static float tw = 1. / (float) def_wrap;
+	static float th = 1. / ((float) def_height / ((float) def_width / (float) def_wrap));
 	*tx1 = tw * tx + ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
 	*ty1 = th * ty + ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
 	*tx2 = tw * (tx + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
