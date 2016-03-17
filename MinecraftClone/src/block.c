@@ -26,10 +26,10 @@ void getTextureCoordinates(const char* name, float* tx1, float* ty1, float* tx2,
 			break;
 		}
 	}
-	*tx1 = tw * tx + (float) TEXTURE_BUFFER / (float) def_width;
-	*ty1 = th * ty + (float) TEXTURE_BUFFER / (float) def_height;
-	*tx2 = tw * (tx + 1) - (float) TEXTURE_BUFFER / (float) def_width;
-	*ty2 = th * (ty + 1) - (float) TEXTURE_BUFFER / (float) def_height;
+	*tx1 = tw * tx + ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
+	*ty1 = th * ty + ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
+	*tx2 = tw * (tx + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_width;
+	*ty2 = th * (ty + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
 }
 
 void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char faceMask, float x, float y, float z) {

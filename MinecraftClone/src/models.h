@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TEXTURE_BUFFER 4
+#define TEXTURE_BUFFER 0
 
 int loadTexturePNG(char* path, int id, int s);
 

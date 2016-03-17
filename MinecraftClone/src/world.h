@@ -43,11 +43,15 @@ struct world {
 		char* levelType;
 		struct encpos spawnpos;
 		int32_t dimension;
+		uint64_t time;
+		uint64_t age;
 };
 
 struct chunk* getChunk(struct world* world, int16_t x, int16_t z);
 
 void removeChunk(struct world* world, struct chunk* chunk);
+
+int getBiome(struct world* world, int32_t x, int32_t z);
 
 void addChunk(struct world* world, struct chunk* chunk);
 

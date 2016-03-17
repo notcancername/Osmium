@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
 	height = 600;
 	if (!glfwInit()) return -1;
 	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
-	glfwWindowHint(GLFW_SAMPLES, 4);
+	//glfwWindowHint(GLFW_SAMPLES, 4); TODO: use shaders and a 2D texture array so we can antialias.
 	glfwSetErrorCallback(error_callback);
 	window = glfwCreateWindow(800, 600, "Minecraft 1.9 (C Version)", NULL, NULL);
 	if (!window) {
@@ -215,8 +215,8 @@ int main(int argc, char *argv[]) {
 #endif
 	printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
-	glEnable (GL_MULTISAMPLE);
-	glEnable (GL_MULTISAMPLE_ARB);
+	//glEnable (GL_MULTISAMPLE);
+	//glEnable (GL_MULTISAMPLE_ARB);
 	glEnable (GL_DEPTH_TEST);
 	glEnable (GL_TEXTURE_2D);
 	loadGUI();

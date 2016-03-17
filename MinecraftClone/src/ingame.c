@@ -23,9 +23,21 @@
 #include <errno.h>
 
 int running = 0;
+struct vao skybox;
 
 void loadIngame() {
-	gs.moveSpeed = .1;
+	gs.moveSpeed = 0.1;
+	struct vertex vts[676];
+	int vi = 0;
+	for (int x1 = -384; x1 <= 384; x1 += 64) {
+		for (int x2 = -384; x2 <= 384; x2 += 64) {
+			virtVertex3f(&vts[vi++], x1, 16., x2);
+			virtVertex3f(&vts[vi++], x1 + 64., 16., x2);
+			virtVertex3f(&vts[vi++], x1 + 64., 16., x2 + 64.);
+			virtVertex3f(&vts[vi++], x1, 16., x2 + 64.);
+		}
+	}
+	createVAO(vts, 676, &skybox, 0, 0);
 }
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
@@ -129,12 +141,15 @@ void ingame_tick() {
 		//TODO else if in lava and not flying
 
 		//ELSE
+		moveStrafe *= 0.98;
+		moveForward *= 0.98;
 		if (gs.usingItem) {
 			moveForward *= .2;
 			moveStrafe *= .2;
 		}
 		double v3 = .91;
 		if (gs.player->onGround) {
+			v3 *= 0.6;
 			//TODO get slipperniss of block below, multiply by .91 set to v3
 		}
 		float v4 = .16277136 / (v3 * v3 * v3);
@@ -158,6 +173,7 @@ void ingame_tick() {
 		}
 		v3 = .91;
 		if (gs.player->onGround) {
+			v3 *= 0.6;
 			//TODO get slipperniss of block below, multiply by .91 set to v3
 		}
 		//
@@ -347,27 +363,146 @@ void drawIngame(float partialTick) {
 	double px = gs.player->x * (1. - partialTick) + gs.player->lx * partialTick;
 	double py = gs.player->y * (1. - partialTick) + gs.player->ly * partialTick;
 	double pz = gs.player->z * (1. - partialTick) + gs.player->lz * partialTick;
-	float v3 = cos(-gs.player->lyaw * 0.017453292 - PI);
-	float v4 = sin(-pyaw * 0.017453292 - PI);
-	float v5 = -cos(-ppitch * 0.017453292);
-	float ly = sin(-ppitch * 0.017453292) + py;
-	float lx = px + v4 * v5;
-	float lz = pz + v3 * v5;
-	gluLookAt(px, py + 1.62, pz, lx, ly + 1.62, lz, 0., 1., 0.);
-//printf("lookat: %f, %f\n", gs.player->pitch, gs.player->yaw);
-//glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
-//if (!tbx) {
-//	struct vertex_tex *vt = NULL;
-//	size_t vts = 0;
-//	drawBlock(&vt, &vts, 1, 0xFF, 0., 0., 0.);
-//	createVAO(vt, vts, &tb, 1, 0);
-//}
-//tbx++;
-//glPushMatrix();
-//glTranslatef(px + 2., py + 1., pz + 1.);
-//glRotatef(tbx, 0., 1., 0.);
-//drawQuads(&tb);
-//glPopMatrix();
+	glRotatef(ppitch, 1., 0., 0.);
+	glRotatef(pyaw + 180, 0., 1., 0.);
+	if (gs.world->dimension == 1) {
+		//TODO
+	} else {
+		glDisable (GL_TEXTURE_2D);
+		glEnable (GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		float ca = 0.;
+		{
+			int tod = gs.world->time % 24000;
+			ca = ((float) tod + partialTick) / 24000. - 0.25;
+			if (ca < 0.) {
+				ca++;
+			} else if (ca > 1.) {
+				ca--;
+			}
+			float cat = ca;
+			ca = 1. - (float) ((cos(ca * PI) + 1) / 2.);
+			ca = cat + (ca - cat) / 3.;
+		}
+		float cmod = cos(ca * PI * 2.) * 2. + .5;
+		if (cmod < 0.) cmod = 0.;
+		if (cmod > 1.) cmod = 1.;
+		int pax = floor(gs.player->x);
+		//int py = floor(gs.player->y);
+		int paz = floor(gs.player->z);
+		int bio = getBiome(gs.world, pax, paz);
+		float temp = 0.8;
+		if (bio == 2) temp = 2.;
+		else if (bio == 3) temp = .2;
+		else if (bio == 4) temp = .7;
+		else if (bio == 5) temp = .25;
+		else if (bio == 6) temp = .8;
+		else if (bio == 8) temp = 2.;
+		else if (bio == 10) temp = 0.;
+		else if (bio == 11) temp = 0.;
+		else if (bio == 12) temp = 0.;
+		else if (bio == 13) temp = 0.;
+		else if (bio == 14) temp = .9;
+		else if (bio == 15) temp = .9;
+		else if (bio == 16) temp = .8;
+		else if (bio == 17) temp = 2.;
+		else if (bio == 18) temp = .7;
+		else if (bio == 19) temp = .25;
+		else if (bio == 20) temp = .2;
+		else if (bio == 21) temp = .95;
+		else if (bio == 22) temp = .95;
+		else if (bio == 23) temp = .95;
+		else if (bio == 25) temp = .2;
+		else if (bio == 26) temp = .05;
+		else if (bio == 27) temp = .7;
+		else if (bio == 28) temp = .7;
+		else if (bio == 29) temp = .7;
+		else if (bio == 30) temp = -.5;
+		else if (bio == 31) temp = -.5;
+		else if (bio == 32) temp = .3;
+		else if (bio == 33) temp = .3;
+		else if (bio == 34) temp = .2;
+		else if (bio == 35) temp = 1.2;
+		else if (bio == 36) temp = 1.;
+		else if (bio == 37) temp = 2.;
+		else if (bio == 38) temp = 2.;
+		else if (bio == 39) temp = 2.;
+		else if (bio == 129) temp = .8;
+		else if (bio == 132) temp = .7;
+		else if (bio == 140) temp = 0.;
+		else if (bio == 165) temp = 2.;
+		else if (bio == 166) temp = 2.;
+		else if (bio == 167) temp = 2.;
+		else if (bio == 160) temp = .25;
+		else if (bio == 131) temp = .2;
+		else if (bio == 162) temp = .2;
+		else if (bio == 161) temp = .25;
+		float fr = .7529412;
+		float fg = .84705883;
+		float fb = 1.;
+		fr *= cmod * .94 + .06;
+		fg *= cmod * .94 + .06;
+		fb *= cmod * .91 + .09;
+		//TODO: sunrise
+
+		temp /= 3.;
+		if (temp < -1.) temp = -1.;
+		if (temp > 1.) temp = 1.;
+		float h = .62222224 - temp * .05;
+		float s = .5 + temp * .1;
+		float br = 1.;
+		float r = 0.;
+		float g = 0.;
+		float b = 0.;
+		h = (h - (float) floor(h)) * 6.;
+		float f = h - (float) floor(h);
+		float p = br * (1. - s);
+		float q = br * (1. - s * f);
+		float t = br * (1. - (s * (1. - f)));
+		int hi = (int) h;
+		if (hi == 0) {
+			r = br * 255. + .5;
+			g = t * 255. + .5;
+			b = p * 255. + .5;
+		} else if (hi == 1) {
+			r = q * 255. + .5;
+			g = br * 255. + .5;
+			b = p * 255. + .5;
+		} else if (hi == 2) {
+			r = p * 255. + .5;
+			g = br * 255. + .5;
+			b = t * 255. + .5;
+		} else if (hi == 3) {
+			r = p * 255. + .5;
+			g = q * 255. + .5;
+			b = br * 255. + .5;
+		} else if (hi == 4) {
+			r = t * 255. + .5;
+			g = p * 255. + .5;
+			b = br * 255. + .5;
+		} else if (hi == 5) {
+			r = br * 255. + .5;
+			g = p * 255. + .5;
+			b = q * 255. + .5;
+		}
+		r /= 255.;
+		g /= 255.;
+		b /= 255.;
+		r *= cmod;
+		g *= cmod;
+		b *= cmod;
+		//TODO: some kind of render distance effect on fog color
+		glClearColor(fr, fg, fb, 1.);
+		//TODO: rain
+		//TODO: thunder
+		glColor4f(r, g, b, 1.);
+		glDepthMask (GL_FALSE);
+		drawQuads(&skybox);
+		glDepthMask (GL_TRUE);
+		glColor4f(1., 1., 1., 1.);
+		glEnable(GL_TEXTURE_2D);
+	}
+	glTranslatef(-px, -(py + 1.62), -pz);
 	drawWorld(gs.world);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -733,7 +868,8 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNPOSITION) {
 			memcpy(&gs.world->spawnpos, &pkt.data.play_server.spawnposition.pos, sizeof(struct encpos));
 		} else if (pkt.id == PKT_PLAY_SERVER_TIMEUPDATE) {
-
+			gs.world->time = pkt.data.play_server.timeupdate.time;
+			gs.world->age = pkt.data.play_server.timeupdate.worldAge;
 		} else if (pkt.id == PKT_PLAY_SERVER_TITLE) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_UPDATESIGN) {

@@ -28,6 +28,12 @@ void removeChunk(struct world* world, struct chunk* chunk) {
 	}
 }
 
+int getBiome(struct world* world, int32_t x, int32_t z) {
+	struct chunk* chunk = getChunk(world, x >> 4, z >> 4);
+	if (chunk == NULL) return 0;
+	return chunk->biomes[z & 0x0f][x & 0x0f];
+}
+
 void addChunk(struct world* world, struct chunk* chunk) {
 	if (world->chunks == NULL) {
 		world->chunks = malloc(sizeof(struct chunk*));
