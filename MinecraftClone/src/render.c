@@ -184,6 +184,16 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 	}
 }
 
+void createBBVao(struct boundingbox* bb) {
+	struct vertex_tex vrt[6 * 4];
+	float tg[6];
+	for (int i = 0; i < 6; i++)
+		tg[i] = 0.;
+	createMultSub((float) (bb->maxX - bb->minX) / 2., (float) (bb->maxY - bb->minY) / 2., (float) (bb->maxZ - bb->minZ) / 2., vrt, (float) (bb->maxX + bb->minX) / 2., (float) (bb->maxY + bb->minY) / 2., (float) (bb->maxZ + bb->minZ) / 2., 0xFF, tg, tg, tg, tg);
+	bb->ovao = malloc(sizeof(struct vao));
+	createVAO(vrt, 6 * 4, bb->ovao, 1, 0);
+}
+
 void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
 	createMultSub(size, size, size, vrt, x, y, z, faceMask, tx1, ty1, tx2, ty2);
 }

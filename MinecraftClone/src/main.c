@@ -222,6 +222,7 @@ int main(int argc, char *argv[]) {
 	loadGUI();
 	loadIngame();
 	loadBlocks();
+	load_entities();
 	def_wrap = 32;
 	blockMapLength = 410;
 	blockMap = malloc(blockMapLength * sizeof(char*));

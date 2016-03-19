@@ -22,8 +22,10 @@ struct gamestate {
 		int moveLeft;
 		int moveRight;
 		int sprinting;
+		int wsprinting;
 		int jumping;
 		int crouching;
+		int wcrouching;
 		int jumpTicks;
 		int usingItem;
 		int flying;

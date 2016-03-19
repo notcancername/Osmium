@@ -128,7 +128,7 @@ void spawnEntity(struct world* world, struct entity* entity) {
 	world->entities[world->entity_count++] = entity;
 }
 
-struct entity* despawnEntity(struct world* world, uint32_t id) {
+struct entity* despawnEntity(struct world* world, int32_t id) {
 	for (size_t i = 0; i < world->entity_count; i++) {
 		if (world->entities[i] != NULL && world->entities[i]->id == id) {
 			struct entity* ent = world->entities[i];
@@ -139,7 +139,7 @@ struct entity* despawnEntity(struct world* world, uint32_t id) {
 	return NULL;
 }
 
-struct entity* getEntity(struct world* world, uint32_t id) {
+struct entity* getEntity(struct world* world, int32_t id) {
 	for (size_t i = 0; i < world->entity_count; i++) {
 		if (world->entities[i] != NULL && world->entities[i]->id == id) {
 			return world->entities[i];

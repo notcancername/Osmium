@@ -20,6 +20,7 @@ struct boundingbox {
 		double maxY;
 		double minZ;
 		double maxZ;
+		struct vao* ovao;
 };
 
 typedef uint16_t block;
@@ -74,8 +75,8 @@ void freeWorld(struct world* world);
 
 void spawnEntity(struct world* world, struct entity* entity);
 
-struct entity* despawnEntity(struct world* world, uint32_t id);
+struct entity* despawnEntity(struct world* world, int32_t id);
 
-struct entity* getEntity(struct world* world, uint32_t id);
+struct entity* getEntity(struct world* world, int32_t id);
 
 #endif /* WORLD_H_ */

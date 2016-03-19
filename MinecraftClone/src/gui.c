@@ -240,12 +240,10 @@ int drawTextbox(int x, int y, int width, int height, char* text, int* cursorPos,
 
 void drawMainMenu(float partialTick) {
 	int fbid;
-	int pfb;
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &pfb);
 	glGenFramebuffers(1, &fbid);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbid);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TX_MMTT, 0);
@@ -338,9 +336,10 @@ void drawMainMenu(float partialTick) {
 		glColorMask(1, 1, 1, 1);
 	}
 	glColor4f(1., 1., 1., 1.);
-	//TODO: render frame
+	glDeleteRenderbuffers(1, &rb);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDeleteFramebuffers(1, &fbid);
 	glViewport(0, 0, width, height);
-	glBindFramebuffer(GL_FRAMEBUFFER, pfb);
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
 	glBegin (GL_QUADS);
 	glTexCoord2f(0., 1.);
@@ -352,8 +351,8 @@ void drawMainMenu(float partialTick) {
 	glTexCoord2f(0., 0.);
 	glVertex3f(0., sheight, -1);
 	glEnd();
-	glDeleteFramebuffers(1, &fbid);
-	glDeleteRenderbuffers(1, &rb);
+	int ttx = TX_MMTT;
+	glDeleteTextures(1, &ttx);
 	int v7 = swidth / 2 - 137;
 	glBindTexture(GL_TEXTURE_2D, TX_TITLE);
 	drawTexturedModalRect(v7, 30, 0, 0, 0, 155, 44);

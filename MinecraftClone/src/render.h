@@ -67,6 +67,8 @@ void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z
 
 void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2);
 
+void createBBVao(struct boundingbox* bb);
+
 void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2);
 
 void createTexCube(float size, struct vao* vao);

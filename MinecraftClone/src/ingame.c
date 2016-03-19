@@ -97,6 +97,11 @@ void ingame_tick() {
 	for (size_t i = 0; i < gs.world->entity_count; i++) {
 		struct entity* ent = gs.world->entities[i];
 		if (ent != NULL) {
+			if (ent->markedKill) {
+				gs.world->entities[i] = NULL;
+				freeEntity(ent);
+				continue;
+			}
 			ent->lx = gs.world->entities[i]->x;
 			ent->ly = gs.world->entities[i]->y;
 			ent->lz = gs.world->entities[i]->z;
@@ -107,6 +112,38 @@ void ingame_tick() {
 			if (fabs(ent->motZ) < 0.005) ent->motZ = 0.;
 		}
 	}
+	if (gs.sprinting && !gs.wsprinting) {
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
+		pkt.data.play_client.entityaction.entityID = gs.player->id;
+		pkt.data.play_client.entityaction.actionID = 3;
+		pkt.data.play_client.entityaction.actionParameter = 0;
+		writePacket(gs.conn, &pkt);
+	} else if (!gs.sprinting && gs.wsprinting) {
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
+		pkt.data.play_client.entityaction.entityID = gs.player->id;
+		pkt.data.play_client.entityaction.actionID = 4;
+		pkt.data.play_client.entityaction.actionParameter = 0;
+		writePacket(gs.conn, &pkt);
+	}
+	gs.wsprinting = gs.sprinting;
+	if (gs.crouching && !gs.wcrouching) {
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
+		pkt.data.play_client.entityaction.entityID = gs.player->id;
+		pkt.data.play_client.entityaction.actionID = 0;
+		pkt.data.play_client.entityaction.actionParameter = 0;
+		writePacket(gs.conn, &pkt);
+	} else if (!gs.crouching && gs.wcrouching) {
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
+		pkt.data.play_client.entityaction.entityID = gs.player->id;
+		pkt.data.play_client.entityaction.actionID = 1;
+		pkt.data.play_client.entityaction.actionParameter = 0;
+		writePacket(gs.conn, &pkt);
+	}
+	gs.wcrouching = gs.crouching;
 	if (gs.jumping) {
 		//if inwater
 		//motY += 0.03999999910593033
@@ -133,6 +170,10 @@ void ingame_tick() {
 	//printf("move %f %i %i\n", moveForward, gs.moveForward, gs.moveBackward);
 	float moveStrafe = gs.moveLeft ? -1. : 0.;
 	if (gs.moveRight) moveStrafe += 1;
+	if (gs.crouching) {
+		moveForward *= .3;
+		moveStrafe *= .3;
+	}
 	if (gs.flying && gs.riding == NULL) {
 		//TODO: flight
 	} else {
@@ -366,7 +407,7 @@ void drawIngame(float partialTick) {
 	double py = gs.player->y * (1. - partialTick) + gs.player->ly * partialTick;
 	double pz = gs.player->z * (1. - partialTick) + gs.player->lz * partialTick;
 	eyeX = px;
-	eyeY = py + 1.62;
+	eyeY = py + (gs.crouching ? 1.54 : 1.62);
 	eyeZ = pz;
 	double v3 = cos(-gs.player->lyaw * 0.017453292 - PI);
 	double v4 = sin(-pyaw * 0.017453292 - PI);
@@ -521,8 +562,14 @@ void drawIngame(float partialTick) {
 		glColor4f(1., 1., 1., 1.);
 		glEnable(GL_TEXTURE_2D);
 	}
-	glTranslatef(-px, -(py + 1.62), -pz);
+	glTranslatef(-eyeX, -eyeY, -eyeZ);
 	drawWorld(gs.world);
+	for (int32_t i = 0; i < gs.world->entity_count; i++) {
+		struct entity* ent = gs.world->entities[i];
+		if (ent != NULL && ent != gs.player) {
+			drawEntity(partialTick, ent);
+		}
+	}
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0., swidth, sheight, 0., -1., 1.);
@@ -578,17 +625,33 @@ void runNetwork(struct conn* conn) {
 		}
 		//printf("recv: %i\n", pkt.id);
 		if (pkt.id == PKT_PLAY_SERVER_SPAWNOBJECT) {
-
+			struct entity* ent = newEntity(pkt.data.play_server.spawnobject.entityID, pkt.data.play_server.spawnobject.x, pkt.data.play_server.spawnobject.y, pkt.data.play_server.spawnobject.z, entNetworkConvert(0, pkt.data.play_server.spawnobject.type), pkt.data.play_server.spawnobject.yaw, pkt.data.play_server.spawnobject.pitch);
+			ent->motX = pkt.data.play_server.spawnobject.velX;
+			ent->motY = pkt.data.play_server.spawnobject.velY;
+			ent->motZ = pkt.data.play_server.spawnobject.velZ;
+			ent->objectData = pkt.data.play_server.spawnobject.data;
+			spawnEntity(gs.world, ent);
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNEXPERIENCEORB) {
-
+			struct entity* ent = newEntity(pkt.data.play_server.spawnexperienceorb.entityID, pkt.data.play_server.spawnexperienceorb.x, pkt.data.play_server.spawnexperienceorb.y, pkt.data.play_server.spawnexperienceorb.z, ENT_EXPERIENCEORB, 0., 0.);
+			ent->objectData = pkt.data.play_server.spawnexperienceorb.count;
+			spawnEntity(gs.world, ent);
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNGLOBALENTITY) {
-
+			//TODO:
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNMOB) {
-
+			struct entity* ent = newEntity(pkt.data.play_server.spawnmob.entityID, pkt.data.play_server.spawnmob.x, pkt.data.play_server.spawnmob.y, pkt.data.play_server.spawnmob.z, entNetworkConvert(1, pkt.data.play_server.spawnmob.type), pkt.data.play_server.spawnmob.yaw, pkt.data.play_server.spawnmob.pitch);
+			ent->motX = pkt.data.play_server.spawnmob.velX;
+			ent->motY = pkt.data.play_server.spawnmob.velY;
+			ent->motZ = pkt.data.play_server.spawnmob.velZ;
+			ent->headpitch = pkt.data.play_server.spawnmob.headPitch;
+			ent->lheadpitch = pkt.data.play_server.spawnmob.headPitch;
+			//TODO: metadata
+			spawnEntity(gs.world, ent);
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNPAINTING) {
-
+			//TODO:
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNPLAYER) {
-
+			struct entity* ent = newEntity(pkt.data.play_server.spawnplayer.entityID, pkt.data.play_server.spawnplayer.x, pkt.data.play_server.spawnplayer.y, pkt.data.play_server.spawnplayer.z, ENT_MPPLAYER, pkt.data.play_server.spawnplayer.yaw, pkt.data.play_server.spawnplayer.pitch);
+			spawnEntity(gs.world, ent);
+			//TODO: metadata
 		} else if (pkt.id == PKT_PLAY_SERVER_ANIMATION) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_STATISTICS) {
@@ -793,7 +856,7 @@ void runNetwork(struct conn* conn) {
 			gs.difficulty = pkt.data.play_server.joingame.difficulty;
 			gs.gamemode = pkt.data.play_server.joingame.gamemode;
 			gs.maxPlayers = pkt.data.play_server.joingame.maxPlayers;
-			gs.player = newEntity(pkt.data.play_server.joingame.eid, 0., 0., 0., ENTITY_OURPLAYER, 0., 0.);
+			gs.player = newEntity(pkt.data.play_server.joingame.eid, 0., 0., 0., ENT_OURPLAYER, 0., 0.);
 			gs.reducedDebugInfo = pkt.data.play_server.joingame.reducedDebugInfo;
 			gs.world = newWorld();
 			spawnEntity(gs.world, gs.player);
@@ -802,13 +865,32 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_MAP) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYRELMOVE) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entityrelmove.entityID);
+			if (ent != NULL) {
+				ent->x += pkt.data.play_server.entityrelmove.dx;
+				ent->y += pkt.data.play_server.entityrelmove.dy;
+				ent->z += pkt.data.play_server.entityrelmove.dz;
+				ent->onGround = pkt.data.play_server.entityrelmove.onGround;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYLOOKRELMOVE) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entitylookrelmove.entityID);
+			if (ent != NULL) {
+				ent->x += pkt.data.play_server.entitylookrelmove.dx;
+				ent->y += pkt.data.play_server.entitylookrelmove.dy;
+				ent->z += pkt.data.play_server.entitylookrelmove.dz;
+				ent->onGround = pkt.data.play_server.entitylookrelmove.onGround;
+				ent->yaw = pkt.data.play_server.entitylookrelmove.yaw;
+				ent->pitch = pkt.data.play_server.entitylookrelmove.pitch;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYLOOK) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entitylook.entityID);
+			if (ent != NULL) {
+				ent->onGround = pkt.data.play_server.entitylook.onGround;
+				ent->yaw = pkt.data.play_server.entitylook.yaw;
+				ent->pitch = pkt.data.play_server.entitylook.pitch;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITY) {
-
+			// this packet seems pretty useless
 		} else if (pkt.id == PKT_PLAY_SERVER_VEHICLEMOVE) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_OPENSIGNEDITOR) {
@@ -848,7 +930,12 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_USEBED) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_DESTROYENTITIES) {
-
+			for (int32_t i = 0; i < pkt.data.play_server.destroyentities.count; i++) {
+				int32_t entityID = pkt.data.play_server.destroyentities.entityIDs[i];
+				struct entity* ent = getEntity(gs.world, entityID);
+				if (ent != NULL) ent->markedKill = 1;
+			}
+			free(pkt.data.play_server.destroyentities.entityIDs);
 		} else if (pkt.id == PKT_PLAY_SERVER_REMOVEENTITYEFFECT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_RESOURCEPACKSEND) {
@@ -856,7 +943,10 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_RESPAWN) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYHEADLOOK) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entityheadlook.entityID);
+			if (ent != NULL) {
+				ent->headpitch = pkt.data.play_server.entityheadlook.headYaw;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_WORLDBORDER) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_CAMERA) {
@@ -901,7 +991,13 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_COLLECTITEM) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYTELEPORT) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entityteleport.entityID);
+			if (ent != NULL) {
+				ent->x = pkt.data.play_server.entityteleport.x;
+				ent->y = pkt.data.play_server.entityteleport.y;
+				ent->z = pkt.data.play_server.entityteleport.z;
+				ent->onGround = pkt.data.play_server.entityteleport.onGround;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYPROPERTIES) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYEFFECT) {
