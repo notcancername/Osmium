@@ -360,10 +360,10 @@ void drawMainMenu(float partialTick) {
 	glPushMatrix();
 	glTranslatef((float) swidth / 2. + 90., 70., 1.);
 	glRotatef(-20., 0., 0., 1.);
-	struct timespec ts;
-	clock_gettime(CLOCK_MONOTONIC, &ts);
 	char* splash = "Minecraft in C!";
 	int sw = stringWidth(splash);
+	struct timespec ts;
+	clock_gettime(CLOCK_MONOTONIC, &ts);
 	double ms = (double) ts.tv_nsec / 1000000. + ts.tv_sec * 1000.;
 	float v9 = 1.8 - fabs(sin((float) (fmod(ms, 1000.)) / 1000. * PI * 2.) * 0.1);
 	v9 = v9 * 100. / (float) (sw + 32);
