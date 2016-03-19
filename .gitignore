@@ -1,9 +1,0 @@
-*.[do]
-*.exe
-*.dll
-
-.cproject
-.project
-
-/MinecraftClone/DebugWindows/
-/MinecraftClone/Debug/

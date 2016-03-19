@@ -1,0 +1,9 @@
+*.[do]
+*.exe
+*.dll
+
+.cproject
+.project
+
+/DebugWindows/
+/Debug/
