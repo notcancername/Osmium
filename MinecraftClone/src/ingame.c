@@ -355,7 +355,9 @@ void ingame_tick() {
 void drawIngame(float partialTick) {
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective((gs.sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70., (double) width / (double) height, 0.1, 16. * 25.);
+	float fov = (gs.sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70.;
+	double whratio = (double) width / (double) height;
+	gluPerspective(fov, whratio, 0.05, viewDistance);
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity();
 	float ppitch = gs.player->pitch * (1. - partialTick) + gs.player->lpitch * partialTick;
@@ -363,6 +365,23 @@ void drawIngame(float partialTick) {
 	double px = gs.player->x * (1. - partialTick) + gs.player->lx * partialTick;
 	double py = gs.player->y * (1. - partialTick) + gs.player->ly * partialTick;
 	double pz = gs.player->z * (1. - partialTick) + gs.player->lz * partialTick;
+	eyeX = px;
+	eyeY = py + 1.62;
+	eyeZ = pz;
+	double v3 = cos(-gs.player->lyaw * 0.017453292 - PI);
+	double v4 = sin(-pyaw * 0.017453292 - PI);
+	double v5 = -cos(-ppitch * 0.017453292);
+	lookY = sin(-ppitch * 0.017453292);
+	lookX = v4 * v5;
+	lookZ = v3 * v5;
+	double llen = sqrt(lookX * lookX + lookY * lookY + lookZ * lookZ);
+	lookY /= llen;
+	lookX /= llen;
+	lookZ /= llen;
+	hnear = 2 * tan(fov / 2.) * 0.05;
+	wnear = hnear * whratio;
+	hfar = 2 * tan(fov / 2.) * viewDistance;
+	wfar = hfar * whratio;
 	glRotatef(ppitch, 1., 0., 0.);
 	glRotatef(pyaw + 180, 0., 1., 0.);
 	if (gs.world->dimension == 1) {
@@ -549,6 +568,7 @@ void drawIngame(float partialTick) {
 void runNetwork(struct conn* conn) {
 	spawnedIn = 0;
 	gs.conn = conn;
+	viewDistance = 16. * 25.;
 	struct packet pkt;
 	struct packet rpkt;
 	while (1) {

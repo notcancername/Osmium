@@ -19,6 +19,7 @@
 #include "block.h"
 #include "ingame.h"
 #include "entity.h"
+#include "globals.h"
 
 void virtVertex3f(union uvertex* vert, float x, float y, float z) {
 	vert->vert.x = x;
@@ -206,7 +207,8 @@ void drawSkeleton(struct vao* vao) {
 	glMultiDrawArrays(GL_LINES, first, count, lc);
 	glBindVertexArray(0);
 }
-
+int acc = 0;
+int tvc = 0;
 int updateChunk(struct chunk* chunk) {
 	struct chunk* chzp = getChunk(gs.world, chunk->x, chunk->z + 1);
 	struct chunk* chzn = getChunk(gs.world, chunk->x, chunk->z - 1);
@@ -220,10 +222,12 @@ int updateChunk(struct chunk* chunk) {
 			chunk->needsUpdate[i] = 0;
 			//printf("Updating section: %i, %i, %i\n", chunk->x, i, chunk->z);
 			int y = i * 16;
-			struct vertex_tex* vts = NULL;
-			size_t vtsx = 0;
-			struct vertex_tex* tvts = NULL;
-			size_t tvtsx = 0;
+			struct vertex_tex* vts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
+			size_t vtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			size_t cvts = 0;
+			struct vertex_tex* tvts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
+			size_t tvtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			size_t tcvts = 0;
 			for (uint16_t x = 0; x < 16; x++) {
 				for (uint16_t z = 0; z < 16; z++) {
 					for (uint16_t sy = 0; sy < 16; sy++) {
@@ -251,9 +255,9 @@ int updateChunk(struct chunk* chunk) {
 								if (z < 15) {
 									if (isBlockOpaque(chunk->blocks[x][z + 1][y + sy])) fm ^= 0x01;
 								} else if (z == 15 && chzp != NULL && isBlockOpaque(chzp->blocks[x][0][y + sy])) fm ^= 0x01;
-								if (fm > 0) drawBlock(&vts, &vtsx, blk, fm, (float) x, (float) sy, (float) z);
+								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z);
 							} else {
-								drawBlock(&tvts, &tvtsx, blk, 0xFF, (float) x, (float) sy, (float) z);
+								drawBlock(&tvts, &tvtsx, &tcvts, blk, 0xFF, (float) x, (float) sy, (float) z);
 							}
 						}
 					}
@@ -263,7 +267,8 @@ int updateChunk(struct chunk* chunk) {
 			//ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
 			//printf("chunk took: %f opaq = %i/4096\n", ms2, opaw);
 			if (vtsx > 0) {
-				createVAO(vts, vtsx, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1);
+				//printf("pic (opaque) = %i\n", cvts);
+				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1);
 				free(vts);
 			} else {
 				if (chunk->vaos[i].vao >= 0) {
@@ -273,7 +278,8 @@ int updateChunk(struct chunk* chunk) {
 				}
 			}
 			if (tvtsx > 0) {
-				createVAO(tvts, tvtsx, &chunk->tvaos[i], 1, chunk->tvaos[i].vao == -1 ? 0 : 1);
+				//printf("pic (trans) = %i\n", tcvts);
+				createVAO(tvts, tcvts, &chunk->tvaos[i], 1, chunk->tvaos[i].vao == -1 ? 0 : 1);
 				free(tvts);
 			} else {
 				if (chunk->tvaos[i].vao >= 0) {
@@ -282,30 +288,183 @@ int updateChunk(struct chunk* chunk) {
 					chunk->tvaos[i].vbo = -1;
 				}
 			}
+			acc++;
+			tvc += cvts + tcvts;
+			//printf("%i chunks, %i verticies, %f verticies/chunk\n", acc, tvc, ((float) tvc / (float) acc));
 		}
 	}
 	return 0;
 }
 
-void drawChunk(struct chunk* chunk, int t) {
+#define FR_TOP 0
+#define FR_BOTTOM 1
+#define FR_LEFT 2
+#define FR_RIGHT 3
+#define FR_NEAR 4
+#define FR_FAR 5
+
+void drawChunk(struct chunk* chunk, int t, struct plane* planes) {
 	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
 	glPushMatrix();
 	for (int i = 0; i < 16; i++) {
+		for (int x = 0; x < 6; x++) {			//TODO: check all 6 planes
+			struct plane* pl = &planes[x];
+			double cpx = chunk->x << 4;
+			if (pl->nx >= 0.) cpx += 16.;
+			double cpy = i << 4;
+			if (pl->ny >= 0.) cpy += 16.;
+			double cpz = chunk->z << 4;
+			if (pl->nz >= 0.) cpz += 16.;
+			double cnx = (chunk->x + 1) << 4;
+			if (pl->nx >= 0.) cnx -= 16.;
+			double cny = (i + 1) << 4;
+			if (pl->ny >= 0.) cny -= 16.;
+			double cnz = (chunk->z + 1) << 4;
+			if (pl->nz >= 0.) cnz -= 16.;
+			double sdist = pl->nx * (cpx - pl->px) + pl->ny * (cpy - pl->py) + pl->nz * (cpz - pl->pz);
+			double sdist2 = pl->nx * (cnx - pl->px) + pl->ny * (cny - pl->py) + pl->nz * (cnz - pl->pz);
+			if (sdist < 0 && sdist2 < 0) {
+				goto cnt;
+			}
+			//sdist = pl->nx * (pl->px - cnx) + pl->ny * (pl->py - cny) + pl->nz * (pl->pz - cnz);
+			//if (sdist > 0) {
+			//goto cnt;
+			//}
+		}
 		if (t) {
 			if (chunk->tvaos[i].vao >= 0) drawQuads(&chunk->tvaos[i]);
 		} else if (chunk->vaos[i].vao >= 0) drawQuads(&chunk->vaos[i]);
+		cnt: ;
 		glTranslatef(0., 16., 0.);
 	}
 	glPopMatrix();
 }
 
+void crossp(double* v1, double* v2, double* res) {
+	res[0] = v1[1] * v2[2] - v1[2] * v2[1];
+	res[1] = v1[2] * v2[0] - v1[0] * v2[2];
+	res[2] = v1[0] * v2[1] - v1[1] * v2[0];
+}
+
 void drawWorld(struct world* world) {
+	struct plane frust[6];
+	double ncx = eyeX + lookX * 0.05;
+	double ncy = eyeY + lookY * 0.05;
+	double ncz = eyeZ + lookZ * 0.05;
+	double fcx = eyeX + lookX * viewDistance;
+	double fcy = eyeY + lookY * viewDistance;
+	double fcz = eyeZ + lookZ * viewDistance;
+	frust[FR_NEAR].nx = lookX;
+	frust[FR_NEAR].ny = lookY;
+	frust[FR_NEAR].nz = lookZ;
+	frust[FR_NEAR].px = ncx;
+	frust[FR_NEAR].py = ncy;
+	frust[FR_NEAR].pz = ncz;
+	frust[FR_FAR].nx = -lookX;
+	frust[FR_FAR].ny = -lookY;
+	frust[FR_FAR].nz = -lookZ;
+	frust[FR_FAR].px = fcx;
+	frust[FR_FAR].py = fcy;
+	frust[FR_FAR].pz = fcz;
+	double xp[3];
+	double zp[3];
+	zp[0] = -lookX;
+	zp[1] = -lookY;
+	zp[2] = -lookZ;
+	double upv[3];
+	upv[0] = 0.;
+	upv[1] = 1.;
+	upv[2] = 0.;
+	crossp(upv, zp, xp);
+	double aul = sqrt(xp[0] * xp[0] + xp[1] * xp[1] + xp[2] * xp[2]);
+	xp[0] /= aul;
+	xp[1] /= aul;
+	xp[2] /= aul;
+	double yp[3];
+	crossp(zp, xp, yp);
+	double aux[3];
+	aux[0] = ncx + (yp[0] * hnear) - eyeX;
+	aux[1] = ncy + (yp[1] * hnear) - eyeY;
+	aux[2] = ncz + (yp[2] * hnear) - eyeZ;
+	aul = sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+	aux[0] /= aul;
+	aux[1] /= aul;
+	aux[2] /= aul;
+	double norm[3];
+	crossp(aux, xp, norm);
+	aul = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+	norm[0] /= aul;
+	norm[1] /= aul;
+	norm[2] /= aul;
+	frust[FR_TOP].nx = norm[0];
+	frust[FR_TOP].ny = norm[1];
+	frust[FR_TOP].nz = norm[2];
+	frust[FR_TOP].px = ncx + (yp[0] * hnear);
+	frust[FR_TOP].py = ncy + (yp[1] * hnear);
+	frust[FR_TOP].pz = ncz + (yp[2] * hnear);
+	//
+	aux[0] = ncx - (yp[0] * hnear) - eyeX;
+	aux[1] = ncy - (yp[1] * hnear) - eyeY;
+	aux[2] = ncz - (yp[2] * hnear) - eyeZ;
+	aul = sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+	aux[0] /= aul;
+	aux[1] /= aul;
+	aux[2] /= aul;
+	crossp(xp, aux, norm);
+	aul = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+	norm[0] /= aul;
+	norm[1] /= aul;
+	norm[2] /= aul;
+	frust[FR_BOTTOM].nx = norm[0];
+	frust[FR_BOTTOM].ny = norm[1];
+	frust[FR_BOTTOM].nz = norm[2];
+	frust[FR_BOTTOM].px = ncx - (yp[0] * hnear);
+	frust[FR_BOTTOM].py = ncy - (yp[1] * hnear);
+	frust[FR_BOTTOM].pz = ncz - (yp[2] * hnear);
+//
+	aux[0] = ncx - (xp[0] * wnear) - eyeX;
+	aux[1] = ncy - (xp[1] * wnear) - eyeY;
+	aux[2] = ncz - (xp[2] * wnear) - eyeZ;
+	aul = sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+	aux[0] /= aul;
+	aux[1] /= aul;
+	aux[2] /= aul;
+	crossp(aux, yp, norm);
+	aul = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+	norm[0] /= aul;
+	norm[1] /= aul;
+	norm[2] /= aul;
+	frust[FR_LEFT].nx = norm[0];
+	frust[FR_LEFT].ny = norm[1];
+	frust[FR_LEFT].nz = norm[2];
+	frust[FR_LEFT].px = ncx - (xp[0] * wnear);
+	frust[FR_LEFT].py = ncy - (xp[1] * wnear);
+	frust[FR_LEFT].pz = ncz - (xp[2] * wnear);
+	//
+	aux[0] = ncx + (xp[0] * wnear) - eyeX;
+	aux[1] = ncy + (xp[1] * wnear) - eyeY;
+	aux[2] = ncz + (xp[2] * wnear) - eyeZ;
+	aul = sqrt(aux[0] * aux[0] + aux[1] * aux[1] + aux[2] * aux[2]);
+	aux[0] /= aul;
+	aux[1] /= aul;
+	aux[2] /= aul;
+	crossp(yp, aux, norm);
+	aul = sqrt(norm[0] * norm[0] + norm[1] * norm[1] + norm[2] * norm[2]);
+	norm[0] /= aul;
+	norm[1] /= aul;
+	norm[2] /= aul;
+	frust[FR_RIGHT].nx = norm[0];
+	frust[FR_RIGHT].ny = norm[1];
+	frust[FR_RIGHT].nz = norm[2];
+	frust[FR_RIGHT].px = ncx + (xp[0] * wnear);
+	frust[FR_RIGHT].py = ncy + (xp[1] * wnear);
+	frust[FR_RIGHT].pz = ncz + (xp[2] * wnear);
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
 			updateChunk(world->chunks[i]);
 			glPushMatrix();
 			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
-			drawChunk(world->chunks[i], 0);
+			drawChunk(world->chunks[i], 0, frust);
 			glPopMatrix();
 		}
 	}
@@ -313,7 +472,7 @@ void drawWorld(struct world* world) {
 		if (world->chunks[i] != NULL) {
 			glPushMatrix();
 			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
-			drawChunk(world->chunks[i], 1);
+			drawChunk(world->chunks[i], 1, frust);
 			glPopMatrix();
 		}
 	}

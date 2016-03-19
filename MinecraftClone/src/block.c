@@ -24,7 +24,7 @@ void getTextureCoordinates(int tx, int ty, float* tx1, float* ty1, float* tx2, f
 	*ty2 = th * (ty + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
 }
 
-void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char faceMask, float x, float y, float z) {
+void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block block, unsigned char faceMask, float x, float y, float z) {
 	unsigned char fc = 0;
 	if (faceMask & 0x01) fc++;
 	if (faceMask & 0x02) fc++;
@@ -32,98 +32,113 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 	if (faceMask & 0x08) fc++;
 	if (faceMask & 0x10) fc++;
 	if (faceMask & 0x20) fc++;
+	goto pimpl;
+	unimpl: ;
+	{
+		float tx1 = 0.;
+		float ty1 = 0.;
+		float tx2 = 1.;
+		float ty2 = 1.;
+		if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + fc * 4 * sizeof(struct vertex_tex)) {
+			*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			*vex = realloc(*vex, *vexs);
+		}
+		getTextureCoordinates(19, 14, &tx1, &ty1, &tx2, &ty2);
+		createSubCube(0.5, &((*vex)[*cvec]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
+		*cvec += fc * 4;
+		return;
+	}
+	pimpl: ;
 	if (block == BLK_SAPLINGOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_SAPLINGSPRUCE) {
-
+		goto unimpl;
 	} else if (block == BLK_SAPLINGBIRCH) {
-
+		goto unimpl;
 	} else if (block == BLK_SAPLINGJUNGLE) {
-
+		goto unimpl;
 	} else if (block == BLK_SAPLINGACACIA) {
-
+		goto unimpl;
 	} else if (block == BLK_SAPLINGDARKOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_WATER) {
-
+		goto unimpl;
 	} else if (block == BLK_WATERNOSPREAD) {
-
+		goto unimpl;
 	} else if (block == BLK_LAVA) {
-
+		goto unimpl;
 	} else if (block == BLK_LAVANOSPREAD) {
-
+		goto unimpl;
 	} else if (block == BLK_RAILPOWERED) {
-
+		goto unimpl;
 	} else if (block == BLK_STICKYPISTON) {
-
+		goto unimpl;
 	} else if (block == BLK_COBWEB) {
-
+		goto unimpl;
 	} else if (block == BLK_TALLGRASSDEADSHRUB) {
-
+		goto unimpl;
 	} else if (block == BLK_TALLGRASSFERN) {
-
+		goto unimpl;
 	} else if (block == BLK_DEADSHRUB) {
-
+		goto unimpl;
 	} else if (block == BLK_PISTON) {
-
+		goto unimpl;
 	} else if (block == BLK_PISTONHEAD) {
-
+		goto unimpl;
 	} else if (block == BLK_PISTONMOVING) {
-
+		goto unimpl;
 	} else if (block == BLK_DANDELION) {
-
+		goto unimpl;
 	} else if (block == BLK_POPPY) {
-
+		goto unimpl;
 	} else if (block == BLK_BLUEORCHID) {
-
+		goto unimpl;
 	} else if (block == BLK_ALLIUM) {
-
+		goto unimpl;
 	} else if (block == BLK_AZUREBLUET) {
-
+		goto unimpl;
 	} else if (block == BLK_REDTULIP) {
-
+		goto unimpl;
 	} else if (block == BLK_ORANGETULIP) {
-
+		goto unimpl;
 	} else if (block == BLK_WHITETULIP) {
-
+		goto unimpl;
 	} else if (block == BLK_PINKTULIP) {
-
+		goto unimpl;
 	} else if (block == BLK_OXEYEDAISY) {
-
+		goto unimpl;
 	} else if (block == BLK_STONESLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_SANDSTONESLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_COBBLESTONESLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_BRICKSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_STONEBRICKSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_NETHERBRICKSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_QUARTZSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_TORCH) {
-
+		goto unimpl;
 	} else if (block == BLK_FIRE) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_CHEST) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONEWIRE) {
-
+		goto unimpl;
 	} else if (block == BLK_WHEATCROP) {
-
+		goto unimpl;
 	} else if (block >> 4 == BLK_FARMLAND >> 4) {
-		if (*vex == NULL) {
-			*vex = malloc(6 * 4 * sizeof(struct vertex_tex));
-			*vexs = 0;
-		} else {
-			*vex = realloc(*vex, ((6 * 4) + *vexs) * sizeof(struct vertex_tex));
+		if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 6 * 4 * sizeof(struct vertex_tex)) {
+			*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			*vex = realloc(*vex, *vexs);
 		}
 		int meta = block & 0x0f;
 		float dof = (1. / 16.);
@@ -136,321 +151,322 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 		ty1[3] = ty1[4] = ty1[5] = ty1[2] = ty1[1];
 		tx2[3] = tx2[4] = tx2[5] = tx2[2] = tx2[1];
 		ty2[3] = ty2[4] = ty2[5] = ty2[2] = ty2[1] - (dof / (float) def_wrap);
-		getTextureCoordinates(meta ? 0, 19 : 30, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
-		createMultSub(0.5, (dof * 15.) / 2., 0.5, &((*vex)[*vexs]), x + 0.5, y + 0.5 - (dof / 2.), z + 0.5, 0xFF, tx1, ty1, tx2, ty2);
-		*vexs += 6 * 4;
+		if (meta) getTextureCoordinates(0, 19, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+		else getTextureCoordinates(30, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+		createMultSub(0.5, (dof * 15.) / 2., 0.5, &((*vex)[*cvec]), x + 0.5, y + 0.5 - (dof / 2.), z + 0.5, 0xFF, tx1, ty1, tx2, ty2);
+		*cvec += 6 * 4;
 	} else if (block == BLK_SIGNBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODDOORBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_RAIL) {
-
+		goto unimpl;
 	} else if (block == BLK_COBBLESTONESTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_SIGNWALLBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_STONEPRESSUREPLATE) {
-
+		goto unimpl;
 	} else if (block == BLK_IRONDOORBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENPRESSUREPLATE) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONETORCH) {
-
+		goto unimpl;
 	} else if (block == BLK_BUTTONSTONE) {
-
+		goto unimpl;
 	} else if (block == BLK_CACTUS) {
-
+		goto unimpl;
 	} else if (block == BLK_SUGARCANEBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_PUMPKIN) {
-
+		goto unimpl;
 	} else if (block == BLK_JACK_O_LANTERN) {
-
+		goto unimpl;
 	} else if (block == BLK_CAKEBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONEREPEATERBLOCKOFF) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONEREPEATERBLOCKON) {
-
+		goto unimpl;
 	} else if (block == BLK_BROWNMUSHROOM) {
-
+		goto unimpl;
 	} else if (block == BLK_REDMUSHROOM) {
-
+		goto unimpl;
 	} else if (block == BLK_GLASSPANE) {
-
+		goto unimpl;
 	} else if (block == BLK_PUMPKINVINE) {
-
+		goto unimpl;
 	} else if (block == BLK_MELONVINE) {
-
+		goto unimpl;
 	} else if (block == BLK_VINES) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATEOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_BRICKSTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_STONEBRICKSTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_LILYPAD) {
-
+		goto unimpl;
 	} else if (block == BLK_NETHERBRICKFENCE) {
-
+		goto unimpl;
 	} else if (block == BLK_NETHERBRICKSTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_NETHERWART) {
-
+		goto unimpl;
 	} else if (block == BLK_ENCHANTMENTTABLE) {
-
+		goto unimpl;
 	} else if (block == BLK_BREWINGSTANDBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_CAULDRONBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDPORTAL) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDPORTALFRAME) {
-
+		goto unimpl;
 	} else if (block == BLK_OAK_WOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_SPRUCE_WOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_BIRCH_WOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_JUNGLE_WOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_ACACIAWOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_DARKOAKWOODSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_COCOAPLANT) {
-
+		goto unimpl;
 	} else if (block == BLK_SANDSTONESTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDERCHEST) {
-
+		goto unimpl;
 	} else if (block == BLK_TRIPWIREHOOK) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSSPRUCE) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSBIRCH) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSJUNGLE) {
-
+		goto unimpl;
 	} else if (block == BLK_COBBLESTONEWALL) {
-
+		goto unimpl;
 	} else if (block == BLK_MOSSYCOBBLESTONEWALL) {
-
+		goto unimpl;
 	} else if (block == BLK_FLOWERPOTBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_CARROTCROP) {
-
+		goto unimpl;
 	} else if (block == BLK_POTATOESCROP) {
-
+		goto unimpl;
 	} else if (block == BLK_BUTTONWOOD) {
-
+		goto unimpl;
 	} else if (block == BLK_HEADBLOCKSKELETON) {
-
+		goto unimpl;
 	} else if (block == BLK_HEADBLOCKWITHER) {
-
+		goto unimpl;
 	} else if (block == BLK_HEADBLOCKZOMBIE) {
-
+		goto unimpl;
 	} else if (block == BLK_HEADBLOCKSTEVE) {
-
+		goto unimpl;
 	} else if (block == BLK_HEADBLOCKCREEPER) {
-
+		goto unimpl;
 	} else if (block == BLK_ANVIL) {
-
+		goto unimpl;
 	} else if (block == BLK_ANVILSLIGHTLYDAMAGED) {
-
+		goto unimpl;
 	} else if (block == BLK_ANVILVERYDAMAGED) {
-
+		goto unimpl;
 	} else if (block == BLK_TRAPPEDCHEST) {
-
+		goto unimpl;
 	} else if (block == BLK_WEIGHTEDPRESSUREPLATELIGHT) {
-
+		goto unimpl;
 	} else if (block == BLK_WEIGHTEDPRESSUREPLATEHEAVY) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONECOMPARATOROFF) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONECOMPARATORON) {
-
+		goto unimpl;
 	} else if (block == BLK_DAYLIGHTSENSOR) {
-
+		goto unimpl;
 	} else if (block == BLK_HOPPER) {
-
+		goto unimpl;
 	} else if (block == BLK_QUARTZSTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEWHITE) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEORANGE) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEMAGENTA) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANELIGHTBLUE) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEYELLOW) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANELIME) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEPINK) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEGRAY) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANELIGHTGRAY) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANECYAN) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEPURPLE) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEBLUE) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEBROWN) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEGREEN) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANERED) {
-
+		goto unimpl;
 	} else if (block == BLK_STAINEDGLASSPANEBLACK) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETWHITE) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETORANGE) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETMAGENTA) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETLIGHTBLUE) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETYELLOW) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETLIME) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETPINK) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETGREY) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETLIGHTGRAY) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETCYAN) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETPURPLE) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETBLUE) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETBROWN) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETGREEN) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETRED) {
-
+		goto unimpl;
 	} else if (block == BLK_CARPETBLACK) {
-
+		goto unimpl;
 	} else if (block == BLK_SUNFLOWER) {
-
+		goto unimpl;
 	} else if (block == BLK_LILAC) {
-
+		goto unimpl;
 	} else if (block == BLK_DOUBLETALLGRASS) {
-
+		goto unimpl;
 	} else if (block == BLK_LARGEFERN) {
-
+		goto unimpl;
 	} else if (block == BLK_ROSEBUSH) {
-
+		goto unimpl;
 	} else if (block == BLK_PEONY) {
-
+		goto unimpl;
 	} else if (block == BLK_STANDINGBANNERBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_WALLBANNERBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_INVERTEDDAYLIGHTSENSOR) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSANDSTONESTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSANDSTONESLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATESPRUCE) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATEBIRCH) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATEJUNGLE) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATEDARKOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEGATEACACIA) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCESPRUCE) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEBIRCH) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEJUNGLE) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEDARKOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_FENCEACACIA) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENDOORBLOCKSPRUCE) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENDOORBLOCKBIRCH) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENDOORBLOCKJUNGLE) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENDOORBLOCKACACIA) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENDOORBLOCKDARKOAK) {
-
+		goto unimpl;
 	} else if (block == BLK_PURPURSTAIRS) {
-
+		goto unimpl;
 	} else if (block == BLK_PURPURSLAB) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDSTONEBRICKS) {
-
+		goto unimpl;
 	} else if (block == BLK_GRASSPATH) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDGATEWAY) {
-
+		goto unimpl;
 	} else if (block == BLK_RAILDETECTOR) {
-
+		goto unimpl;
 	} else if (block == BLK_TALLGRASS) {
-
+		goto unimpl;
 	} else if (block == BLK_BOOKSHELF) {
-
+		goto unimpl;
 	} else if (block == BLK_LADDER) {
-
+		goto unimpl;
 	} else if (block == BLK_LEVER) {
-
+		goto unimpl;
 	} else if (block == BLK_REDSTONETORCHOFF) {
-
+		goto unimpl;
 	} else if (block == BLK_SNOW) {
-
+		goto unimpl;
 	} else if (block == BLK_PORTAL) {
-
+		goto unimpl;
 	} else if (block == BLK_TRAPDOOR) {
-
+		goto unimpl;
 	} else if (block == BLK_IRONBARS) {
-
+		goto unimpl;
 	} else if (block == BLK_DRAGONEGG) {
-
+		goto unimpl;
 	} else if (block == BLK_TRIPWIRE) {
-
+		goto unimpl;
 	} else if (block == BLK_BEACON) {
-
+		goto unimpl;
 	} else if (block == BLK_RAILACTIVATOR) {
-
+		goto unimpl;
 	} else if (block == BLK_IRONTRAPDOOR) {
-
+		goto unimpl;
 	} else if (block == BLK_ENDROD) {
-
+		goto unimpl;
 	} else if (block == BLK_CHORUSPLANT) {
-
+		goto unimpl;
 	} else if (block == BLK_CHORUSFLOWER) {
-
+		goto unimpl;
 	} else if (block == BLK_STRUCTUREBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_BEDBLOCK) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSACACIA) {
-
+		goto unimpl;
 	} else if (block == BLK_WOODENSTAIRSDARKOAK) {
-
+		goto unimpl;
 	} else {
 		int tx = -1;
 		int ty = -1;
@@ -649,7 +665,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 		} else if (block == BLK_HARDENEDCLAY_BLACK) {
 			tx = 5;
 			ty = 19;
-		} else if (block == BLK_PURPURBLOCK) {
+		} else if (block == BLK_PURPURBLOCK || block == BLK_PURPURSLABDOUBLE) {
 			tx = 6;
 			ty = 18;
 		} else if (block == BLK_LAPISLAZULIORE) {
@@ -1397,25 +1413,91 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 					else if (dir == 5) getTextureCoordinates(11, 0, &tx1[5], &ty1[5], &tx2[5], &ty2[5]);
 				}
 			} else if (block == BLK_HAYBALE) {
-
-			} else if (block == BLK_REDSANDSTONE) {
-
+				int meta = block & 0x0f;
+				int dir = (meta & 12) >> 2;
+				int ttx = 26;
+				int tty = 14;
+				int stx = 4;
+				int sty = 1;
+				getTextureCoordinates(ttx, tty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				tx1[1] = tx1[0];
+				tx2[1] = tx2[0];
+				ty1[1] = ty1[0];
+				ty2[1] = ty2[0];
+				if (dir == 0) {
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					tx1[3] = tx1[4] = tx1[5] = tx1[2];
+					ty1[3] = ty1[4] = ty1[5] = ty1[2];
+					tx2[3] = tx2[4] = tx2[5] = tx2[2];
+					ty2[3] = ty2[4] = ty2[5] = ty2[2];
+				} else if (dir == 2) {
+					tx1[2] = tx1[0];
+					tx2[2] = tx2[0];
+					ty1[2] = ty1[0];
+					ty2[2] = ty2[0];
+					tx1[3] = tx1[1];
+					tx2[3] = tx2[1];
+					ty1[3] = ty1[1];
+					ty2[3] = ty2[1];
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					tx1[1] = tx1[4] = tx1[5] = tx1[0];
+					ty1[1] = ty1[4] = ty1[5] = ty1[0];
+					tx2[1] = tx2[4] = tx2[5] = tx2[0];
+					ty2[1] = ty2[4] = ty2[5] = ty2[0];
+				} else if (dir == 1) {
+					tx1[4] = tx1[0];
+					tx2[4] = tx2[0];
+					ty1[4] = ty1[0];
+					ty2[4] = ty2[0];
+					tx1[5] = tx1[1];
+					tx2[5] = tx2[1];
+					ty1[5] = ty1[1];
+					ty2[5] = ty2[1];
+					getTextureCoordinates(stx, sty, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+					tx1[1] = tx1[3] = tx1[2] = tx1[0];
+					ty1[1] = ty1[3] = ty1[2] = ty1[0];
+					tx2[1] = tx2[3] = tx2[2] = tx2[0];
+					ty2[1] = ty2[3] = ty2[2] = ty2[0];
+				} else if (dir == 3) {
+					getTextureCoordinates(stx, sty, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					tx1[1] = tx1[0] = tx1[3] = tx1[4] = tx1[5] = tx1[2];
+					ty1[1] = ty1[0] = ty1[3] = ty1[4] = ty1[5] = ty1[2];
+					tx2[1] = tx2[0] = tx2[3] = tx2[4] = tx2[5] = tx2[2];
+					ty2[1] = ty2[0] = ty2[3] = ty2[4] = ty2[5] = ty2[2];
+				}
+			} else if (block == BLK_REDSANDSTONE || block == BLK_REDSANDSTONESLABDOUBLE) {
+				getTextureCoordinates(24, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(24, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(14, 2, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				tx1[3] = tx1[4] = tx1[5] = tx1[2];
+				ty1[3] = ty1[4] = ty1[5] = ty1[2];
+				tx2[3] = tx2[4] = tx2[5] = tx2[2];
+				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_REDSANDSTONECHISELED) {
-			} else if (block == BLK_REDSANDSTONESLABDOUBLE) {
-			} else if (block == BLK_PURPURSLABDOUBLE) {
+				getTextureCoordinates(24, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(24, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(25, 0, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				tx1[3] = tx1[4] = tx1[5] = tx1[2];
+				ty1[3] = ty1[4] = ty1[5] = ty1[2];
+				tx2[3] = tx2[4] = tx2[5] = tx2[2];
+				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else if (block == BLK_REDSANDSTONESMOOTH) {
-
+				getTextureCoordinates(24, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+				getTextureCoordinates(24, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+				getTextureCoordinates(26, 8, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+				tx1[3] = tx1[4] = tx1[5] = tx1[2];
+				ty1[3] = ty1[4] = ty1[5] = ty1[2];
+				tx2[3] = tx2[4] = tx2[5] = tx2[2];
+				ty2[3] = ty2[4] = ty2[5] = ty2[2];
 			} else {
 				return;
 			}
-			if (*vex == NULL) {
-				*vex = malloc(fc * 4 * sizeof(struct vertex_tex));
-				*vexs = 0;
-			} else {
-				*vex = realloc(*vex, ((fc * 4) + *vexs) * sizeof(struct vertex_tex));
+			if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + fc * 4 * sizeof(struct vertex_tex)) {
+				*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+				*vex = realloc(*vex, *vexs);
 			}
-			createMultSubCube(0.5, &((*vex)[*vexs]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
-			*vexs += fc * 4;
+			createMultSubCube(0.5, &((*vex)[*cvec]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
+			*cvec += fc * 4;
 			return;
 		}
 		if (tx >= 0 && ty >= 0) {
@@ -1423,15 +1505,13 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, block block, unsigned char
 			float ty1 = 0.;
 			float tx2 = 1.;
 			float ty2 = 1.;
-			if (*vex == NULL) {
-				*vex = malloc(fc * 4 * sizeof(struct vertex_tex));
-				*vexs = 0;
-			} else {
-				*vex = realloc(*vex, ((fc * 4) + *vexs) * sizeof(struct vertex_tex));
+			if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + fc * 4 * sizeof(struct vertex_tex)) {
+				*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+				*vex = realloc(*vex, *vexs);
 			}
 			getTextureCoordinates(tx, ty, &tx1, &ty1, &tx2, &ty2);
-			createSubCube(0.5, &((*vex)[*vexs]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
-			*vexs += fc * 4;
+			createSubCube(0.5, &((*vex)[*cvec]), x + 0.5, y + 0.5, z + 0.5, faceMask, tx1, ty1, tx2, ty2);
+			*cvec += fc * 4;
 		}
 	}
 }

@@ -159,11 +159,11 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				}
 			}
 		}
-		if (streq(me, "grass_top.png")) { // TODO: implement dynamic textures better than this
+		if (streq(me, "grass_top.png") || startsWith(me, "leaves_")) { // TODO: implement dynamic textures better than this
 			for (int y = 0; y < bry; y++) {
 				uint32_t* pix = row_pointers[y];
 				for (int x = 0; x < rw; x++) {
-					printf("%08X", pix[x]);
+					//printf("%08X", pix[x]);
 					int cc = (pix[x] & 0xFF);
 					int r = 71 * ((float) cc / 255.);
 					int g = 205 * ((float) cc / 255.);
@@ -186,9 +186,9 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 					if (r < 0) r = 0;
 					if (g < 0) g = 0;
 					if (b < 0) b = 0;
-					pix[x] = r | (g << 8) | (b << 16) | (255 << 24);
+					pix[x] = r | (g << 8) | (b << 16) | (pix[x] & 0xFF000000);
 				}
-				printf("\n");
+				//printf("\n");
 			}
 		}
 		free(row_pointers);

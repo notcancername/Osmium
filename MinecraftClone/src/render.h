@@ -77,7 +77,16 @@ void drawTriangles(struct vao* vao);
 
 void drawQuads(struct vao* vao);
 
-void drawChunk(struct chunk* chunk, int t);
+struct plane {
+		double nx;
+		double ny;
+		double nz;
+		double px;
+		double py;
+		double pz;
+};
+
+void drawChunk(struct chunk* chunk, int t, struct plane* planes);
 
 void drawWorld(struct world* world);
 

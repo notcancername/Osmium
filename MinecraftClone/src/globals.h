@@ -26,6 +26,17 @@ GLFWwindow* window;
 char** blockMap;
 int* blockSizeMap;
 int blockMapLength;
+float hnear;
+float hfar;
+float wnear;
+float wfar;
+double eyeX;
+double eyeY;
+double eyeZ;
+double lookX;
+double lookY;
+double lookZ;
+float viewDistance;
 
 #define PI 3.141592653589793
 
