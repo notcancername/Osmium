@@ -45,7 +45,6 @@ struct vao {
 #define TX_DEFAULT 1
 #define TX_WIDGETS 4
 #define TX_OPTIONSBG 5
-//#define TX_HOTBARH 5
 #define TX_PAN0 6
 #define TX_PAN1 7
 #define TX_PAN2 8
@@ -54,6 +53,7 @@ struct vao {
 #define TX_PAN5 11
 #define TX_ASCII 12
 #define TX_TITLE 13
+#define TX_MMTT 14
 
 void virtVertex3f(union uvertex* vert, float x, float y, float z);
 

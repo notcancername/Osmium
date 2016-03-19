@@ -168,7 +168,7 @@ src/render.d: ../src/render.c ../src/render.h \
  /usr/share/mingw-w64/include/math.h /usr/share/mingw-w64/include/time.h \
  /usr/share/mingw-w64/include/sec_api/time_s.h \
  /usr/share/mingw-w64/include/pthread_time.h ../src/block.h \
- ../src/ingame.h
+ ../src/ingame.h ../src/globals.h /mingw/include/GLFW/glfw3.h
 
 ../src/render.h:
 
@@ -539,3 +539,7 @@ src/render.d: ../src/render.c ../src/render.h \
 ../src/block.h:
 
 ../src/ingame.h:
+
+../src/globals.h:
+
+/mingw/include/GLFW/glfw3.h:
