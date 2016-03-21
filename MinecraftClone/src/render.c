@@ -265,9 +265,9 @@ int updateChunk(struct chunk* chunk) {
 								if (z < 15) {
 									if (isBlockOpaque(chunk->blocks[x][z + 1][y + sy])) fm ^= 0x01;
 								} else if (z == 15 && chzp != NULL && isBlockOpaque(chzp->blocks[x][0][y + sy])) fm ^= 0x01;
-								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z);
+								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
 							} else {
-								drawBlock(&vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z);
+								drawBlock(&vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
 							}
 						}
 					}

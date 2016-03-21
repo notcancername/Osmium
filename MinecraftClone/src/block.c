@@ -1454,25 +1454,29 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 				} else if (blk == BLK_LARGEFERN_BOTTOM) {
 					tx = 17;
 					ty = 1;
-				} else if (blk == BLK_LARGEFERN_TOP) {
-					tx = 4;
-					ty = 2;
-					printf("lft\n");
-				} else if (blk == BLK_DOUBLETALLGRASS_TOP) {
-					tx = 29;
-					ty = 19;
-				} else if (blk == BLK_PEONY_TOP) {
-					tx = 16;
-					ty = 6;
-				} else if (blk == BLK_LILAC_TOP) {
-					tx = 22;
-					ty = 6;
-				} else if (blk == BLK_ROSEBUSH_TOP) {
-					tx = 15;
-					ty = 2;
-				} else if (blk == BLK_SUNFLOWER_TOP) {
-					tx = 19;
-					ty = 15;
+				} else if (blk == BLK_DOUBLE_TOP) {
+					block bbelow = getBlockWorld(gs.world, wx, wy - 1, wz);
+					if (bbelow == BLK_LARGEFERN_BOTTOM) {
+						tx = 4;
+						ty = 2;
+					} else if (bbelow == BLK_DOUBLETALLGRASS_BOTTOM) {
+						tx = 29;
+						ty = 19;
+					} else if (bbelow == BLK_PEONY_BOTTOM) {
+						tx = 16;
+						ty = 6;
+					} else if (bbelow == BLK_LILAC_BOTTOM) {
+						tx = 22;
+						ty = 6;
+					} else if (bbelow == BLK_ROSEBUSH_BOTTOM) {
+						tx = 15;
+						ty = 2;
+					} else if (bbelow == BLK_SUNFLOWER_BOTTOM) { // TODO:
+						tx = 19;
+						ty = 15;
+					} else {
+						goto unimpl;
+					}
 				} else if (blk == BLK_DOUBLETALLGRASS_BOTTOM) {
 					tx = 5;
 					ty = 6;
