@@ -68,22 +68,7 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		goto unimpl;
 	} else if (blk == BLK_PISTONMOVING) {
 		goto unimpl;
-	} else if (blk == BLK_STONESLAB) {
-		goto unimpl;
-	} else if (blk == BLK_SANDSTONESLAB) {
-		goto unimpl;
-	} else if (blk == BLK_WOODENSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_COBBLESTONESLAB) {
-		goto unimpl;
-	} else if (blk == BLK_BRICKSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_STONEBRICKSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_NETHERBRICKSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_QUARTZSLAB) {
-		goto unimpl;
+
 	} else if (blk == BLK_TORCH) {
 		goto unimpl;
 	} else if (blk == BLK_FIRE) {
@@ -181,18 +166,6 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 	} else if (blk == BLK_ENDPORTAL) {
 		goto unimpl;
 	} else if (blk == BLK_ENDPORTALFRAME) {
-		goto unimpl;
-	} else if (blk == BLK_OAK_WOODSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_SPRUCE_WOODSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_BIRCH_WOODSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_JUNGLE_WOODSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_ACACIAWOODSLAB) {
-		goto unimpl;
-	} else if (blk == BLK_DARKOAKWOODSLAB) {
 		goto unimpl;
 	} else if (blk == BLK_COCOAPLANT) {
 		goto unimpl;
@@ -324,8 +297,6 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		goto unimpl;
 	} else if (blk == BLK_REDSANDSTONESTAIRS) {
 		goto unimpl;
-	} else if (blk == BLK_REDSANDSTONESLAB) {
-		goto unimpl;
 	} else if (blk == BLK_FENCEGATESPRUCE) {
 		goto unimpl;
 	} else if (blk == BLK_FENCEGATEBIRCH) {
@@ -357,8 +328,6 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 	} else if (blk == BLK_WOODENDOORBLOCKDARKOAK) {
 		goto unimpl;
 	} else if (blk == BLK_PURPURSTAIRS) {
-		goto unimpl;
-	} else if (blk == BLK_PURPURSLAB) {
 		goto unimpl;
 	} else if (blk == BLK_ENDSTONEBRICKS) {
 		goto unimpl;
@@ -1547,7 +1516,119 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 					tx = 1;
 					ty = 2;
 				} else {
-					goto unimpl;
+					int meta = blk & 0x0f;
+					int upper = meta & 0x08;
+					meta &= 0x07;
+					block sblk = ((blk >> 4) << 4) | meta;
+					float tx1[6]; // top, buttom, side, other three are for processing
+					float tx2[6];
+					float ty1[6];
+					float ty2[6];
+					if (sblk == BLK_STONESLAB) {
+						getTextureCoordinates(8, 15, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[1] = tx1[0];
+						tx2[1] = tx2[0];
+						ty1[1] = ty1[0];
+						ty2[1] = ty2[0];
+						getTextureCoordinates(23, 11, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					} else if (sblk == BLK_SANDSTONESLAB) {
+						getTextureCoordinates(27, 17, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						getTextureCoordinates(14, 5, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+						getTextureCoordinates(3, 21, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					} else if (sblk == BLK_WOODENSLAB) {
+						getTextureCoordinates(30, 19, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_COBBLESTONESLAB) {
+						getTextureCoordinates(19, 8, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_BRICKSLAB) {
+						getTextureCoordinates(28, 14, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_STONEBRICKSLAB) {
+						getTextureCoordinates(16, 11, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_NETHERBRICKSLAB) {
+						getTextureCoordinates(3, 11, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_QUARTZSLAB) {
+						getTextureCoordinates(28, 13, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						getTextureCoordinates(9, 18, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+						getTextureCoordinates(3, 15, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					} else if (sblk == BLK_OAK_WOODSLAB) {
+						getTextureCoordinates(30, 19, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_SPRUCE_WOODSLAB) {
+						getTextureCoordinates(20, 19, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_BIRCH_WOODSLAB) {
+						getTextureCoordinates(27, 19, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_JUNGLE_WOODSLAB) {
+						getTextureCoordinates(3, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_ACACIAWOODSLAB) {
+						getTextureCoordinates(25, 11, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_DARKOAKWOODSLAB) {
+						getTextureCoordinates(9, 1, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else if (sblk == BLK_REDSANDSTONESLAB) {
+						getTextureCoordinates(24, 2, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						getTextureCoordinates(24, 1, &tx1[1], &ty1[1], &tx2[1], &ty2[1]);
+						getTextureCoordinates(14, 2, &tx1[2], &ty1[2], &tx2[2], &ty2[2]);
+					} else if (sblk == BLK_PURPURSLAB) {
+						getTextureCoordinates(6, 18, &tx1[0], &ty1[0], &tx2[0], &ty2[0]);
+						tx1[2] = tx1[1] = tx1[0];
+						tx2[2] = tx2[1] = tx2[0];
+						ty1[2] = ty1[1] = ty1[0];
+						ty2[2] = ty2[1] = ty2[0];
+					} else {
+						goto unimpl;
+					}
+					if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 6 * 4 * sizeof(struct vertex_tex)) {
+						*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+						*vex = realloc(*vex, *vexs);
+					}
+					tx1[3] = tx1[4] = tx1[5] = tx1[2];
+					ty1[3] = ty1[4] = ty1[5] = ty1[2];
+					tx2[3] = tx2[4] = tx2[5] = tx2[2];
+					ty2[3] = ty2[4] = ty2[5] = ty2[2] - (.5 / (float) def_wrap);
+					createMultSub(.5, .25, .5, &((*vex)[*cvec]), x + 0.5, y + (upper ? .75 : .25), z + 0.5, 0xFF, tx1, ty1, tx2, ty2);
+					*cvec += 6 * 4;
+					return;
 				}
 				if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 4 * 4 * sizeof(struct vertex_tex)) {
 					*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
@@ -1628,9 +1709,17 @@ int isBlockOpaque(block block) {
 }
 
 struct boundingbox bb_cube;
+struct boundingbox bb_hcube;
+struct boundingbox bb_hucube;
 
 struct boundingbox* getBlockCollision(block block) {
 	if (block == BLK_AIR || block >> 4 == BLK_TALLGRASSDEADSHRUB >> 4 || block >> 4 == BLK_SUNFLOWER_BOTTOM >> 4 || block >> 4 == BLK_REDMUSHROOM >> 4 || block >> 4 == BLK_POPPY >> 4 || block >> 4 == BLK_DANDELION >> 4) return NULL;
+	if (block >> 4 == BLK_STONESLAB >> 4 || block >> 4 == BLK_OAK_WOODSLAB >> 4 || block >> 4 == BLK_REDSANDSTONESLAB >> 4 || block >> 4 == BLK_PURPURSLAB >> 4) {
+		int meta = block & 0x0f;
+		int upper = meta & 0x08;
+		return upper ? &bb_hucube : &bb_hcube;
+	}
+
 	return &bb_cube;
 }
 
@@ -1638,4 +1727,11 @@ void loadBlocks() {
 	bb_cube.maxX = 1.;
 	bb_cube.maxY = 1.;
 	bb_cube.maxZ = 1.;
+	bb_hcube.maxX = 1.;
+	bb_hcube.maxY = .5;
+	bb_hcube.maxZ = 1.;
+	bb_hucube.minY = .5;
+	bb_hucube.maxX = 1.;
+	bb_hucube.maxY = 1.;
+	bb_hucube.maxZ = 1.;
 }
