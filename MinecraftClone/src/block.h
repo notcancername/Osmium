@@ -358,12 +358,18 @@
 #define BLK_HARDENEDCLAY_BLACK 2767
 #define BLK_BLOCKOFCOAL 2768
 #define BLK_PACKEDICE 2784
-#define BLK_SUNFLOWER 2800
-#define BLK_LILAC 2801
-#define BLK_DOUBLETALLGRASS 2802
-#define BLK_LARGEFERN 2803
-#define BLK_ROSEBUSH 2804
-#define BLK_PEONY 2805
+#define BLK_SUNFLOWER_BOTTOM 2800
+#define BLK_LILAC_BOTTOM 2801
+#define BLK_DOUBLETALLGRASS_BOTTOM 2802
+#define BLK_LARGEFERN_BOTTOM 2803
+#define BLK_ROSEBUSH_BOTTOM 2804
+#define BLK_PEONY_BOTTOM 2805
+#define BLK_SUNFLOWER_TOP 2808
+#define BLK_LILAC_TOP 2809
+#define BLK_DOUBLETALLGRASS_TOP 2810
+#define BLK_LARGEFERN_TOP 2811
+#define BLK_ROSEBUSH_TOP 2812
+#define BLK_PEONY_TOP 2813
 #define BLK_STANDINGBANNERBLOCK 2816
 #define BLK_WALLBANNERBLOCK 2832
 #define BLK_INVERTEDDAYLIGHTSENSOR 2848
@@ -406,11 +412,9 @@
 
 void loadBlocks();
 
-void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block block, unsigned char faceMask, float x, float y, float z);
+void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block block, unsigned char faceMask, float x, float y, float z, int32_t wx, int32_t wy, int32_t wz);
 
 int isBlockOpaque(block block);
-
-int doesBlockCollide(block block);
 
 struct boundingbox* getBlockCollision(block block);
 

@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <GL/gl.h>
+#include "models.h"
+#include "globals.h"
 
 int entNetworkConvert(int type, int id) {
 	if (type == 0) {
@@ -110,15 +112,20 @@ void drawEntity(float partialTick, struct entity* ent) {
 	double py = ent->y * (1. - partialTick) + ent->ly * partialTick;
 	double pz = ent->z * (1. - partialTick) + ent->lz * partialTick;
 	glTranslatef(px, py, pz);
-	//glRotatef(pyaw, 0., 1., 0.);
+	glRotatef(-pyaw + 180., 0., 1., 0.);
 	//begin debug draw
-	struct boundingbox* bb = getEntityCollision(ent);
-	if (bb->minX != bb->maxX && bb->minY != bb->maxY && bb->minZ != bb->maxZ && bb->ovao != NULL) {
-		glDisable (GL_TEXTURE_2D);
-		glColor4f(1., 0., 0., 1.);
-		drawQuads(bb->ovao);
-		glColor4f(1., 1., 1., 1.);
-		glEnable(GL_TEXTURE_2D);
+	if (ent->type == ENT_MPPLAYER) {
+		mod_biped.children[0]->rotX = ppitch / (180. / PI);
+		drawModel (&mod_biped);
+	} else {
+		struct boundingbox* bb = getEntityCollision(ent);
+		if (bb->minX != bb->maxX && bb->minY != bb->maxY && bb->minZ != bb->maxZ && bb->ovao != NULL) {
+			glDisable (GL_TEXTURE_2D);
+			glColor4f(1., 0., 0., 1.);
+			drawQuads(bb->ovao);
+			glColor4f(1., 1., 1., 1.);
+			glEnable(GL_TEXTURE_2D);
+		}
 	}
 	//end debug draw
 	glPopMatrix();

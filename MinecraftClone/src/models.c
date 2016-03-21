@@ -11,6 +11,224 @@
 #include <errno.h>
 #include <dirent.h>
 #include <math.h>
+#include "globals.h"
+
+void loadBaseModels() {
+	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/entity/steve.png", TX_STEVE, 1);
+	newModel(&mod_biped, TX_STEVE, 64, 64); // even if scaled up due to texture pack, this should still scale UV coords to 64x64
+	struct modr* biped_head = malloc(sizeof(struct modr));
+	newModr(biped_head, 0, 0, 64, 64, 0., 0., 0.);
+	struct vertex_tex cube[24];
+	createModelCube(biped_head, cube, -4., -8., -4., 8, 8, 8, 0., 0);
+	biped_head->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_head->vao, 1, 0);
+	addModelChild(&mod_biped, biped_head);
+	struct modr* biped_headwear = malloc(sizeof(struct modr));
+	newModr(biped_headwear, 32, 0, 64, 64, 0., 0., 0.);
+	createModelCube(biped_headwear, cube, -4., -8., -4., 8, 8, 8, .5, 0);
+	biped_headwear->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_headwear->vao, 1, 0);
+	addModelChild(&mod_biped, biped_headwear);
+	struct modr* biped_body = malloc(sizeof(struct modr));
+	newModr(biped_body, 16, 16, 64, 64, 0., 0., 0.);
+	createModelCube(biped_body, cube, -4., 0., -2., 8, 12, 4, 0., 0);
+	biped_body->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_body->vao, 1, 0);
+	addModelChild(&mod_biped, biped_body);
+	struct modr* biped_rightarm = malloc(sizeof(struct modr));
+	newModr(biped_rightarm, 40, 16, 64, 64, -5., 2., 0.);
+	createModelCube(biped_rightarm, cube, -3., -2., -2., 4, 12, 4, 0., 0);
+	biped_rightarm->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_rightarm->vao, 1, 0);
+	addModelChild(&mod_biped, biped_rightarm);
+	struct modr* biped_leftarm = malloc(sizeof(struct modr));
+	newModr(biped_leftarm, 40, 16, 64, 64, 5., 2., 0.);
+	createModelCube(biped_leftarm, cube, -1., -2., -2., 4, 12, 4, 0., 1);
+	biped_leftarm->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_leftarm->vao, 1, 0);
+	addModelChild(&mod_biped, biped_leftarm);
+	struct modr* biped_rightleg = malloc(sizeof(struct modr));
+	newModr(biped_rightleg, 0, 16, 64, 64, -1.9, 12., 0.);
+	createModelCube(biped_rightleg, cube, -2., 0., -2., 4, 12, 4, 0., 0);
+	biped_rightleg->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_rightleg->vao, 1, 0);
+	addModelChild(&mod_biped, biped_rightleg);
+	struct modr* biped_leftleg = malloc(sizeof(struct modr));
+	newModr(biped_leftleg, 0, 16, 64, 64, 1.9, 12., 0.);
+	createModelCube(biped_leftleg, cube, -2., 0., -2., 4, 12, 4, 0., 1);
+	biped_leftleg->vao = malloc(sizeof(struct vao));
+	createVAO(cube, 24, biped_leftleg->vao, 1, 0);
+	addModelChild(&mod_biped, biped_leftleg);
+}
+
+void newModel(struct model* model, int tx, int width, int height) {
+	model->tex = tx;
+	model->txh = height;
+	model->txw = width;
+	model->children = NULL;
+	model->child_count = 0;
+}
+
+void newModr(struct modr* modr, int txx, int txy, int txw, int txh, float rpX, float rpY, float rpZ) {
+	modr->child_count = 0;
+	modr->children = NULL;
+	modr->txx = txx;
+	modr->txy = txy;
+	modr->txh = txh;
+	modr->txw = txw;
+	modr->vao = NULL;
+	modr->rotX = 0.;
+	modr->rotY = 0.;
+	modr->rotZ = 0.;
+	modr->rpX = rpX;
+	modr->rpY = rpY;
+	modr->rpZ = rpZ;
+}
+
+void setModrAngles(struct modr* modr, float rotX, float rotY, float rotZ) {
+	modr->rotX = rotX;
+	modr->rotY = rotY;
+	modr->rotZ = rotZ;
+}
+
+void addModrChild(struct modr* modr, struct modr* child) {
+	if (modr->children == NULL) {
+		modr->children = malloc(sizeof(struct modr*));
+		modr->child_count = 0;
+	} else {
+		modr->children = realloc(modr->children, sizeof(struct modr*) * (1 + modr->child_count));
+	}
+	modr->children[modr->child_count++] = child;
+}
+
+void addModelChild(struct model* modr, struct modr* child) {
+	if (modr->children == NULL) {
+		modr->children = malloc(sizeof(struct modr*));
+		modr->child_count = 0;
+	} else {
+		modr->children = realloc(modr->children, sizeof(struct modr*) * (1 + modr->child_count));
+	}
+	modr->children[modr->child_count++] = child;
+}
+
+void xferVerticiesQuad(struct vertex_tex* to, struct vertex_tex** from, int x1, int y1, int x2, int y2, float txw, float txh, int mirror) {
+	struct vertex_tex* mir[4];
+	struct vertex_tex** rt = mir;
+	if (mirror) {
+		mir[0] = &to[3];
+		mir[1] = &to[2];
+		mir[2] = &to[1];
+		mir[3] = &to[0];
+	} else {
+		mir[0] = &to[0];
+		mir[1] = &to[1];
+		mir[2] = &to[2];
+		mir[3] = &to[3];
+	}
+	for (int i = 0; i < 4; i++) {
+		(rt)[i]->x = from[i]->x * .0625;
+		(rt)[i]->y = from[i]->y * .0625;
+		(rt)[i]->z = from[i]->z * .0625;
+	}
+	(rt)[0]->texX = (float) x2 / txw;
+	(rt)[0]->texY = (float) y1 / txh;
+	(rt)[1]->texX = (float) x1 / txw;
+	(rt)[1]->texY = (float) y1 / txh;
+	(rt)[2]->texX = (float) x1 / txw;
+	(rt)[2]->texY = (float) y2 / txh;
+	(rt)[3]->texX = (float) x2 / txw;
+	(rt)[3]->texY = (float) y2 / txh;
+}
+
+void createModelCube(struct modr* modr, struct vertex_tex* vexs, float x, float y, float z, int width, int height, int depth, float scale, int mirror) {
+	float x2 = x + (float) width;
+	float y2 = y + (float) height;
+	float z2 = z + (float) depth;
+	x -= scale;
+	y -= scale;
+	z -= scale;
+	x2 += scale;
+	y2 += scale;
+	z2 += scale;
+	if (mirror) {
+		float t = x2;
+		x2 = x;
+		x = t;
+	}
+	struct vertex_tex tt[8];
+	virtVertex3f(&tt[0], x, y, z);
+	virtTexCoord2f(&tt[0], 0., 0.);
+	virtVertex3f(&tt[1], x2, y, z);
+	virtTexCoord2f(&tt[1], 0., 8.);
+	virtVertex3f(&tt[2], x2, y2, z);
+	virtTexCoord2f(&tt[2], 8., 8.);
+	virtVertex3f(&tt[3], x, y2, z);
+	virtTexCoord2f(&tt[3], 8., 0.);
+	virtVertex3f(&tt[4], x, y, z2);
+	virtTexCoord2f(&tt[4], 0., 0.);
+	virtVertex3f(&tt[5], x2, y, z2);
+	virtTexCoord2f(&tt[5], 0., 8.);
+	virtVertex3f(&tt[6], x2, y2, z2);
+	virtTexCoord2f(&tt[6], 8., 8.);
+	virtVertex3f(&tt[7], x, y2, z2);
+	virtTexCoord2f(&tt[7], 8., 0.);
+	//
+	struct vertex_tex* tv[4];
+	tv[0] = &tt[5];
+	tv[1] = &tt[1];
+	tv[2] = &tt[2];
+	tv[3] = &tt[6];
+	xferVerticiesQuad(&(vexs[0]), tv, modr->txx + depth + width, modr->txy + depth, modr->txx + depth + width + depth, modr->txy + depth + height, modr->txw, modr->txh, mirror);
+	tv[0] = &tt[0];
+	tv[1] = &tt[4];
+	tv[2] = &tt[7];
+	tv[3] = &tt[3];
+	xferVerticiesQuad(&(vexs[4]), tv, modr->txx, modr->txy + depth, modr->txx + depth, modr->txy + depth + height, modr->txw, modr->txh, mirror);
+	tv[0] = &tt[5];
+	tv[1] = &tt[4];
+	tv[2] = &tt[0];
+	tv[3] = &tt[1];
+	xferVerticiesQuad(&(vexs[8]), tv, modr->txx + depth, modr->txy, modr->txx + depth + width, modr->txy + depth, modr->txw, modr->txh, mirror);
+	tv[0] = &tt[2];
+	tv[1] = &tt[3];
+	tv[2] = &tt[7];
+	tv[3] = &tt[6];
+	xferVerticiesQuad(&(vexs[12]), tv, modr->txx + depth + width, modr->txy + depth, modr->txx + depth + width + width, modr->txy, modr->txw, modr->txh, mirror);
+	tv[0] = &tt[1];
+	tv[1] = &tt[0];
+	tv[2] = &tt[3];
+	tv[3] = &tt[2];
+	xferVerticiesQuad(&(vexs[16]), tv, modr->txx + depth, modr->txy + depth, modr->txx + depth + width, modr->txy + depth + height, modr->txw, modr->txh, mirror);
+	tv[0] = &tt[4];
+	tv[1] = &tt[5];
+	tv[2] = &tt[6];
+	tv[3] = &tt[7];
+	xferVerticiesQuad(&(vexs[20]), tv, modr->txx + depth + width, modr->txy + depth, modr->txx + depth + width + depth + width, modr->txy + depth + height, modr->txw, modr->txh, mirror);
+}
+
+void drawModr(struct modr* modr) {
+	glPushMatrix();
+	if (modr->rpX != 0. || modr->rpY != 0. || modr->rpZ != 0.) glTranslatef(modr->rpX * .0625, modr->rpY * .0625, modr->rpZ * .0625);
+	if (modr->rotZ != 0.) glRotatef(modr->rotZ * (180. / PI), 0., 0., 1.);
+	if (modr->rotY != 0.) glRotatef(modr->rotY * (180. / PI), 0., 1., 0.);
+	if (modr->rotX != 0.) glRotatef(modr->rotX * (180. / PI), 1., 0., 0.);
+	drawQuads(modr->vao);
+	for (int i = 0; i < modr->child_count; i++) {
+		drawModr(modr->children[i]);
+	}
+	glPopMatrix();
+}
+
+void drawModel(struct model* model) {
+	glBindTexture(GL_TEXTURE_2D, model->tex);
+	glPushMatrix();
+	glScalef(-1., -1., 1.);
+	glTranslatef(0., -1.5078125, 0.);
+	for (int i = 0; i < model->child_count; i++) {
+		drawModr(model->children[i]);
+	}
+	glPopMatrix();
+}
 
 int loadTexturePNG(char* path, int id, int s) {
 	FILE* fd = fopen(path, "rb");
@@ -159,7 +377,7 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				}
 			}
 		}
-		if (streq(me, "grass_top.png") || startsWith(me, "leaves_")) { // TODO: implement dynamic textures better than this
+		if (streq(me, "grass_top.png") || streq(me, "fern.png") || streq(me, "tallgrass.png") || startsWith(me, "double_plant_grass") || startsWith(me, "double_plant_fern") || startsWith(me, "leaves_")) { // TODO: implement dynamic textures better than this
 			for (int y = 0; y < bry; y++) {
 				uint32_t* pix = row_pointers[y];
 				for (int x = 0; x < rw; x++) {
@@ -236,8 +454,8 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 void loadTextureData(int id, size_t width, size_t height, void* data, int s) {
 	glBindTexture(GL_TEXTURE_2D, id);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	//glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+//glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 //glGenerateMipmap (GL_TEXTURE_2D);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

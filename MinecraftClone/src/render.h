@@ -54,6 +54,7 @@ struct vao {
 #define TX_ASCII 12
 #define TX_TITLE 13
 #define TX_MMTT 14
+#define TX_STEVE 15
 
 void virtVertex3f(union uvertex* vert, float x, float y, float z);
 

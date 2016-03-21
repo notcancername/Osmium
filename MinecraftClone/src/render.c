@@ -235,9 +235,9 @@ int updateChunk(struct chunk* chunk) {
 			struct vertex_tex* vts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
 			size_t vtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
 			size_t cvts = 0;
-			struct vertex_tex* tvts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
-			size_t tvtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
-			size_t tcvts = 0;
+			//struct vertex_tex* tvts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
+			//size_t tvtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			//size_t tcvts = 0;
 			for (uint16_t x = 0; x < 16; x++) {
 				for (uint16_t z = 0; z < 16; z++) {
 					for (uint16_t sy = 0; sy < 16; sy++) {
@@ -267,7 +267,7 @@ int updateChunk(struct chunk* chunk) {
 								} else if (z == 15 && chzp != NULL && isBlockOpaque(chzp->blocks[x][0][y + sy])) fm ^= 0x01;
 								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z);
 							} else {
-								drawBlock(&tvts, &tvtsx, &tcvts, blk, 0xFF, (float) x, (float) sy, (float) z);
+								drawBlock(&vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z);
 							}
 						}
 					}
@@ -287,19 +287,19 @@ int updateChunk(struct chunk* chunk) {
 					chunk->vaos[i].vbo = -1;
 				}
 			}
-			if (tvtsx > 0) {
-				//printf("pic (trans) = %i\n", tcvts);
-				createVAO(tvts, tcvts, &chunk->tvaos[i], 1, chunk->tvaos[i].vao == -1 ? 0 : 1);
-				free(tvts);
-			} else {
-				if (chunk->tvaos[i].vao >= 0) {
-					deleteVAO(&chunk->tvaos[i]);
-					chunk->tvaos[i].vao = -1;
-					chunk->tvaos[i].vbo = -1;
-				}
-			}
+			//if (tvtsx > 0) {
+			//printf("pic (trans) = %i\n", tcvts);
+			//	createVAO(tvts, tcvts, &chunk->tvaos[i], 1, chunk->tvaos[i].vao == -1 ? 0 : 1);
+			//	free(tvts);
+			//} else {
+			//	if (chunk->tvaos[i].vao >= 0) {
+			//		deleteVAO(&chunk->tvaos[i]);
+			//		chunk->tvaos[i].vao = -1;
+			//		chunk->tvaos[i].vbo = -1;
+			//	}
+			//}
 			acc++;
-			tvc += cvts + tcvts;
+			tvc += cvts;			// + tcvts;
 			//printf("%i chunks, %i verticies, %f verticies/chunk\n", acc, tvc, ((float) tvc / (float) acc));
 		}
 	}
@@ -341,9 +341,10 @@ void drawChunk(struct chunk* chunk, int t, struct plane* planes) {
 			//goto cnt;
 			//}
 		}
-		if (t) {
-			if (chunk->tvaos[i].vao >= 0) drawQuads(&chunk->tvaos[i]);
-		} else if (chunk->vaos[i].vao >= 0) drawQuads(&chunk->vaos[i]);
+		//if (t) {
+		//	if (chunk->tvaos[i].vao >= 0) drawQuads(&chunk->tvaos[i]);
+		//} else
+		if (chunk->vaos[i].vao >= 0) drawQuads(&chunk->vaos[i]);
 		cnt: ;
 		glTranslatef(0., 16., 0.);
 	}
@@ -478,14 +479,14 @@ void drawWorld(struct world* world) {
 			glPopMatrix();
 		}
 	}
-	for (size_t i = 0; i < world->chunk_count; i++) {
-		if (world->chunks[i] != NULL) {
-			glPushMatrix();
-			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
-			drawChunk(world->chunks[i], 1, frust);
-			glPopMatrix();
-		}
-	}
+	//for (size_t i = 0; i < world->chunk_count; i++) {
+	//	if (world->chunks[i] != NULL) {
+	//		glPushMatrix();
+	//		glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
+	//		drawChunk(world->chunks[i], 1, frust);
+	//		glPopMatrix();
+	//	}
+	//}
 }
 
 void drawTriangles(struct vao* vao) {

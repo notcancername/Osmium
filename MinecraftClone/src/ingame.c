@@ -38,6 +38,7 @@ void loadIngame() {
 		}
 	}
 	createVAO(vts, 676, &skybox, 0, 0);
+
 }
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
@@ -256,8 +257,8 @@ void ingame_tick() {
 			for (int32_t z = floor(obb.minZ); z < floor(obb.maxZ + 1.); z++) {
 				for (int32_t y = floor(obb.minY); y < floor(obb.maxY + 1.); y++) {
 					block b = getBlockWorld(gs.world, x, y, z);
-					if (b > 0 && doesBlockCollide(b)) {
-						struct boundingbox* bb = getBlockCollision(b);
+					struct boundingbox* bb = getBlockCollision(b);
+					if (b > 0 && bb != NULL) {
 						if (bb->maxX + x > obb.minX && bb->minX + x < obb.maxX ? (bb->maxY + y > obb.minY && bb->minY + y < obb.maxY ? bb->maxZ + z > obb.minZ && bb->minZ + z < obb.maxZ : 0) : 0) {
 							if (pbb.maxX > bb->minX + x && pbb.minX < bb->maxX + x && pbb.maxZ > bb->minZ + z && pbb.minZ < bb->maxZ + z) {
 								double t;
@@ -286,8 +287,8 @@ void ingame_tick() {
 			for (int32_t z = floor(obb.minZ); z < floor(obb.maxZ + 1.); z++) {
 				for (int32_t y = floor(obb.minY); y < floor(obb.maxY + 1.); y++) {
 					block b = getBlockWorld(gs.world, x, y, z);
-					if (b > 0 && doesBlockCollide(b)) {
-						struct boundingbox* bb = getBlockCollision(b);
+					struct boundingbox* bb = getBlockCollision(b);
+					if (b > 0 && bb != NULL) {
 						if (bb->maxX + x > obb.minX && bb->minX + x < obb.maxX ? (bb->maxY + y > obb.minY && bb->minY + y < obb.maxY ? bb->maxZ + z > obb.minZ && bb->minZ + z < obb.maxZ : 0) : 0) {
 							if (pbb.maxY > bb->minY + y && pbb.minY < bb->maxY + y && pbb.maxZ > bb->minZ + z && pbb.minZ < bb->maxZ + z) {
 								double t;
@@ -316,8 +317,8 @@ void ingame_tick() {
 			for (int32_t z = floor(obb.minZ); z < floor(obb.maxZ + 1.); z++) {
 				for (int32_t y = floor(obb.minY); y < floor(obb.maxY + 1.); y++) {
 					block b = getBlockWorld(gs.world, x, y, z);
-					if (b > 0 && doesBlockCollide(b)) {
-						struct boundingbox* bb = getBlockCollision(b);
+					struct boundingbox* bb = getBlockCollision(b);
+					if (b > 0 && bb != NULL) {
 						if (bb->maxX + x > obb.minX && bb->minX + x < obb.maxX ? (bb->maxY + y > obb.minY && bb->minY + y < obb.maxY ? bb->maxZ + z > obb.minZ && bb->minZ + z < obb.maxZ : 0) : 0) {
 							if (pbb.maxX > bb->minX + x && pbb.minX < bb->maxX + x && pbb.maxY > bb->minY + y && pbb.minY < bb->maxY + y) {
 								double t;
@@ -960,7 +961,12 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_ATTACHENTITY) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYVELOCITY) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entityvelocity.entityID);
+			if (ent != NULL) {
+				ent->motX += pkt.data.play_server.entityvelocity.velX;
+				ent->motY += pkt.data.play_server.entityvelocity.velY;
+				ent->motZ += pkt.data.play_server.entityvelocity.velZ;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYEQUIPMENT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_SETEXPERIENCE) {
