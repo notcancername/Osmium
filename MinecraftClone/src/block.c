@@ -68,7 +68,6 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		goto unimpl;
 	} else if (blk == BLK_PISTONMOVING) {
 		goto unimpl;
-
 	} else if (blk == BLK_TORCH) {
 		goto unimpl;
 	} else if (blk == BLK_FIRE) {
@@ -79,8 +78,154 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		goto unimpl;
 	} else if (blk == BLK_REDSTONEWIRE) {
 		goto unimpl;
-	} else if (blk == BLK_WHEATCROP) {
-		goto unimpl;
+	} else if (blk >> 4 == BLK_WHEATCROP >> 4 || blk >> 4 == BLK_CARROTCROP >> 4 || blk >> 4 == BLK_POTATOESCROP >> 4) {
+		int tx = 0;
+		int ty = 0;
+		int meta = blk & 0x0f;
+		if (blk >> 4 == BLK_WHEATCROP >> 4) {
+			if (meta == 0) {
+				tx = 2;
+				ty = 6;
+			} else if (meta == 1) {
+				tx = 18;
+				ty = 1;
+			} else if (meta == 2) {
+				tx = 30;
+				ty = 1;
+			} else if (meta == 3) {
+				tx = 7;
+				ty = 1;
+			} else if (meta == 4) {
+				tx = 9;
+				ty = 14;
+			} else if (meta == 5) {
+				tx = 22;
+				ty = 15;
+			} else if (meta == 6) {
+				tx = 12;
+				ty = 21;
+			} else {
+				tx = 15;
+				ty = 0;
+			}
+		} else if (blk >> 4 == BLK_CARROTCROP >> 4) {
+			if (meta <= 1) {
+				tx = 15;
+				ty = 18;
+			} else if (meta <= 3) {
+				tx = 15;
+				ty = 21;
+			} else if (meta <= 6) {
+				tx = 28;
+				ty = 1;
+			} else {
+				tx = 25;
+				ty = 17;
+			}
+		} else if (blk >> 4 == BLK_POTATOESCROP >> 4) {
+			if (meta <= 1) {
+				tx = 4;
+				ty = 3;
+			} else if (meta <= 3) {
+				tx = 0;
+				ty = 1;
+			} else if (meta <= 6) {
+				tx = 4;
+				ty = 15;
+			} else {
+				tx = 13;
+				ty = 18;
+			}
+		} else {
+			tx = 15;
+			ty = 0;
+		}
+		float tx1;
+		float ty1;
+		float tx2;
+		float ty2;
+		if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 8 * 4 * sizeof(struct vertex_tex)) {
+			*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
+			*vex = realloc(*vex, *vexs);
+		}
+		float inset = 4. / 16.;
+		float yoff = 1. / 16.;
+		getTextureCoordinates(tx, ty, &tx1, &ty1, &tx2, &ty2);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z + inset);
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z + inset);
+		//
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z - inset + 1.);
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z - inset + 1.);
+		//
+		//
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z + 1.);
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z);
+		//
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z + 1.);
+		//
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z);
 	} else if (blk >> 4 == BLK_FARMLAND >> 4) {
 		if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 6 * 4 * sizeof(struct vertex_tex)) {
 			*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
@@ -186,10 +331,6 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 	} else if (blk == BLK_MOSSYCOBBLESTONEWALL) {
 		goto unimpl;
 	} else if (blk == BLK_FLOWERPOTBLOCK) {
-		goto unimpl;
-	} else if (blk == BLK_CARROTCROP) {
-		goto unimpl;
-	} else if (blk == BLK_POTATOESCROP) {
 		goto unimpl;
 	} else if (blk == BLK_BUTTONWOOD) {
 		goto unimpl;
@@ -1709,17 +1850,20 @@ int isBlockOpaque(block block) {
 }
 
 struct boundingbox bb_cube;
+struct boundingbox bb_farm;
 struct boundingbox bb_hcube;
 struct boundingbox bb_hucube;
 
 struct boundingbox* getBlockCollision(block block) {
-	if (block == BLK_AIR || block >> 4 == BLK_TALLGRASSDEADSHRUB >> 4 || block >> 4 == BLK_SUNFLOWER_BOTTOM >> 4 || block >> 4 == BLK_REDMUSHROOM >> 4 || block >> 4 == BLK_POPPY >> 4 || block >> 4 == BLK_DANDELION >> 4) return NULL;
+	if (block == BLK_AIR || block >> 4 == BLK_TALLGRASSDEADSHRUB >> 4 || block >> 4 == BLK_SUNFLOWER_BOTTOM >> 4 || block >> 4 == BLK_REDMUSHROOM >> 4 || block >> 4 == BLK_POPPY >> 4 || block >> 4 == BLK_DANDELION >> 4 || block >> 4 == BLK_WHEATCROP >> 4 || block >> 4 == BLK_POTATOESCROP >> 4 || block >> 4 == BLK_CARROTCROP >> 4) return NULL;
 	if (block >> 4 == BLK_STONESLAB >> 4 || block >> 4 == BLK_OAK_WOODSLAB >> 4 || block >> 4 == BLK_REDSANDSTONESLAB >> 4 || block >> 4 == BLK_PURPURSLAB >> 4) {
 		int meta = block & 0x0f;
 		int upper = meta & 0x08;
 		return upper ? &bb_hucube : &bb_hcube;
 	}
-
+	if (block >> 4 == BLK_FARMLAND >> 4) {
+		return &bb_farm;
+	}
 	return &bb_cube;
 }
 
@@ -1734,4 +1878,7 @@ void loadBlocks() {
 	bb_hucube.maxX = 1.;
 	bb_hucube.maxY = 1.;
 	bb_hucube.maxZ = 1.;
+	bb_farm.maxX = 1.;
+	bb_farm.maxY = 15. / 16.;
+	bb_farm.maxZ = 1.;
 }
