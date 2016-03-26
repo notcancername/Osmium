@@ -746,6 +746,16 @@ void runNetwork(struct conn* conn) {
 			gs.openinv->title = pkt.data.play_server.openwindow.title;
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWITEMS) {
 			struct inventory* inv = NULL;
+			if (gs.openinv == NULL) {
+				for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
+					if (pkt.data.play_server.windowitems.slots[i].nbt != NULL) {
+						freeNBT(pkt.data.play_server.windowitems.slots[i].nbt);
+						free(pkt.data.play_server.windowitems.slots[i].nbt);
+					}
+				}
+				free(pkt.data.play_server.windowitems.slots);
+				continue;
+			}
 			if (pkt.data.play_server.windowitems.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.windowitems.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else {
@@ -765,12 +775,17 @@ void runNetwork(struct conn* conn) {
 			setInventoryItems(inv, slots, pkt.data.play_server.windowitems.count);
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWPROPERTY) {
 			struct inventory* inv = NULL;
+			if (gs.openinv == NULL) continue;
 			if (pkt.data.play_server.windowproperty.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.windowproperty.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else continue;
 			setInventoryProperty(inv, pkt.data.play_server.windowproperty.property, pkt.data.play_server.windowproperty.value);
 		} else if (pkt.id == PKT_PLAY_SERVER_SETSLOT) {
 			struct inventory* inv = NULL;
+			if (gs.openinv == NULL) {
+				freeNBT(pkt.data.play_server.setslot.data.nbt);
+				continue;
+			}
 			if (pkt.data.play_server.setslot.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.setslot.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else {
