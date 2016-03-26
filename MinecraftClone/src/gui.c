@@ -157,6 +157,7 @@ void loadGUI() {
 	free(pngd);
 	fclose (fd);
 	ppn: ;
+	loadInventoryGUI();
 }
 
 int drawButton(int x, int y, int width, int height, char* text, int disabled) { // state  is 0 for disabled, 1 for normal, 2 for hovering
@@ -253,7 +254,6 @@ void drawMainMenu(float partialTick) {
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 256, 256);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rb);
 	glViewport(0, 0, 256, 256);
-	glDisable (GL_ALPHA_TEST);
 	glMatrixMode (GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -266,6 +266,7 @@ void drawMainMenu(float partialTick) {
 	glRotatef(90., 0., 0., 1.);
 	glEnable (GL_BLEND);
 	glDisable (GL_CULL_FACE);
+	glDisable (GL_ALPHA_TEST);
 	glDepthMask(0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	for (int i = 0; i < 64; i++) {
@@ -296,19 +297,20 @@ void drawMainMenu(float partialTick) {
 				glRotatef(-90., 1., 0., 0.);
 				glBindTexture(GL_TEXTURE_2D, TX_PAN5);
 			}
-			glColor4f(1., 1., 1., 255. / (float) (i + 1));
+			glColor4f(1., 1., 1., 1. / (float) (i + 1));
 			drawQuads(&mod_pan);
 			glPopMatrix();
 		}
 		glPopMatrix();
+		glColorMask(1, 1, 1, 0);
 	}
+	glColorMask(1, 1, 1, 1);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-	glDepthMask(1);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_ALPHA_TEST);
+	glDepthMask(1);
 	for (int i = 0; i < 7; i++) {
 		glBindTexture(GL_TEXTURE_2D, TX_MMTT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -341,15 +343,18 @@ void drawMainMenu(float partialTick) {
 	glDeleteFramebuffers(1, &fbid);
 	glViewport(0, 0, width, height);
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
+	float vr = swidth > sheight ? 120. / (float) swidth : 120. / (float) sheight;
+	float ah = (float) sheight * vr / 256.;
+	float aw = (float) swidth * vr / 256.;
 	glBegin (GL_QUADS);
-	glTexCoord2f(0., 1.);
-	glVertex3f(swidth, sheight, -1);
-	glTexCoord2f(1., 1.);
-	glVertex3f(swidth, 0, -1);
-	glTexCoord2f(1., 0.);
-	glVertex3f(0, 0, -1);
-	glTexCoord2f(0., 0.);
-	glVertex3f(0., sheight, -1);
+	glTexCoord2f(.5 - ah, .5 + aw);
+	glVertex3f(0., sheight, -.5);
+	glTexCoord2f(.5 - ah, .5 - aw);
+	glVertex3f(swidth, sheight, -.5);
+	glTexCoord2f(.5 + ah, .5 - aw);
+	glVertex3f(swidth, 0., -.5);
+	glTexCoord2f(.5 + ah, .5 + aw);
+	glVertex3f(0., 0., -.5);
 	glEnd();
 	int ttx = TX_MMTT;
 	glDeleteTextures(1, &ttx);

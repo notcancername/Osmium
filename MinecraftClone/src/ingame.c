@@ -21,6 +21,7 @@
 #include "gui.h"
 #include "block.h"
 #include <errno.h>
+#include "inventory.h"
 
 int running = 0;
 struct vao skybox;
@@ -38,13 +39,27 @@ void loadIngame() {
 		}
 	}
 	createVAO(vts, 676, &skybox, 0, 0);
-
+	gs.playerinv = malloc(sizeof(struct inventory));
+	newInventory(gs.playerinv, INVTYPE_PLAYERINVENTORY, 0);
+	gs.playerinv->slot_count = 46;
 }
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 	if (gs.inMenu) {
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 			gs.inMenu = 0;
+		}
+	} else if (gs.openinv != NULL) {
+		if ((key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) || (key == GLFW_KEY_E && action == GLFW_PRESS)) {
+			struct packet pkt;
+			pkt.id = PKT_PLAY_CLIENT_CLOSEWINDOW;
+			pkt.data.play_client.closewindow.windowID = gs.openinv->windowID;
+			writePacket(gs.conn, &pkt);
+			if (gs.openinv != gs.playerinv) {
+				freeInventory(gs.openinv);
+				free(gs.openinv);
+			}
+			gs.openinv = NULL;
 		}
 	} else {
 		if (key == GLFW_KEY_W) {
@@ -65,6 +80,10 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 			gs.inMenu = 1;
 			gs.crouching = 0;
 			gs.sprinting = 0;
+		} else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
+			gs.openinv = gs.playerinv;
+			gs.crouching = 0;
+			gs.sprinting = 0;
 		}
 	}
 }
@@ -74,7 +93,7 @@ double lmx = 0.;
 double lmy = 0.;
 
 void ingame_mouseMotionCallback(double x, double y) {
-	if (gs.player != NULL && spawnedIn && hasMouse && !gs.inMenu) {
+	if (gs.player != NULL && spawnedIn && hasMouse && !gs.inMenu && gs.openinv == NULL) {
 		if (!moc) {
 			moc = 1;
 			claimMouse();
@@ -577,7 +596,7 @@ void drawIngame(float partialTick) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClear (GL_DEPTH_BUFFER_BIT);
-	if (gs.inMenu) {
+	if (gs.inMenu || gs.openinv != NULL) {
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_DEPTH_TEST);
 		glDepthMask (GL_FALSE);
@@ -589,9 +608,14 @@ void drawIngame(float partialTick) {
 		glVertex3f(0., 0., 0.);
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
-		drawString("Game menu", swidth / 2 - stringWidth("Game menu") / 2, 36, 16777215);
 		glColor4f(1., 1., 1., 1.);
-		glEnable(GL_DEPTH_TEST);
+	}
+	if (gs.openinv != NULL) {
+		drawInventory(gs.openinv, gs.playerinv);
+	}
+	if (gs.inMenu) {
+		drawString("Game menu", swidth / 2 - stringWidth("Game menu") / 2, 36, 16777215);
+		glEnable (GL_DEPTH_TEST);
 		glDepthMask (GL_TRUE);
 		if (drawButton(swidth / 2 - 100, sheight / 4 + 120 - 16, 200, 20, "Disconnect", 1) && mouseButton == 0) {
 
@@ -687,15 +711,75 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_CONFIRMTRANSACTION) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_CLOSEWINDOW) {
-
+			if (gs.openinv != NULL && gs.openinv->windowID == pkt.data.play_server.closewindow.windowID) {
+				if (gs.openinv != gs.playerinv) {
+					freeInventory(gs.openinv);
+					free(gs.openinv);
+				}
+				gs.openinv = NULL;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_OPENWINDOW) {
-
+			if (gs.openinv != NULL) {
+				if (gs.openinv != gs.playerinv) {
+					freeInventory(gs.openinv);
+					free(gs.openinv);
+				}
+				gs.openinv = NULL;
+			}
+			gs.openinv = malloc(sizeof(struct inventory));
+			int wt = 0;
+			if (streq(pkt.data.play_server.openwindow.type, "minecraft:chest")) wt = INVTYPE_CHEST;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:crafting_table")) wt = INVTYPE_WORKBENCH;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:furnace")) wt = INVTYPE_FURNACE;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:dispenser")) wt = INVTYPE_DISPENSER;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:enchanting_table")) wt = INVTYPE_ENCHANTINGTABLE;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:brewing_stand")) wt = INVTYPE_BREWINGSTAND;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:villager")) wt = INVTYPE_VILLAGER;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:beacon")) wt = INVTYPE_BEACON;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:anvil")) wt = INVTYPE_ANVIL;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:hopper")) wt = INVTYPE_HOPPER;
+			else if (streq(pkt.data.play_server.openwindow.type, "minecraft:dropper")) wt = INVTYPE_DROPPER;
+			else if (streq(pkt.data.play_server.openwindow.type, "EntityHorse")) wt = INVTYPE_HORSE;
+			free(pkt.data.play_server.openwindow.type);
+			newInventory(gs.openinv, wt, pkt.data.play_server.openwindow.windowID);
+			gs.openinv->slot_count = pkt.data.play_server.openwindow.slot_count;
+			gs.openinv->title = pkt.data.play_server.openwindow.title;
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWITEMS) {
-
+			struct inventory* inv = NULL;
+			if (pkt.data.play_server.windowitems.windowID == gs.openinv->windowID) inv = gs.openinv;
+			else if (pkt.data.play_server.windowitems.windowID == gs.playerinv->windowID) inv = gs.playerinv;
+			else {
+				for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
+					if (pkt.data.play_server.windowitems.slots[i].nbt != NULL) {
+						freeNBT(pkt.data.play_server.windowitems.slots[i].nbt);
+						free(pkt.data.play_server.windowitems.slots[i].nbt);
+					}
+				}
+				free(pkt.data.play_server.windowitems.slots);
+				continue;
+			}
+			struct slot** slots = malloc(sizeof(struct slot*) * pkt.data.play_server.windowitems.count);
+			for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
+				slots[i] = &pkt.data.play_server.windowitems.slots[i];
+			}
+			setInventoryItems(inv, slots, pkt.data.play_server.windowitems.count);
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWPROPERTY) {
-
+			struct inventory* inv = NULL;
+			if (pkt.data.play_server.windowproperty.windowID == gs.openinv->windowID) inv = gs.openinv;
+			else if (pkt.data.play_server.windowproperty.windowID == gs.playerinv->windowID) inv = gs.playerinv;
+			else continue;
+			setInventoryProperty(inv, pkt.data.play_server.windowproperty.property, pkt.data.play_server.windowproperty.value);
 		} else if (pkt.id == PKT_PLAY_SERVER_SETSLOT) {
-
+			struct inventory* inv = NULL;
+			if (pkt.data.play_server.setslot.windowID == gs.openinv->windowID) inv = gs.openinv;
+			else if (pkt.data.play_server.setslot.windowID == gs.playerinv->windowID) inv = gs.playerinv;
+			else {
+				freeNBT(pkt.data.play_server.setslot.data.nbt);
+				continue;
+			}
+			struct slot* sc = malloc(sizeof(struct slot));
+			memcpy(sc, &pkt.data.play_server.setslot.slot, sizeof(struct slot));
+			setInventorySlot(inv, sc, pkt.data.play_server.setslot.slot);
 		} else if (pkt.id == PKT_PLAY_SERVER_SETCOOLDOWN) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLUGINMESSAGE) {

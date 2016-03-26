@@ -53,4 +53,6 @@ struct nbt_tag {
 		union nbt_data data;
 };
 
+void freeNBT(struct nbt_tag* nbt);
+
 #endif /* NBT_H_ */

@@ -35,6 +35,8 @@ struct gamestate {
 		struct entity* riding;
 		struct conn* conn;
 		int inMenu;
+		struct inventory* playerinv;
+		struct inventory* openinv;
 };
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);

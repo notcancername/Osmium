@@ -50,9 +50,8 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		return;
 	}
 	pimpl: ;
-	if (blk == BLK_WATER) {
-		goto unimpl;
-	} else if (blk == BLK_WATERNOSPREAD) {
+	if (blk >> 4 == BLK_WATER >> 4 || blk >> 4 == BLK_WATERNOSPREAD >> 4) {
+		int meta = blk & 0x0f;
 		goto unimpl;
 	} else if (blk == BLK_LAVA) {
 		goto unimpl;

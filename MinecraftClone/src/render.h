@@ -55,6 +55,19 @@ struct vao {
 #define TX_TITLE 13
 #define TX_MMTT 14
 #define TX_STEVE 15
+#define TX_ITEMS 16
+#define TX_IV_INVENTORY 17
+#define TX_IV_CHEST 18
+#define TX_IV_WORKBENCH 19
+#define TX_IV_FURNACE 20
+#define TX_IV_DISPENSER 21
+#define TX_IV_ENCHANTINGTABLE 22
+#define TX_IV_BREWINGSTAND 23
+#define TX_IV_VILLAGER 24
+#define TX_IV_BEACON 25
+#define TX_IV_ANVIL 26
+#define TX_IV_HOPPER 27
+#define TX_IV_HORSE 28
 
 void virtVertex3f(union uvertex* vert, float x, float y, float z);
 

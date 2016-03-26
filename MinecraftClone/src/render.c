@@ -6,6 +6,7 @@
  */
 
 #include "render.h"
+#include "inventory.h"
 #ifdef __MINGW32__
 #define GLEW_STATIC
 #include <GL/glew.h>

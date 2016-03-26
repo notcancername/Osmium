@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "nbt.h"
 #include <pthread.h>
+#include "inventory.h"
 #ifdef __MINGW32__
 # include <winsock2.h>
 #endif
@@ -46,13 +47,6 @@ struct __attribute__((__packed__)) encpos {
 struct __attribute__((__packed__)) uuid {
 		uint64_t uuid1;
 		uint64_t uuid2;
-};
-
-struct slot {
-		int16_t item;
-		unsigned char itemCount;
-		int16_t damage;
-		struct nbt_tag* nbt;
 };
 
 typedef uint8_t mcbool;
