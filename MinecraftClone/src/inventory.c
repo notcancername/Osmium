@@ -659,7 +659,82 @@ int maxStackSize(struct slot* slot) {
 void drawSlot(struct inventory* inv, int si, struct slot* slot, int x, int y) {
 	if (mouseX >= x && mouseY >= y && mouseX <= x + 16 && mouseY <= y + 16 && si >= -1) {
 		drawRect(x, y, -.1, 16, 16, -2130706433);
-		if (mouseButton == 0) {
+		if (gs.shiftDown && (mouseButton == 0 || mouseButton == 1)) {
+			if (slot == NULL) return;
+			struct packet pkt;
+			pkt.data.play_client.clickwindow.clicked.item = -1;
+			pkt.data.play_client.clickwindow.clicked.nbt = NULL;
+			if (slot != NULL && !(slot->item >= INV_NOHELM && slot->item <= INV_NOSHIELD)) {
+				memcpy(&pkt.data.play_client.clickwindow.clicked, slot, sizeof(struct slot));
+				pkt.data.play_client.clickwindow.clicked.nbt = cloneNBT(slot->nbt);
+			}
+			int target = -1;
+			if (inv->type == INVTYPE_PLAYERINVENTORY) {
+				if (slot->item >= LEATHER_CAP && slot->item <= GOLDEN_BOOTS) {
+					int at = (slot->item - LEATHER_CAP) % 4;
+					if (si != at + 5) target = at + 5;
+				}
+				int cis = 0;
+				int cie = 0;
+				if (si >= 36 && si <= 44) {
+					cis = 9;
+					cie = 35;
+				} else if (si >= 9 && si <= 35) {
+					cis = 36;
+					cie = 44;
+				} else {
+					cis = 9;
+					cie = 44;
+				}
+				for (int i = cis; i < cie; i++) {
+					if (inv->slots[i] != NULL && inv->slots[i]->item == slot->item && inv->slots[i]->damage == slot->damage) {
+						int mss = maxStackSize(inv->slots[i]);
+						int tc = slot->itemCount + inv->slots[i]->itemCount;
+						if (tc <= mss) {
+							target = i;
+							break;
+						} else {
+							inv->slots[i]->itemCount = mss;
+							slot->itemCount = tc - mss;
+						}
+					}
+				}
+				if (target == -1) for (int i = cis; i < cie; i++) {
+					if (inv->slots[i] == NULL) {
+						target = i;
+						break;
+					}
+				}
+				pkt.id = PKT_PLAY_CLIENT_CLICKWINDOW;
+				pkt.data.play_client.clickwindow.actionNumber = gs.invAct++;
+				pkt.data.play_client.clickwindow.button = 0;
+				pkt.data.play_client.clickwindow.mode = 1;
+				pkt.data.play_client.clickwindow.slot = si;
+				pkt.data.play_client.clickwindow.windowID = inv->windowID;
+				writePacket(gs.conn, &pkt);
+				if (pkt.data.play_client.clickwindow.clicked.nbt != NULL) {
+					freeNBT(pkt.data.play_client.clickwindow.clicked.nbt);
+					free(pkt.data.play_client.clickwindow.clicked.nbt);
+				}
+			}
+			if (target != -1) {
+				struct slot* tgt = inv->slots[target];
+				if (tgt != NULL) {
+					tgt->itemCount += slot->itemCount;
+					if (slot->nbt != NULL) {
+						freeNBT(slot->nbt);
+						free(slot->nbt);
+					}
+					free(slot);
+					slot = NULL;
+					inv->slots[si] = NULL;
+				} else {
+					inv->slots[target] = slot;
+					slot = NULL;
+					inv->slots[si] = NULL;
+				}
+			}
+		} else if (mouseButton == 0) {
 			mouseButton = -1;
 			struct packet pkt;
 			pkt.data.play_client.clickwindow.clicked.item = -1;
@@ -906,8 +981,6 @@ void setInventoryItems(struct inventory* inv, struct slot** slots, size_t slot_c
 			if (slots[i]->nbt != NULL) freeNBT(slots[i]->nbt);
 			free(slots[i]);
 			slots[i] = NULL;
-		} else {
-			printf("bulk %i = %u, %i\n", i, slots[i]->nbt, (slots[i]->nbt == NULL ? 0 : slots[i]->nbt->id));
 		}
 	}
 	inv->slots = slots;
@@ -931,7 +1004,6 @@ void setInventorySlot(struct inventory* inv, struct slot* slot, int index) {
 		free(slot);
 		slot = NULL;
 	}
-	printf("single %i = %u, %i\n", index, slot == NULL ? 1 : slot->nbt, (slot == NULL || slot->nbt == NULL ? 0 : slot->nbt->id));
 	if (inv->slots[index] != NULL) {
 		if (inv->slots[index]->nbt != NULL) {
 			freeNBT(inv->slots[index]->nbt);

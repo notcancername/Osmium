@@ -41,6 +41,7 @@ struct gamestate {
 		struct inventory* openinv;
 		struct slot* inCursor;
 		uint64_t invAct;
+		int shiftDown;
 };
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);

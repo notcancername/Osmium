@@ -59,7 +59,10 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 				freeInventory(gs.openinv);
 				free(gs.openinv);
 			}
+			gs.shiftDown = 0;
 			gs.openinv = NULL;
+		} else if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT) {
+			gs.shiftDown = action == GLFW_PRESS || action == GLFW_REPEAT;
 		}
 	} else {
 		if (key == GLFW_KEY_W) {
@@ -776,6 +779,14 @@ void runNetwork(struct conn* conn) {
 				rpkt.data.play_client.confirmtransaction.windowID = inv->windowID;
 				rpkt.data.play_client.confirmtransaction.actionNumber = inv->desync;
 				inv->desync = -1;
+				if (gs.inCursor != NULL) {
+					if (gs.inCursor->nbt != NULL) {
+						freeNBT(gs.inCursor->nbt);
+						free(gs.inCursor->nbt);
+					}
+					free(gs.inCursor);
+					gs.inCursor = NULL;
+				}
 				writePacket(gs.conn, &rpkt);
 			}
 			setInventoryItems(inv, slots, pkt.data.play_server.windowitems.count);
