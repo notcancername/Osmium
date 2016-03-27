@@ -709,7 +709,13 @@ void runNetwork(struct conn* conn) {
 			}
 			free(pkt.data.play_server.multiblockchange.records);
 		} else if (pkt.id == PKT_PLAY_SERVER_CONFIRMTRANSACTION) {
-
+			if (!pkt.data.play_server.confirmtransaction.accepted) {
+				struct inventory* inv = NULL;
+				if (gs.openinv != NULL && pkt.data.play_server.confirmtransaction.windowID == gs.openinv->windowID) inv = gs.openinv;
+				else if (pkt.data.play_server.confirmtransaction.windowID == gs.playerinv->windowID) inv = gs.playerinv;
+				else continue;
+				inv->desync = pkt.data.play_server.confirmtransaction.actionID;
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_CLOSEWINDOW) {
 			if (gs.openinv != NULL && gs.openinv->windowID == pkt.data.play_server.closewindow.windowID) {
 				if (gs.openinv != gs.playerinv) {
@@ -746,17 +752,7 @@ void runNetwork(struct conn* conn) {
 			gs.openinv->title = pkt.data.play_server.openwindow.title;
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWITEMS) {
 			struct inventory* inv = NULL;
-			if (gs.openinv == NULL) {
-				for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
-					if (pkt.data.play_server.windowitems.slots[i].nbt != NULL) {
-						freeNBT(pkt.data.play_server.windowitems.slots[i].nbt);
-						free(pkt.data.play_server.windowitems.slots[i].nbt);
-					}
-				}
-				free(pkt.data.play_server.windowitems.slots);
-				continue;
-			}
-			if (pkt.data.play_server.windowitems.windowID == gs.openinv->windowID) inv = gs.openinv;
+			if (gs.openinv != NULL && pkt.data.play_server.windowitems.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.windowitems.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else {
 				for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
@@ -770,31 +766,46 @@ void runNetwork(struct conn* conn) {
 			}
 			struct slot** slots = malloc(sizeof(struct slot*) * pkt.data.play_server.windowitems.count);
 			for (size_t i = 0; i < pkt.data.play_server.windowitems.count; i++) {
-				slots[i] = &pkt.data.play_server.windowitems.slots[i];
+				slots[i] = malloc(sizeof(struct slot));
+				memcpy(slots[i], &pkt.data.play_server.windowitems.slots[i], sizeof(struct slot));
+			}
+			if (inv->desync != -1) {
+				struct packet rpkt;
+				rpkt.id = PKT_PLAY_CLIENT_CONFIRMTRANSACTION;
+				rpkt.data.play_client.confirmtransaction.accepted = 1;
+				rpkt.data.play_client.confirmtransaction.windowID = inv->windowID;
+				rpkt.data.play_client.confirmtransaction.actionNumber = inv->desync;
+				inv->desync = -1;
+				writePacket(gs.conn, &rpkt);
 			}
 			setInventoryItems(inv, slots, pkt.data.play_server.windowitems.count);
 		} else if (pkt.id == PKT_PLAY_SERVER_WINDOWPROPERTY) {
 			struct inventory* inv = NULL;
-			if (gs.openinv == NULL) continue;
-			if (pkt.data.play_server.windowproperty.windowID == gs.openinv->windowID) inv = gs.openinv;
+			if (gs.openinv != NULL && pkt.data.play_server.windowproperty.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.windowproperty.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else continue;
 			setInventoryProperty(inv, pkt.data.play_server.windowproperty.property, pkt.data.play_server.windowproperty.value);
 		} else if (pkt.id == PKT_PLAY_SERVER_SETSLOT) {
 			struct inventory* inv = NULL;
-			if (gs.openinv == NULL) {
-				freeNBT(pkt.data.play_server.setslot.data.nbt);
-				continue;
-			}
-			if (pkt.data.play_server.setslot.windowID == gs.openinv->windowID) inv = gs.openinv;
+			if (gs.openinv != NULL && pkt.data.play_server.setslot.windowID == gs.openinv->windowID) inv = gs.openinv;
 			else if (pkt.data.play_server.setslot.windowID == gs.playerinv->windowID) inv = gs.playerinv;
 			else {
 				freeNBT(pkt.data.play_server.setslot.data.nbt);
+				free(pkt.data.play_server.setslot.data.nbt);
 				continue;
 			}
 			struct slot* sc = malloc(sizeof(struct slot));
-			memcpy(sc, &pkt.data.play_server.setslot.slot, sizeof(struct slot));
-			setInventorySlot(inv, sc, pkt.data.play_server.setslot.slot);
+			memcpy(sc, &pkt.data.play_server.setslot.data, sizeof(struct slot));
+			if (pkt.data.play_server.setslot.slot == -1) {
+				if (gs.inCursor != NULL) {
+					if (gs.inCursor->nbt != NULL) {
+						freeNBT(gs.inCursor->nbt);
+						free(gs.inCursor->nbt);
+					}
+					free(gs.inCursor);
+				}
+				gs.inCursor = sc;
+			} else setInventorySlot(inv, sc, pkt.data.play_server.setslot.slot);
 		} else if (pkt.id == PKT_PLAY_SERVER_SETCOOLDOWN) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLUGINMESSAGE) {

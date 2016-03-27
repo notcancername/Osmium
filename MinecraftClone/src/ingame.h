@@ -8,6 +8,8 @@
 #ifndef INGAME_H_
 #define INGAME_H_
 
+#include <stdint.h>
+
 int spawnedIn;
 
 struct gamestate {
@@ -37,6 +39,8 @@ struct gamestate {
 		int inMenu;
 		struct inventory* playerinv;
 		struct inventory* openinv;
+		struct slot* inCursor;
+		uint64_t invAct;
 };
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);

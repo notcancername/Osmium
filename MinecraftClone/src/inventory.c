@@ -11,6 +11,11 @@
 #include <GL/gl.h>
 #include "gui.h"
 #include "render.h"
+#include "item.h"
+#include "network.h"
+#include "ingame.h"
+#include <string.h>
+#include <math.h>
 
 void newInventory(struct inventory* inv, int type, int id) {
 	inv->title = NULL;
@@ -20,6 +25,7 @@ void newInventory(struct inventory* inv, int type, int id) {
 	inv->prop_count = 0;
 	inv->type = type;
 	inv->windowID = id;
+	inv->desync = -1;
 }
 
 void _freeInventorySlots(struct inventory* inv) {
@@ -33,6 +39,7 @@ void _freeInventorySlots(struct inventory* inv) {
 			free(inv->slots[i]);
 		}
 		free(inv->slots);
+		inv->slots = NULL;
 	}
 }
 
@@ -402,19 +409,402 @@ void loadInventoryGUI() {
 	itemMap[336] = "clock_62.png";
 	itemMap[337] = "iron_ingot.png";
 	itemMap[338] = "minecart_command_block.png";
-	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/items/", idef_wrap, &idef_width, &idef_height, TX_ITEMS, 1, NULL, 0, NULL);;
+	itemSizeMap = malloc(sizeof(int) * 339);
+	loadTexturesPNG(INSTALLDIR "assets/minecraft/textures/items/", idef_wrap, &idef_width, &idef_height, TX_ITEMS, 1, itemMap, 339, itemSizeMap);;
 }
 
-int drawSlot(struct slot* slot, int x, int y) {
-	if (slot->item <= 0) return 0;
+void getITextureCoordinates(int tx, int ty, float* tx1, float* ty1, float* tx2, float* ty2) {
+	static float tw;
+	if (!tw) tw = 1. / (float) idef_wrap;
+	static float th;
+	if (!th) th = 1. / ((float) idef_height / ((float) idef_width / (float) idef_wrap));
+	*tx1 = tw * tx + ((float) TEXTURE_BUFFER + 0.01) / (float) idef_width;
+	*ty1 = th * ty + ((float) TEXTURE_BUFFER + 0.01) / (float) idef_height;
+	*tx2 = tw * (tx + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) idef_width;
+	*ty2 = th * (ty + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) idef_height;
+}
+
+void getItemTexture(struct slot* slot, float* tx1, float* ty1, float* tx2, float* ty2) {
+	if (slot->item == IRON_SHOVEL) getITextureCoordinates(TXC_IRON_SHOVEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_PICKAXE) getITextureCoordinates(TXC_IRON_PICKAXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_AXE) getITextureCoordinates(TXC_IRON_AXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == FLINT_AND_STEEL) getITextureCoordinates(TXC_FLINT_AND_STEEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == APPLE) getITextureCoordinates(TXC_APPLE, tx1, ty1, tx2, ty2);
+	else if (slot->item == BOW) getITextureCoordinates(TXC_BOW, tx1, ty1, tx2, ty2);
+	else if (slot->item == ARROW) getITextureCoordinates(TXC_ARROW, tx1, ty1, tx2, ty2);
+	else if (slot->item == COAL) getITextureCoordinates(TXC_COAL, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND) getITextureCoordinates(TXC_DIAMOND, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_INGOT) getITextureCoordinates(TXC_IRON_INGOT, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLD_INGOT) getITextureCoordinates(TXC_GOLD_INGOT, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_SWORD) getITextureCoordinates(TXC_IRON_SWORD, tx1, ty1, tx2, ty2);
+	else if (slot->item == WOODEN_SWORD) getITextureCoordinates(TXC_WOODEN_SWORD, tx1, ty1, tx2, ty2);
+	else if (slot->item == WOODEN_SHOVEL) getITextureCoordinates(TXC_WOODEN_SHOVEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == WOODEN_PICKAXE) getITextureCoordinates(TXC_WOODEN_PICKAXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == WOODEN_AXE) getITextureCoordinates(TXC_WOODEN_AXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == STONE_SWORD) getITextureCoordinates(TXC_STONE_SWORD, tx1, ty1, tx2, ty2);
+	else if (slot->item == STONE_SHOVEL) getITextureCoordinates(TXC_STONE_SHOVEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == STONE_PICKAXE) getITextureCoordinates(TXC_STONE_PICKAXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == STONE_AXE) getITextureCoordinates(TXC_STONE_AXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_SWORD) getITextureCoordinates(TXC_DIAMOND_SWORD, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_SHOVEL) getITextureCoordinates(TXC_DIAMOND_SHOVEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_PICKAXE) getITextureCoordinates(TXC_DIAMOND_PICKAXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_AXE) getITextureCoordinates(TXC_DIAMOND_AXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == STICK) getITextureCoordinates(TXC_STICK, tx1, ty1, tx2, ty2);
+	else if (slot->item == BOWL) getITextureCoordinates(TXC_BOWL, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSHROOM_STEW) getITextureCoordinates(TXC_MUSHROOM_STEW, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_SWORD) getITextureCoordinates(TXC_GOLDEN_SWORD, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_SHOVEL) getITextureCoordinates(TXC_GOLDEN_SHOVEL, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_PICKAXE) getITextureCoordinates(TXC_GOLDEN_PICKAXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_AXE) getITextureCoordinates(TXC_GOLDEN_AXE, tx1, ty1, tx2, ty2);
+	else if (slot->item == STRING) getITextureCoordinates(TXC_STRING, tx1, ty1, tx2, ty2);
+	else if (slot->item == FEATHER) getITextureCoordinates(TXC_FEATHER, tx1, ty1, tx2, ty2);
+	else if (slot->item == GUNPOWDER) getITextureCoordinates(TXC_GUNPOWDER, tx1, ty1, tx2, ty2);
+	else if (slot->item == WOODEN_HOE) getITextureCoordinates(TXC_WOODEN_HOE, tx1, ty1, tx2, ty2);
+	else if (slot->item == STONE_HOE) getITextureCoordinates(TXC_STONE_HOE, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_HOE) getITextureCoordinates(TXC_IRON_HOE, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_HOE) getITextureCoordinates(TXC_DIAMOND_HOE, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_HOE) getITextureCoordinates(TXC_GOLDEN_HOE, tx1, ty1, tx2, ty2);
+	else if (slot->item == SEEDS) getITextureCoordinates(TXC_SEEDS, tx1, ty1, tx2, ty2);
+	else if (slot->item == WHEAT) getITextureCoordinates(TXC_WHEAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == BREAD) getITextureCoordinates(TXC_BREAD, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEATHER_CAP) getITextureCoordinates(TXC_LEATHER_CAP, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEATHER_TUNIC) getITextureCoordinates(TXC_LEATHER_TUNIC, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEATHER_PANTS) getITextureCoordinates(TXC_LEATHER_PANTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEATHER_BOOTS) getITextureCoordinates(TXC_LEATHER_BOOTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == CHAIN_HELMET) getITextureCoordinates(TXC_CHAIN_HELMET, tx1, ty1, tx2, ty2);
+	else if (slot->item == CHAIN_CHESTPLATE) getITextureCoordinates(TXC_CHAIN_CHESTPLATE, tx1, ty1, tx2, ty2);
+	else if (slot->item == CHAIN_LEGGINGS) getITextureCoordinates(TXC_CHAIN_LEGGINGS, tx1, ty1, tx2, ty2);
+	else if (slot->item == CHAIN_BOOTS) getITextureCoordinates(TXC_CHAIN_BOOTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_HELMET) getITextureCoordinates(TXC_IRON_HELMET, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_CHESTPLATE) getITextureCoordinates(TXC_IRON_CHESTPLATE, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_LEGGINGS) getITextureCoordinates(TXC_IRON_LEGGINGS, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_BOOTS) getITextureCoordinates(TXC_IRON_BOOTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_HELMET) getITextureCoordinates(TXC_DIAMOND_HELMET, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_CHESTPLATE) getITextureCoordinates(TXC_DIAMOND_CHESTPLATE, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_LEGGINGS) getITextureCoordinates(TXC_DIAMOND_LEGGINGS, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_BOOTS) getITextureCoordinates(TXC_DIAMOND_BOOTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_HELMET) getITextureCoordinates(TXC_GOLDEN_HELMET, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_CHESTPLATE) getITextureCoordinates(TXC_GOLDEN_CHESTPLATE, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_LEGGINGS) getITextureCoordinates(TXC_GOLDEN_LEGGINGS, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_BOOTS) getITextureCoordinates(TXC_GOLDEN_BOOTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == FLINT) getITextureCoordinates(TXC_FLINT, tx1, ty1, tx2, ty2);
+	else if (slot->item == RAW_PORKCHOP) getITextureCoordinates(TXC_RAW_PORKCHOP, tx1, ty1, tx2, ty2);
+	else if (slot->item == COOKED_PORKCHOP) getITextureCoordinates(TXC_COOKED_PORKCHOP, tx1, ty1, tx2, ty2);
+	else if (slot->item == PAINTING) getITextureCoordinates(TXC_PAINTING, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_APPLE) getITextureCoordinates(TXC_GOLDEN_APPLE, tx1, ty1, tx2, ty2);
+	else if (slot->item == SIGN) getITextureCoordinates(TXC_SIGN, tx1, ty1, tx2, ty2);
+	else if (slot->item == OAK_DOOR) getITextureCoordinates(TXC_OAK_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == BUCKET) getITextureCoordinates(TXC_BUCKET, tx1, ty1, tx2, ty2);
+	else if (slot->item == WATER_BUCKET) getITextureCoordinates(TXC_WATER_BUCKET, tx1, ty1, tx2, ty2);
+	else if (slot->item == LAVA_BUCKET) getITextureCoordinates(TXC_LAVA_BUCKET, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART) getITextureCoordinates(TXC_MINECART, tx1, ty1, tx2, ty2);
+	else if (slot->item == SADDLE) getITextureCoordinates(TXC_SADDLE, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_DOOR) getITextureCoordinates(TXC_IRON_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == REDSTONE) getITextureCoordinates(TXC_REDSTONE, tx1, ty1, tx2, ty2);
+	else if (slot->item == SNOWBALL) getITextureCoordinates(TXC_SNOWBALL, tx1, ty1, tx2, ty2);
+	else if (slot->item == OAK_BOAT) getITextureCoordinates(TXC_OAK_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEATHER) getITextureCoordinates(TXC_LEATHER, tx1, ty1, tx2, ty2);
+	else if (slot->item == MILK) getITextureCoordinates(TXC_MILK, tx1, ty1, tx2, ty2);
+	else if (slot->item == BRICK) getITextureCoordinates(TXC_BRICK, tx1, ty1, tx2, ty2);
+	else if (slot->item == CLAY) getITextureCoordinates(TXC_CLAY, tx1, ty1, tx2, ty2);
+	else if (slot->item == SUGAR_CANES) getITextureCoordinates(TXC_SUGAR_CANES, tx1, ty1, tx2, ty2);
+	else if (slot->item == PAPER) getITextureCoordinates(TXC_PAPER, tx1, ty1, tx2, ty2);
+	else if (slot->item == BOOK) getITextureCoordinates(TXC_BOOK, tx1, ty1, tx2, ty2);
+	else if (slot->item == SLIMEBALL) getITextureCoordinates(TXC_SLIMEBALL, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART_WITH_CHEST) getITextureCoordinates(TXC_MINECART_WITH_CHEST, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART_WITH_FURNACE) getITextureCoordinates(TXC_MINECART_WITH_FURNACE, tx1, ty1, tx2, ty2);
+	else if (slot->item == EGG) getITextureCoordinates(TXC_EGG, tx1, ty1, tx2, ty2);
+	else if (slot->item == COMPASS) getITextureCoordinates(TXC_COMPASS, tx1, ty1, tx2, ty2);
+	else if (slot->item == FISHING_ROD) getITextureCoordinates(TXC_FISHING_ROD, tx1, ty1, tx2, ty2);
+	else if (slot->item == CLOCK) getITextureCoordinates(TXC_CLOCK, tx1, ty1, tx2, ty2);
+	else if (slot->item == GLOWSTONE_DUST) getITextureCoordinates(TXC_GLOWSTONE_DUST, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_FISH_NAME) getITextureCoordinates(TXC_ITEM_FISH_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_FISH_NAME2) getITextureCoordinates(TXC_ITEM_FISH_NAME2, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_DYEPOWDER_NAME) getITextureCoordinates(TXC_ITEM_DYEPOWDER_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == BONE) getITextureCoordinates(TXC_BONE, tx1, ty1, tx2, ty2);
+	else if (slot->item == SUGAR) getITextureCoordinates(TXC_SUGAR, tx1, ty1, tx2, ty2);
+	else if (slot->item == CAKE) getITextureCoordinates(TXC_CAKE, tx1, ty1, tx2, ty2);
+	else if (slot->item == BED) getITextureCoordinates(TXC_BED, tx1, ty1, tx2, ty2);
+	else if (slot->item == REDSTONE_REPEATER) getITextureCoordinates(TXC_REDSTONE_REPEATER, tx1, ty1, tx2, ty2);
+	else if (slot->item == COOKIE) getITextureCoordinates(TXC_COOKIE, tx1, ty1, tx2, ty2);
+	else if (slot->item == MAP) getITextureCoordinates(TXC_MAP, tx1, ty1, tx2, ty2);
+	else if (slot->item == SHEARS) getITextureCoordinates(TXC_SHEARS, tx1, ty1, tx2, ty2);
+	else if (slot->item == MELON) getITextureCoordinates(TXC_MELON, tx1, ty1, tx2, ty2);
+	else if (slot->item == PUMPKIN_SEEDS) getITextureCoordinates(TXC_PUMPKIN_SEEDS, tx1, ty1, tx2, ty2);
+	else if (slot->item == MELON_SEEDS) getITextureCoordinates(TXC_MELON_SEEDS, tx1, ty1, tx2, ty2);
+	else if (slot->item == RAW_BEEF) getITextureCoordinates(TXC_RAW_BEEF, tx1, ty1, tx2, ty2);
+	else if (slot->item == STEAK) getITextureCoordinates(TXC_STEAK, tx1, ty1, tx2, ty2);
+	else if (slot->item == RAW_CHICKEN) getITextureCoordinates(TXC_RAW_CHICKEN, tx1, ty1, tx2, ty2);
+	else if (slot->item == COOKED_CHICKEN) getITextureCoordinates(TXC_COOKED_CHICKEN, tx1, ty1, tx2, ty2);
+	else if (slot->item == ROTTEN_FLESH) getITextureCoordinates(TXC_ROTTEN_FLESH, tx1, ty1, tx2, ty2);
+	else if (slot->item == ENDER_PEARL) getITextureCoordinates(TXC_ENDER_PEARL, tx1, ty1, tx2, ty2);
+	else if (slot->item == BLAZE_ROD) getITextureCoordinates(TXC_BLAZE_ROD, tx1, ty1, tx2, ty2);
+	else if (slot->item == GHAST_TEAR) getITextureCoordinates(TXC_GHAST_TEAR, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLD_NUGGET) getITextureCoordinates(TXC_GOLD_NUGGET, tx1, ty1, tx2, ty2);
+	else if (slot->item == NETHER_WART) getITextureCoordinates(TXC_NETHER_WART, tx1, ty1, tx2, ty2);
+	else if (slot->item == POTION) getITextureCoordinates(TXC_POTION, tx1, ty1, tx2, ty2);
+	else if (slot->item == GLASS_BOTTLE) getITextureCoordinates(TXC_GLASS_BOTTLE, tx1, ty1, tx2, ty2);
+	else if (slot->item == SPIDER_EYE) getITextureCoordinates(TXC_SPIDER_EYE, tx1, ty1, tx2, ty2);
+	else if (slot->item == FERMENTED_SPIDER_EYE) getITextureCoordinates(TXC_FERMENTED_SPIDER_EYE, tx1, ty1, tx2, ty2);
+	else if (slot->item == BLAZE_POWDER) getITextureCoordinates(TXC_BLAZE_POWDER, tx1, ty1, tx2, ty2);
+	else if (slot->item == MAGMA_CREAM) getITextureCoordinates(TXC_MAGMA_CREAM, tx1, ty1, tx2, ty2);
+	else if (slot->item == BREWING_STAND) getITextureCoordinates(TXC_BREWING_STAND, tx1, ty1, tx2, ty2);
+	else if (slot->item == CAULDRON) getITextureCoordinates(TXC_CAULDRON, tx1, ty1, tx2, ty2);
+	else if (slot->item == EYE_OF_ENDER) getITextureCoordinates(TXC_EYE_OF_ENDER, tx1, ty1, tx2, ty2);
+	else if (slot->item == GLISTERING_MELON) getITextureCoordinates(TXC_GLISTERING_MELON, tx1, ty1, tx2, ty2);
+	else if (slot->item == SPAWN) getITextureCoordinates(TXC_SPAWN, tx1, ty1, tx2, ty2);
+	else if (slot->item == BOTTLE_O_ENCHANTING) getITextureCoordinates(TXC_BOTTLE_O_ENCHANTING, tx1, ty1, tx2, ty2);
+	else if (slot->item == FIRE_CHARGE) getITextureCoordinates(TXC_FIRE_CHARGE, tx1, ty1, tx2, ty2);
+	else if (slot->item == BOOK_AND_QUILL) getITextureCoordinates(TXC_BOOK_AND_QUILL, tx1, ty1, tx2, ty2);
+	else if (slot->item == WRITTEN_BOOK) getITextureCoordinates(TXC_WRITTEN_BOOK, tx1, ty1, tx2, ty2);
+	else if (slot->item == EMERALD) getITextureCoordinates(TXC_EMERALD, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_FRAME) getITextureCoordinates(TXC_ITEM_FRAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == FLOWER_POT) getITextureCoordinates(TXC_FLOWER_POT, tx1, ty1, tx2, ty2);
+	else if (slot->item == CARROT) getITextureCoordinates(TXC_CARROT, tx1, ty1, tx2, ty2);
+	else if (slot->item == POTATO) getITextureCoordinates(TXC_POTATO, tx1, ty1, tx2, ty2);
+	else if (slot->item == BAKED_POTATO) getITextureCoordinates(TXC_BAKED_POTATO, tx1, ty1, tx2, ty2);
+	else if (slot->item == POISONOUS_POTATO) getITextureCoordinates(TXC_POISONOUS_POTATO, tx1, ty1, tx2, ty2);
+	else if (slot->item == EMPTY_MAP) getITextureCoordinates(TXC_EMPTY_MAP, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLDEN_CARROT) getITextureCoordinates(TXC_GOLDEN_CARROT, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_SKULL_NAME) getITextureCoordinates(TXC_ITEM_SKULL_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == CARROT_ON_A_STICK) getITextureCoordinates(TXC_CARROT_ON_A_STICK, tx1, ty1, tx2, ty2);
+	else if (slot->item == NETHER_STAR) getITextureCoordinates(TXC_NETHER_STAR, tx1, ty1, tx2, ty2);
+	else if (slot->item == PUMPKIN_PIE) getITextureCoordinates(TXC_PUMPKIN_PIE, tx1, ty1, tx2, ty2);
+	else if (slot->item == FIREWORK_ROCKET) getITextureCoordinates(TXC_FIREWORK_ROCKET, tx1, ty1, tx2, ty2);
+	else if (slot->item == FIREWORK_STAR) getITextureCoordinates(TXC_FIREWORK_STAR, tx1, ty1, tx2, ty2);
+	else if (slot->item == ENCHANTED_BOOK) getITextureCoordinates(TXC_ENCHANTED_BOOK, tx1, ty1, tx2, ty2);
+	else if (slot->item == REDSTONE_COMPARATOR) getITextureCoordinates(TXC_REDSTONE_COMPARATOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == NETHER_BRICK) getITextureCoordinates(TXC_NETHER_BRICK, tx1, ty1, tx2, ty2);
+	else if (slot->item == NETHER_QUARTZ) getITextureCoordinates(TXC_NETHER_QUARTZ, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART_WITH_TNT) getITextureCoordinates(TXC_MINECART_WITH_TNT, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART_WITH_HOPPER) getITextureCoordinates(TXC_MINECART_WITH_HOPPER, tx1, ty1, tx2, ty2);
+	else if (slot->item == PRISMARINE_SHARD) getITextureCoordinates(TXC_PRISMARINE_SHARD, tx1, ty1, tx2, ty2);
+	else if (slot->item == PRISMARINE_CRYSTALS) getITextureCoordinates(TXC_PRISMARINE_CRYSTALS, tx1, ty1, tx2, ty2);
+	else if (slot->item == RAW_RABBIT) getITextureCoordinates(TXC_RAW_RABBIT, tx1, ty1, tx2, ty2);
+	else if (slot->item == COOKED_RABBIT) getITextureCoordinates(TXC_COOKED_RABBIT, tx1, ty1, tx2, ty2);
+	else if (slot->item == RABBIT_STEW) getITextureCoordinates(TXC_RABBIT_STEW, tx1, ty1, tx2, ty2);
+	else if (slot->item == RABBITS_FOOT) getITextureCoordinates(TXC_RABBITS_FOOT, tx1, ty1, tx2, ty2);
+	else if (slot->item == RABBIT_HIDE) getITextureCoordinates(TXC_RABBIT_HIDE, tx1, ty1, tx2, ty2);
+	else if (slot->item == ARMOR_STAND) getITextureCoordinates(TXC_ARMOR_STAND, tx1, ty1, tx2, ty2);
+	else if (slot->item == IRON_HORSE_ARMOR) getITextureCoordinates(TXC_IRON_HORSE_ARMOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == GOLD_HORSE_ARMOR) getITextureCoordinates(TXC_GOLD_HORSE_ARMOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == DIAMOND_HORSE_ARMOR) getITextureCoordinates(TXC_DIAMOND_HORSE_ARMOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == LEAD) getITextureCoordinates(TXC_LEAD, tx1, ty1, tx2, ty2);
+	else if (slot->item == NAME_TAG) getITextureCoordinates(TXC_NAME_TAG, tx1, ty1, tx2, ty2);
+	else if (slot->item == MINECART_WITH_COMMAND_BLOCK) getITextureCoordinates(TXC_MINECART_WITH_COMMAND_BLOCK, tx1, ty1, tx2, ty2);
+	else if (slot->item == RAW_MUTTON) getITextureCoordinates(TXC_RAW_MUTTON, tx1, ty1, tx2, ty2);
+	else if (slot->item == COOKED_MUTTON) getITextureCoordinates(TXC_COOKED_MUTTON, tx1, ty1, tx2, ty2);
+	else if (slot->item == TILE_BANNER_NAME) getITextureCoordinates(TXC_TILE_BANNER_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == END_CRYSTAL) getITextureCoordinates(TXC_END_CRYSTAL, tx1, ty1, tx2, ty2);
+	else if (slot->item == SPRUCE_DOOR) getITextureCoordinates(TXC_SPRUCE_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == BIRCH_DOOR) getITextureCoordinates(TXC_BIRCH_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == JUNGLE_DOOR) getITextureCoordinates(TXC_JUNGLE_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == ACACIA_DOOR) getITextureCoordinates(TXC_ACACIA_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == DARK_OAK_DOOR) getITextureCoordinates(TXC_DARK_OAK_DOOR, tx1, ty1, tx2, ty2);
+	else if (slot->item == CHORUS_FRUIT) getITextureCoordinates(TXC_CHORUS_FRUIT, tx1, ty1, tx2, ty2);
+	else if (slot->item == POPPED_CHORUS_FRUIT) getITextureCoordinates(TXC_POPPED_CHORUS_FRUIT, tx1, ty1, tx2, ty2);
+	else if (slot->item == BEETROOT) getITextureCoordinates(TXC_BEETROOT, tx1, ty1, tx2, ty2);
+	else if (slot->item == BEETROOT_SEEDS) getITextureCoordinates(TXC_BEETROOT_SEEDS, tx1, ty1, tx2, ty2);
+	else if (slot->item == BEETROOT_SOUP) getITextureCoordinates(TXC_BEETROOT_SOUP, tx1, ty1, tx2, ty2);
+	else if (slot->item == DRAGONS_BREATH) getITextureCoordinates(TXC_DRAGONS_BREATH, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_SPLASH_POTION_NAME) getITextureCoordinates(TXC_ITEM_SPLASH_POTION_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == SPECTRAL_ARROW) getITextureCoordinates(TXC_SPECTRAL_ARROW, tx1, ty1, tx2, ty2);
+	else if (slot->item == TIPPED_ARROW) getITextureCoordinates(TXC_TIPPED_ARROW, tx1, ty1, tx2, ty2);
+	else if (slot->item == ITEM_LINGERING_POTION_NAME) getITextureCoordinates(TXC_ITEM_LINGERING_POTION_NAME, tx1, ty1, tx2, ty2);
+	else if (slot->item == SHIELD) getITextureCoordinates(TXC_SHIELD, tx1, ty1, tx2, ty2);
+	else if (slot->item == ELYTRA) getITextureCoordinates(TXC_ELYTRA, tx1, ty1, tx2, ty2);
+	else if (slot->item == SPRUCE_BOAT) getITextureCoordinates(TXC_SPRUCE_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == BIRCH_BOAT) getITextureCoordinates(TXC_BIRCH_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == JUNGLE_BOAT) getITextureCoordinates(TXC_JUNGLE_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == ACACIA_BOAT) getITextureCoordinates(TXC_ACACIA_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == DARK_OAK_BOAT) getITextureCoordinates(TXC_DARK_OAK_BOAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_13) getITextureCoordinates(TXC_MUSIC_DISC_13, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_CAT) getITextureCoordinates(TXC_MUSIC_DISC_CAT, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_BLOCKS) getITextureCoordinates(TXC_MUSIC_DISC_BLOCKS, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_CHIRP) getITextureCoordinates(TXC_MUSIC_DISC_CHIRP, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_FAR) getITextureCoordinates(TXC_MUSIC_DISC_FAR, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_MALL) getITextureCoordinates(TXC_MUSIC_DISC_MALL, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_MELLOHI) getITextureCoordinates(TXC_MUSIC_DISC_MELLOHI, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_STAL) getITextureCoordinates(TXC_MUSIC_DISC_STAL, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_STRAD) getITextureCoordinates(TXC_MUSIC_DISC_STRAD, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_WARD) getITextureCoordinates(TXC_MUSIC_DISC_WARD, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_11) getITextureCoordinates(TXC_MUSIC_DISC11, tx1, ty1, tx2, ty2);
+	else if (slot->item == MUSIC_DISC_WAIT) getITextureCoordinates(TXC_MUSIC_DISC_WAIT, tx1, ty1, tx2, ty2);
+	else if (slot->item == INV_NOHELM) getITextureCoordinates(TXC_INV_NOHELM, tx1, ty1, tx2, ty2);
+	else if (slot->item == INV_NOCHEST) getITextureCoordinates(TXC_INV_NOCHEST, tx1, ty1, tx2, ty2);
+	else if (slot->item == INV_NOPANTS) getITextureCoordinates(TXC_INV_NOPANTS, tx1, ty1, tx2, ty2);
+	else if (slot->item == INV_NOFEET) getITextureCoordinates(TXC_INV_NOFEET, tx1, ty1, tx2, ty2);
+	else if (slot->item == INV_NOSHIELD) getITextureCoordinates(TXC_INV_NOSHIELD, tx1, ty1, tx2, ty2);
+}
+
+int validItemForSlot(int invtype, int si, struct slot* slot) {
+	if (invtype == INVTYPE_PLAYERINVENTORY) {
+		if (si == 0) return 0;
+		if (si >= 5 && si <= 8) {
+			return slot->item >= LEATHER_CAP && slot->item <= GOLDEN_BOOTS;
+		} else if (si == 45) {
+			return slot->item == SHIELD;
+		}
+	}
+	return 1;
+}
+
+int maxStackSize(struct slot* slot) {
+	if ((slot->item >= IRON_SHOVEL && slot->item <= FLINT_AND_STEEL) || slot->item == BOW || (slot->item >= IRON_SWORD && slot->item <= DIAMOND_AXE) || (slot->item >= MUSHROOM_STEW && slot->item <= GOLDEN_AXE) || (slot->item >= WOODEN_HOE && slot->item <= GOLDEN_HOE) || (slot->item >= LEATHER_CAP && slot->item <= GOLDEN_BOOTS) || (slot->item >= WATER_BUCKET && slot->item <= SADDLE) || slot->item == OAK_BOAT || slot->item == MILK || slot->item == MINECART_WITH_CHEST || slot->item == MINECART_WITH_FURNACE || slot->item == FISHING_ROD || slot->item == CAKE || slot->item == BED || slot->item == SHEARS || slot->item == POTION || slot->item == BOOK_AND_QUILL || slot->item == CARROT_ON_A_STICK || slot->item == ENCHANTED_BOOK || slot->item == MINECART_WITH_TNT || slot->item == MINECART_WITH_HOPPER || slot->item == RABBIT_STEW || slot->item == IRON_HORSE_ARMOR || slot->item == GOLD_HORSE_ARMOR || slot->item == DIAMOND_HORSE_ARMOR || slot->item == MINECART_WITH_COMMAND_BLOCK
+			|| slot->item == BEETROOT_SOUP || slot->item == ITEM_SPLASH_POTION_NAME || slot->item == ITEM_LINGERING_POTION_NAME || slot->item >= SHIELD) return 1;
+	if (slot->item == SIGN || slot->item == BUCKET || slot->item == SNOWBALL || slot->item == EGG || slot->item == ENDER_PEARL || slot->item == WRITTEN_BOOK || slot->item == ARMOR_STAND || slot->item == TILE_BANNER_NAME) return 16;
+	return 64;
+}
+
+void drawSlot(struct inventory* inv, int si, struct slot* slot, int x, int y) {
+	if (mouseX >= x && mouseY >= y && mouseX <= x + 16 && mouseY <= y + 16 && si >= -1) {
+		drawRect(x, y, -.1, 16, 16, -2130706433);
+		if (mouseButton == 0) {
+			mouseButton = -1;
+			struct packet pkt;
+			pkt.data.play_client.clickwindow.clicked.item = -1;
+			pkt.data.play_client.clickwindow.clicked.nbt = NULL;
+			if (slot != NULL && !(slot->item >= INV_NOHELM && slot->item <= INV_NOSHIELD)) {
+				memcpy(&pkt.data.play_client.clickwindow.clicked, slot, sizeof(struct slot));
+				pkt.data.play_client.clickwindow.clicked.nbt = cloneNBT(slot->nbt);
+			}
+			if (gs.inCursor != NULL && !validItemForSlot(inv->type, si, gs.inCursor)) goto ske;
+			if (inv->slots[si] != NULL && gs.inCursor != NULL && inv->slots[si]->item == gs.inCursor->item && inv->slots[si]->damage == gs.inCursor->damage) {
+				int mss = maxStackSize(gs.inCursor);
+				int tot = inv->slots[si]->itemCount + gs.inCursor->itemCount;
+				inv->slots[si]->itemCount = mss < tot ? mss : tot;
+				gs.inCursor->itemCount = tot - inv->slots[si]->itemCount;
+				if (gs.inCursor->itemCount <= 0) {
+					if (gs.inCursor->nbt != NULL) {
+						freeNBT(gs.inCursor->nbt);
+						free(gs.inCursor->nbt);
+					}
+					free(gs.inCursor);
+					gs.inCursor = NULL;
+				}
+				goto sndl;
+			}
+			inv->slots[si] = gs.inCursor;
+			int fi = slot != NULL && slot->item >= INV_NOHELM && slot->item <= INV_NOSHIELD;
+			gs.inCursor = fi ? NULL : slot;
+			if (gs.inCursor != NULL && gs.inCursor->item < 0) {
+				if (gs.inCursor->nbt != NULL) {
+					freeNBT(gs.inCursor->nbt);
+					free(gs.inCursor->nbt);
+				}
+				free(gs.inCursor);
+				gs.inCursor = NULL;
+			}
+			slot = inv->slots[si];
+			sndl: ;
+			pkt.id = PKT_PLAY_CLIENT_CLICKWINDOW;
+			pkt.data.play_client.clickwindow.actionNumber = gs.invAct++;
+			pkt.data.play_client.clickwindow.button = 0;
+			pkt.data.play_client.clickwindow.mode = 0;
+			pkt.data.play_client.clickwindow.slot = si;
+			pkt.data.play_client.clickwindow.windowID = inv->windowID;
+			writePacket(gs.conn, &pkt);
+			ske: ;
+		} else if (mouseButton == 1) {
+			mouseButton = -1;
+			struct packet pkt;
+			pkt.data.play_client.clickwindow.clicked.item = -1;
+			pkt.data.play_client.clickwindow.clicked.nbt = NULL;
+			if (slot != NULL && !(slot->item >= INV_NOHELM && slot->item <= INV_NOSHIELD)) {
+				memcpy(&pkt.data.play_client.clickwindow.clicked, slot, sizeof(struct slot));
+				pkt.data.play_client.clickwindow.clicked.nbt = cloneNBT(slot->nbt);
+			}
+			if (gs.inCursor == NULL && slot != NULL) {
+				gs.inCursor = malloc(sizeof(struct slot));
+				memcpy(gs.inCursor, slot, sizeof(struct slot));
+				gs.inCursor->nbt = cloneNBT(slot->nbt);
+				gs.inCursor->itemCount = (unsigned char) ceil((float) gs.inCursor->itemCount / 2.);
+				slot->itemCount -= gs.inCursor->itemCount;
+				if (slot->itemCount < 0) {
+					if (slot->nbt != NULL) {
+						freeNBT(slot->nbt);
+						free(slot->nbt);
+					}
+					free(slot);
+					slot = NULL;
+					inv->slots[si] = NULL;
+				}
+			} else if (gs.inCursor != NULL) {
+				if (slot == NULL || (slot->item == gs.inCursor->item && slot->damage == gs.inCursor->damage)) {
+					int mss = maxStackSize(gs.inCursor);
+					if (slot == NULL) {
+						slot = malloc(sizeof(struct slot));
+						inv->slots[si] = slot;
+						memcpy(slot, gs.inCursor, sizeof(struct slot));
+						slot->nbt = cloneNBT(gs.inCursor->nbt);
+						slot->itemCount = 0;
+					}
+					if (slot->itemCount < mss) {
+						slot->itemCount++;
+						if (--gs.inCursor->itemCount == 0) {
+							if (gs.inCursor->nbt != NULL) {
+								freeNBT(gs.inCursor->nbt);
+								free(gs.inCursor->nbt);
+							}
+							free(gs.inCursor);
+							gs.inCursor = NULL;
+						}
+					}
+				} else if (slot != NULL) {
+					inv->slots[si] = gs.inCursor;
+					int fi = slot != NULL && slot->item >= INV_NOHELM && slot->item <= INV_NOSHIELD;
+					gs.inCursor = fi ? NULL : slot;
+					slot = inv->slots[si];
+					if (gs.inCursor->item < 0) {
+						if (gs.inCursor->nbt != NULL) {
+							freeNBT(gs.inCursor->nbt);
+							free(gs.inCursor->nbt);
+						}
+						free(gs.inCursor);
+						gs.inCursor = NULL;
+					}
+				}
+			}
+			pkt.id = PKT_PLAY_CLIENT_CLICKWINDOW;
+			pkt.data.play_client.clickwindow.actionNumber = gs.invAct++;
+			pkt.data.play_client.clickwindow.button = 1;
+			pkt.data.play_client.clickwindow.mode = 0;
+			pkt.data.play_client.clickwindow.slot = si;
+			pkt.data.play_client.clickwindow.windowID = inv->windowID;
+			writePacket(gs.conn, &pkt);
+			if (pkt.data.play_client.clickwindow.clicked.nbt != NULL) {
+				freeNBT(pkt.data.play_client.clickwindow.clicked.nbt);
+				free(pkt.data.play_client.clickwindow.clicked.nbt);
+			}
+		}
+	}
+	if (slot == NULL || slot->item <= 0) return;
 	if (slot->item < 256) {
 		//block (for now)
 	} else {
-		//if(slot->item == 256) {
-
-		//}
+		float tx1 = 0.;
+		float ty1 = 0.;
+		float tx2 = 0.;
+		float ty2 = 0.;
+		getItemTexture(slot, &tx1, &ty1, &tx2, &ty2);
+		glBindTexture(GL_TEXTURE_2D, TX_ITEMS);
+		glBegin (GL_QUADS);
+		glTexCoord2f(tx1, ty2);
+		glVertex3f(x, y + 16, 0.);
+		glTexCoord2f(tx2, ty2);
+		glVertex3f(x + 16, y + 16, 0.);
+		glTexCoord2f(tx2, ty1);
+		glVertex3f(x + 16, y, 0.);
+		glTexCoord2f(tx1, ty1);
+		glVertex3f(x, y, 0.);
+		glEnd();
 	}
-	return 0;
+	if (slot->itemCount != 1) {
+		char nc[33];
+		nc[32] = 0;
+		snprintf(nc, 32, "%i", slot->itemCount);
+		drawString(nc, x + 19 - 2 - stringWidth(nc), y + 6 + 3, 16777215);
+	}
 }
 
 void drawInventory(struct inventory* inv, struct inventory* plinv) {
@@ -432,6 +822,46 @@ void drawInventory(struct inventory* inv, struct inventory* plinv) {
 	if (inv->type == INVTYPE_PLAYERINVENTORY) {
 		glBindTexture(GL_TEXTURE_2D, TX_IV_INVENTORY);
 		drawTexturedModalRect(x, y, -1, 0, 0, iwid, ihei);
+		if (inv->slots != NULL && inv->slot_count == 46) {
+			drawSlot(inv, 0, inv->slots[0], x + 154, y + 28);
+			for (int i = 0; i < 2; i++) {
+				for (int j = 0; j < 2; j++) {
+					drawSlot(inv, j + i * 2, inv->slots[j + i * 2], x + 98 + j * 18, y + 18 + i * 18);
+				}
+			}
+			for (int i = 0; i < 4; i++) {
+				struct slot* sl = inv->slots[5 + i];
+				struct slot ti;
+				if (sl == NULL || sl->item <= 0) {
+					sl = &ti;
+					ti.item = INV_NOHELM + i;
+					ti.damage = 0;
+					ti.itemCount = 1;
+					ti.nbt = NULL;
+				}
+				drawSlot(inv, 5 + i, sl, x + 8, y + 8 + i * 18);
+			}
+			for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 9; j++) {
+					drawSlot(inv, j + (i + 1) * 9, inv->slots[j + (i + 1) * 9], x + 8 + j * 18, y + 84 + i * 18);
+				}
+			}
+			for (int i = 0; i < 9; i++) {
+				drawSlot(inv, 36 + i, inv->slots[36 + i], x + 8 + i * 18, y + 142);
+			}
+			{
+				struct slot* sl = inv->slots[45];
+				struct slot ti;
+				if (sl == NULL || sl->item <= 0) {
+					sl = &ti;
+					ti.item = INV_NOSHIELD;
+					ti.damage = 0;
+					ti.itemCount = 1;
+					ti.nbt = NULL;
+				}
+				drawSlot(inv, 45, sl, x + 77, y + 62);
+			}
+		}
 	} else if (inv->type == INVTYPE_CHEST) {
 		glBindTexture(GL_TEXTURE_2D, TX_IV_CHEST);
 		drawTexturedModalRect(x, y, -1, 0, 0, iwid, ihei);
@@ -466,10 +896,20 @@ void drawInventory(struct inventory* inv, struct inventory* plinv) {
 		glBindTexture(GL_TEXTURE_2D, TX_IV_HORSE);
 		drawTexturedModalRect(x, y, -1, 0, 0, iwid, ihei);
 	}
+	drawSlot(NULL, -2, gs.inCursor, mouseX - 8, mouseY - 8);
 }
 
 void setInventoryItems(struct inventory* inv, struct slot** slots, size_t slot_count) {
 	_freeInventorySlots(inv);
+	for (size_t i = 0; i < slot_count; i++) {
+		if (slots[i]->item < 0) {
+			if (slots[i]->nbt != NULL) freeNBT(slots[i]->nbt);
+			free(slots[i]);
+			slots[i] = NULL;
+		} else {
+			printf("bulk %i = %u, %i\n", i, slots[i]->nbt, (slots[i]->nbt == NULL ? 0 : slots[i]->nbt->id));
+		}
+	}
 	inv->slots = slots;
 	inv->slot_count = slot_count;
 }
@@ -479,6 +919,25 @@ void setInventorySlot(struct inventory* inv, struct slot* slot, int index) {
 	if (inv->slots == NULL) {
 		if (inv->slot_count < 1) return;
 		inv->slots = malloc(sizeof(struct slot*) * inv->slot_count);
+		for (int i = 0; i < inv->slot_count; i++) {
+			inv->slots[i] = NULL;
+		}
+	}
+	if (slot != NULL && slot->item < 0) {
+		if (slot->nbt != NULL) {
+			freeNBT(slot->nbt);
+			free(slot->nbt);
+		}
+		free(slot);
+		slot = NULL;
+	}
+	printf("single %i = %u, %i\n", index, slot == NULL ? 1 : slot->nbt, (slot == NULL || slot->nbt == NULL ? 0 : slot->nbt->id));
+	if (inv->slots[index] != NULL) {
+		if (inv->slots[index]->nbt != NULL) {
+			freeNBT(inv->slots[index]->nbt);
+			free(inv->slots[index]->nbt);
+		}
+		free(inv->slots[index]);
 	}
 	inv->slots[index] = slot;
 }

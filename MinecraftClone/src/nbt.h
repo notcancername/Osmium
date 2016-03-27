@@ -55,4 +55,6 @@ struct nbt_tag {
 
 void freeNBT(struct nbt_tag* nbt);
 
+struct nbt_tag* cloneNBT(struct nbt_tag* nbt);
+
 #endif /* NBT_H_ */

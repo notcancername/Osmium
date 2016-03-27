@@ -25,9 +25,9 @@
 #define INVTYPE_DROPPER 11
 #define INVTYPE_HORSE 12
 
-size_t idef_width;
-size_t idef_height;
-size_t idef_wrap;
+int idef_width;
+int idef_height;
+int idef_wrap;
 char** itemMap;
 int* itemSizeMap;
 int itemMapLength;
@@ -47,6 +47,7 @@ struct inventory {
 		int16_t** props;
 		size_t prop_count;
 		int windowID;
+		int desync;
 };
 
 void loadInventoryGUI();

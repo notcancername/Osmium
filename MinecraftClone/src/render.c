@@ -603,5 +603,6 @@ void drawRect(int x, int y, int z, int width, int height, uint32_t color) {
 	glVertex3f(x, y, z);
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
+	glColor4f(1., 1., 1., 1.);
 }
 
