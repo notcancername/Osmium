@@ -50,6 +50,8 @@ struct inventory {
 		int desync;
 };
 
+void drawSlot(struct inventory* inv, int si, struct slot* slot, int x, int y);
+
 void loadInventoryGUI();
 
 void newInventory(struct inventory* inv, int type, int id);

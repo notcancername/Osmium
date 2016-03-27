@@ -87,6 +87,12 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 			gs.openinv = gs.playerinv;
 			gs.crouching = 0;
 			gs.sprinting = 0;
+		} else if (action == GLFW_PRESS && key >= GLFW_KEY_1 && key <= GLFW_KEY_9) {
+			gs.heldItem = key - GLFW_KEY_1;
+			struct packet pkt;
+			pkt.id = PKT_PLAY_CLIENT_HELDITEMCHANGE;
+			pkt.data.play_client.helditemchange.slot = gs.heldItem;
+			writePacket(gs.conn, &pkt);
 		}
 	}
 }
@@ -94,6 +100,18 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 int moc = 0;
 double lmx = 0.;
 double lmy = 0.;
+
+void ingame_scrollCallback(double x, double y) {
+	if (moc) {
+		gs.heldItem -= y;
+		if (gs.heldItem < 0) gs.heldItem = 8;
+		if (gs.heldItem > 8) gs.heldItem = 0;
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_HELDITEMCHANGE;
+		pkt.data.play_client.helditemchange.slot = gs.heldItem;
+		writePacket(gs.conn, &pkt);
+	}
+}
 
 void ingame_mouseMotionCallback(double x, double y) {
 	if (gs.player != NULL && spawnedIn && hasMouse && !gs.inMenu && gs.openinv == NULL) {
@@ -599,6 +617,14 @@ void drawIngame(float partialTick) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glClear (GL_DEPTH_BUFFER_BIT);
+	{
+		glBindTexture(GL_TEXTURE_2D, TX_WIDGETS);
+		drawTexturedModalRect(swidth / 2 - 91, sheight - 22, 0, 0, 0, 182, 22);
+		drawTexturedModalRect(swidth / 2 - 92 + gs.heldItem * 20, sheight - 23, 1, 0, 22, 24, 22);
+		for (int i = 0; i < 9; i++) {
+			drawSlot(NULL, -2, gs.playerinv->slots[36 + i], swidth / 2 - 90 + i * 20 + 2, sheight - 19);
+		}
+	}
 	if (gs.inMenu || gs.openinv != NULL) {
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_DEPTH_TEST);
@@ -1074,7 +1100,7 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_CAMERA) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_HELDITEMCHANGE) {
-
+			gs.heldItem = pkt.data.play_server.helditemchange.slot;
 		} else if (pkt.id == PKT_PLAY_SERVER_DISPLAYSCOREBOARD) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYMETADATA) {

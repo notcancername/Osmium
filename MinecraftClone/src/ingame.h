@@ -42,7 +42,10 @@ struct gamestate {
 		struct slot* inCursor;
 		uint64_t invAct;
 		int shiftDown;
+		int heldItem;
 };
+
+void ingame_scrollCallback(double x, double y);
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);
 

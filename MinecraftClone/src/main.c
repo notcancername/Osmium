@@ -172,6 +172,10 @@ void mouseCallback(GLFWwindow* window, int button, int action, int mods) {
 	if (action == GLFW_PRESS) mouseButton = button;
 }
 
+void scrollCallback(GLFWwindow* window, double x, double y) {
+	ingame_scrollCallback(x, y);
+}
+
 void error_callback(int error, const char* description) {
 	printf("GLFW error: %s\n", description);
 }
@@ -650,6 +654,7 @@ int main(int argc, char *argv[]) {
 	glfwSetCharCallback(window, textCallback);
 	glfwSetCursorPosCallback(window, mouseMotionCallback);
 	glfwSetMouseButtonCallback(window, mouseCallback);
+	glfwSetScrollCallback(window, scrollCallback);
 	printf("Loaded.\n");
 	while (!glfwWindowShouldClose(window)) {
 		displayCallback();

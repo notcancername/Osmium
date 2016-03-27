@@ -865,13 +865,13 @@ void drawSlot(struct inventory* inv, int si, struct slot* slot, int x, int y) {
 		glBindTexture(GL_TEXTURE_2D, TX_ITEMS);
 		glBegin (GL_QUADS);
 		glTexCoord2f(tx1, ty2);
-		glVertex3f(x, y + 16, 0.);
+		glVertex3f(x, y + 16, 1.);
 		glTexCoord2f(tx2, ty2);
-		glVertex3f(x + 16, y + 16, 0.);
+		glVertex3f(x + 16, y + 16, 1.);
 		glTexCoord2f(tx2, ty1);
-		glVertex3f(x + 16, y, 0.);
+		glVertex3f(x + 16, y, 1.);
 		glTexCoord2f(tx1, ty1);
-		glVertex3f(x, y, 0.);
+		glVertex3f(x, y, 1.);
 		glEnd();
 	}
 	if (slot->itemCount != 1) {
