@@ -11,7 +11,8 @@
 #include <GL/gl.h>
 #include "models.h"
 #include "globals.h"
-
+#include "ingame.h"
+#include <math.h>
 int entNetworkConvert(int type, int id) {
 	if (type == 0) {
 		if (id == 1) return ENT_BOAT;
@@ -101,13 +102,160 @@ struct entity* newEntity(int32_t id, float x, float y, float z, uint8_t type, fl
 	e->motZ = 0.;
 	e->objectData = 0;
 	e->markedKill = 0;
+	e->swingProgress = 0.;
+	e->prevSwingProgress = 0.;
+	e->swingProgressInt = -1;
+	e->effects = NULL;
+	e->effect_count = 0;
+	e->sneaking = 0;
+	e->sprinting = 0;
 	return e;
+}
+
+void handleMetaByte(struct entity* ent, int index, signed char b) {
+
+}
+
+void handleMetaVarInt(struct entity* ent, int index, int32_t b) {
+
+}
+
+void handleMetaFloat(struct entity* ent, int index, float f) {
+
+}
+
+void handleMetaString(struct entity* ent, int index, char* str) {
+
+	free(str);
+}
+
+void handleMetaSlot(struct entity* ent, int index, struct slot* slot) {
+
+}
+
+void handleMetaVector(struct entity* ent, int index, float f1, float f2, float f3) {
+
+}
+
+void handleMetaPosition(struct entity* ent, int index, struct encpos* pos) {
+
+}
+
+void handleMetaUUID(struct entity* ent, int index, struct uuid* pos) {
+
+}
+
+void readMetadata(struct entity* ent, unsigned char* meta, size_t size) {
+	while (size > 0) {
+		unsigned char index = meta[0];
+		meta++;
+		size--;
+		if (index == 0xff || size == 0) break;
+		unsigned char type = meta[0];
+		meta++;
+		size--;
+		if (type == 0 || type == 6) {
+			if (size == 0) break;
+			signed char b = meta[0];
+			meta++;
+			size--;
+			handleMetaByte(ent, index, b);
+		} else if (type == 1 || type == 10 || type == 12) {
+			int32_t vi = 0;
+			int r = readVarInt(&vi, meta, size);
+			meta += r;
+			size -= r;
+			handleMetaVarInt(ent, index, vi);
+		} else if (type == 2) {
+			if (size < 4) break;
+			float f = 0.;
+			memcpy(&f, meta, 4);
+			meta += 4;
+			size -= 4;
+			swapEndian(&f, 4);
+			handleMetaFloat(ent, index, f);
+		} else if (type == 3 || type == 4) {
+			char* str = NULL;
+			int r = readString(&str, meta, size);
+			meta += r;
+			size -= r;
+			handleMetaString(ent, index, str);
+		} else if (type == 5) {
+			struct slot slot;
+			int r = readSlot(&slot, meta, size);
+			meta += r;
+			size -= r;
+			handleMetaSlot(ent, index, &slot);
+		} else if (type == 7) {
+			if (size < 12) break;
+			float f1 = 0.;
+			float f2 = 0.;
+			float f3 = 0.;
+			memcpy(&f1, meta, 4);
+			meta += 4;
+			size -= 4;
+			memcpy(&f2, meta, 4);
+			meta += 4;
+			size -= 4;
+			memcpy(&f3, meta, 4);
+			meta += 4;
+			size -= 4;
+			swapEndian(&f1, 4);
+			swapEndian(&f2, 4);
+			swapEndian(&f3, 4);
+			handleMetaVector(ent, index, f1, f2, f3);
+		} else if (type == 8) {
+			struct encpos pos;
+			if (size < sizeof(struct encpos)) break;
+			memcpy(&pos, meta, sizeof(struct encpos));
+			meta += sizeof(struct encpos);
+			size -= sizeof(struct encpos);
+			handleMetaPosition(ent, index, &pos);
+		} else if (type == 9) {
+			if (size == 0) break;
+			signed char b = meta[0];
+			meta++;
+			size--;
+			if (b) {
+				struct encpos pos;
+				if (size < sizeof(struct encpos)) break;
+				memcpy(&pos, meta, sizeof(struct encpos));
+				meta += sizeof(struct encpos);
+				size -= sizeof(struct encpos);
+				handleMetaPosition(ent, index, &pos);
+			}
+		} else if (type == 11) {
+			if (size == 0) break;
+			signed char b = meta[0];
+			meta++;
+			size--;
+			if (b) {
+				struct uuid uuid;
+				if (size < sizeof(struct uuid)) break;
+				memcpy(&uuid, meta, sizeof(struct uuid));
+				meta += sizeof(struct uuid);
+				size -= sizeof(struct uuid);
+				handleMetaUUID(ent, index, &uuid);
+			}
+		}
+	}
+}
+
+int getSwingTime(struct entity* ent) {
+	for (size_t i = 0; i < ent->effect_count; i++) {
+		if (ent->effects[i].effectID == 3) {
+			return 6 - (1 + ent->effects[i].amplifier);
+		} else if (ent->effects[i].effectID == 4) {
+			return 6 + (1 + ent->effects[i].amplifier) * 2;
+		}
+	}
+	return 6;
 }
 
 void drawEntity(float partialTick, struct entity* ent) {
 	glPushMatrix();
-	float ppitch = ent->pitch * (1. - partialTick) + ent->lpitch * partialTick;
-	float pyaw = ent->yaw * (1. - partialTick) + ent->lyaw * partialTick;
+	float ppitch = interpolateAngle(ent->pitch, ent->lpitch, partialTick);
+	float pyaw = interpolateAngle(ent->yaw, ent->lyaw, partialTick);
 	double px = ent->x * (1. - partialTick) + ent->lx * partialTick;
 	double py = ent->y * (1. - partialTick) + ent->ly * partialTick;
 	double pz = ent->z * (1. - partialTick) + ent->lz * partialTick;
@@ -115,8 +263,31 @@ void drawEntity(float partialTick, struct entity* ent) {
 	glRotatef(-pyaw + 180., 0., 1., 0.);
 	//begin debug draw
 	if (ent->type == ENT_MPPLAYER) {
-		mod_biped.children[0]->rotX = ppitch / (180. / PI);
-		drawModel (&mod_biped);
+		resetModel (&mod_biped);
+		mod_biped.BIPED_HEAD->rotX = ppitch / (180. / PI);
+		if (ent->swingProgressInt > -1) {
+			float swp = ent->swingProgress - ent->prevSwingProgress;
+			if (swp < 0.) swp++;
+			swp = ent->prevSwingProgress + swp * (1. - partialTick);
+			mod_biped.BIPED_BODY->rotY = sin(sqrt(swp) * PI * 2.) * .2;
+			mod_biped.BIPED_RIGHTARM->rpZ = sin(mod_biped.BIPED_BODY->rotY) * 5.;
+			mod_biped.BIPED_RIGHTARM->rpX = -cos(mod_biped.BIPED_BODY->rotY) * 5.;
+			mod_biped.BIPED_LEFTARM->rpZ = -sin(mod_biped.BIPED_BODY->rotY) * 5.;
+			mod_biped.BIPED_LEFTARM->rpX = cos(mod_biped.BIPED_BODY->rotY) * 5.;
+			mod_biped.BIPED_RIGHTARM->rotY += mod_biped.BIPED_BODY->rotY;
+			mod_biped.BIPED_LEFTARM->rotY += mod_biped.BIPED_BODY->rotY;
+			mod_biped.BIPED_LEFTARM->rotX += mod_biped.BIPED_BODY->rotY;
+			float v8 = 1. - swp;
+			v8 *= v8;
+			v8 *= v8;
+			v8 = 1. - v8;
+			float v9 = sin(v8 * PI);
+			float v10 = sin(swp * PI) * -(mod_biped.BIPED_HEAD->rotX - .7) * .75;
+			mod_biped.BIPED_RIGHTARM->rotX -= v9 * 1.2 + v10;
+			mod_biped.BIPED_RIGHTARM->rotY += mod_biped.BIPED_BODY->rotY * 2.;
+			mod_biped.BIPED_RIGHTARM->rotZ += sin(swp * PI) * -.4;
+		}
+		drawModel(&mod_biped);
 	} else {
 		struct boundingbox* bb = getEntityCollision(ent);
 		if (bb->minX != bb->maxX && bb->minY != bb->maxY && bb->minZ != bb->maxZ && bb->ovao != NULL) {

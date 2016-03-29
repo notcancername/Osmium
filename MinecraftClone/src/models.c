@@ -80,6 +80,12 @@ void newModr(struct modr* modr, int txx, int txy, int txw, int txh, float rpX, f
 	modr->rotX = 0.;
 	modr->rotY = 0.;
 	modr->rotZ = 0.;
+	modr->defRotX = 0.;
+	modr->defRotY = 0.;
+	modr->defRotZ = 0.;
+	modr->defrpX = rpX;
+	modr->defrpY = rpY;
+	modr->defrpZ = rpZ;
 	modr->rpX = rpX;
 	modr->rpY = rpY;
 	modr->rpZ = rpZ;
@@ -89,6 +95,42 @@ void setModrAngles(struct modr* modr, float rotX, float rotY, float rotZ) {
 	modr->rotX = rotX;
 	modr->rotY = rotY;
 	modr->rotZ = rotZ;
+}
+
+void setModrDefAngles(struct modr* modr, float rotX, float rotY, float rotZ) {
+	modr->defRotX = rotX;
+	modr->defRotY = rotY;
+	modr->defRotZ = rotZ;
+}
+
+void setModrAnglePoint(struct modr* modr, float rpX, float rpY, float rpZ) {
+	modr->rpX = rpX;
+	modr->rpY = rpY;
+	modr->rpZ = rpZ;
+}
+
+void setModrDefAnglePoint(struct modr* modr, float rpX, float rpY, float rpZ) {
+	modr->defrpX = rpX;
+	modr->defrpY = rpY;
+	modr->defrpZ = rpZ;
+}
+
+void resetModr(struct modr* modr) {
+	modr->rpX = modr->defrpX;
+	modr->rpY = modr->defrpY;
+	modr->rpZ = modr->defrpZ;
+	modr->rotX = modr->defRotX;
+	modr->rotY = modr->defRotY;
+	modr->rotZ = modr->defRotZ;
+	for (size_t i = 0; i < modr->child_count; i++) {
+		resetModr(modr->children[i]);
+	}
+}
+
+void resetModel(struct model* model) {
+	for (size_t i = 0; i < model->child_count; i++) {
+		resetModr(model->children[i]);
+	}
 }
 
 void addModrChild(struct modr* modr, struct modr* child) {
@@ -101,14 +143,14 @@ void addModrChild(struct modr* modr, struct modr* child) {
 	modr->children[modr->child_count++] = child;
 }
 
-void addModelChild(struct model* modr, struct modr* child) {
-	if (modr->children == NULL) {
-		modr->children = malloc(sizeof(struct modr*));
-		modr->child_count = 0;
+void addModelChild(struct model* model, struct modr* child) {
+	if (model->children == NULL) {
+		model->children = malloc(sizeof(struct modr*));
+		model->child_count = 0;
 	} else {
-		modr->children = realloc(modr->children, sizeof(struct modr*) * (1 + modr->child_count));
+		model->children = realloc(model->children, sizeof(struct modr*) * (1 + model->child_count));
 	}
-	modr->children[modr->child_count++] = child;
+	model->children[model->child_count++] = child;
 }
 
 void xferVerticiesQuad(struct vertex_tex* to, struct vertex_tex** from, int x1, int y1, int x2, int y2, float txw, float txh, int mirror) {

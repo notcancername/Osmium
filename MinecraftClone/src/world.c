@@ -10,6 +10,16 @@
 #include <stdint.h>
 #include <string.h>
 
+float interpolateAngle(float ang1, float ang2, float gradiant) {
+	float dif;
+	for (dif = ang2 - ang1; dif < -180.; dif += 360.)
+		;
+	while (dif >= 180.) {
+		dif -= 360.;
+	}
+	return ang1 + gradiant * dif;
+}
+
 struct chunk* getChunk(struct world* world, int16_t x, int16_t z) {
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL && world->chunks[i]->x == x && world->chunks[i]->z == z) {

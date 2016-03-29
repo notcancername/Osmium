@@ -37,6 +37,7 @@ double lookX;
 double lookY;
 double lookZ;
 float viewDistance;
+int viewBobbing;
 
 #define PI 3.141592653589793
 

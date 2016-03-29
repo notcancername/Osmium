@@ -42,6 +42,7 @@ void loadIngame() {
 	gs.playerinv = malloc(sizeof(struct inventory));
 	newInventory(gs.playerinv, INVTYPE_PLAYERINVENTORY, 0);
 	gs.playerinv->slot_count = 46;
+	viewBobbing = 1;
 }
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
@@ -76,17 +77,17 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods) {
 		} else if (key == GLFW_KEY_SPACE) {
 			gs.jumping = action == GLFW_PRESS || action == GLFW_REPEAT;
 		} else if (key == GLFW_KEY_LEFT_CONTROL) {
-			gs.sprinting = action == GLFW_PRESS || action == GLFW_REPEAT;
+			gs.player->sprinting = action == GLFW_PRESS || action == GLFW_REPEAT;
 		} else if (key == GLFW_KEY_LEFT_SHIFT) {
-			gs.crouching = action == GLFW_PRESS || action == GLFW_REPEAT;
+			gs.player->sneaking = action == GLFW_PRESS || action == GLFW_REPEAT;
 		} else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 			gs.inMenu = 1;
-			gs.crouching = 0;
-			gs.sprinting = 0;
+			gs.player->sneaking = 0;
+			gs.player->sprinting = 0;
 		} else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
 			gs.openinv = gs.playerinv;
-			gs.crouching = 0;
-			gs.sprinting = 0;
+			gs.player->sneaking = 0;
+			gs.player->sprinting = 0;
 		} else if (action == GLFW_PRESS && key >= GLFW_KEY_1 && key <= GLFW_KEY_9) {
 			gs.heldItem = key - GLFW_KEY_1;
 			struct packet pkt;
@@ -151,16 +152,25 @@ void ingame_tick() {
 			if (fabs(ent->motX) < 0.005) ent->motX = 0.;
 			if (fabs(ent->motY) < 0.005) ent->motY = 0.;
 			if (fabs(ent->motZ) < 0.005) ent->motZ = 0.;
+			ent->prevSwingProgress = ent->swingProgress;
+			if (ent->swingProgressInt >= 0) {
+				float max = getSwingTime(ent);
+				ent->swingProgress = 1. - ((float) ent->swingProgressInt / max);
+				ent->swingProgressInt--;
+			} else {
+				ent->swingProgressInt = -1;
+				ent->swingProgress = 0.;
+			}
 		}
 	}
-	if (gs.sprinting && !gs.wsprinting) {
+	if (gs.player->sprinting && !gs.wsprinting) {
 		struct packet pkt;
 		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
 		pkt.data.play_client.entityaction.entityID = gs.player->id;
 		pkt.data.play_client.entityaction.actionID = 3;
 		pkt.data.play_client.entityaction.actionParameter = 0;
 		writePacket(gs.conn, &pkt);
-	} else if (!gs.sprinting && gs.wsprinting) {
+	} else if (!gs.player->sprinting && gs.wsprinting) {
 		struct packet pkt;
 		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
 		pkt.data.play_client.entityaction.entityID = gs.player->id;
@@ -168,15 +178,15 @@ void ingame_tick() {
 		pkt.data.play_client.entityaction.actionParameter = 0;
 		writePacket(gs.conn, &pkt);
 	}
-	gs.wsprinting = gs.sprinting;
-	if (gs.crouching && !gs.wcrouching) {
+	gs.wsprinting = gs.player->sprinting;
+	if (gs.player->sneaking && !gs.wcrouching) {
 		struct packet pkt;
 		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
 		pkt.data.play_client.entityaction.entityID = gs.player->id;
 		pkt.data.play_client.entityaction.actionID = 0;
 		pkt.data.play_client.entityaction.actionParameter = 0;
 		writePacket(gs.conn, &pkt);
-	} else if (!gs.crouching && gs.wcrouching) {
+	} else if (!gs.player->sneaking && gs.wcrouching) {
 		struct packet pkt;
 		pkt.id = PKT_PLAY_CLIENT_ENTITYACTION;
 		pkt.data.play_client.entityaction.entityID = gs.player->id;
@@ -184,7 +194,7 @@ void ingame_tick() {
 		pkt.data.play_client.entityaction.actionParameter = 0;
 		writePacket(gs.conn, &pkt);
 	}
-	gs.wcrouching = gs.crouching;
+	gs.wcrouching = gs.player->sneaking;
 	if (gs.jumping) {
 		//if inwater
 		//motY += 0.03999999910593033
@@ -192,7 +202,7 @@ void ingame_tick() {
 		if (gs.player->onGround && gs.jumpTicks <= 0) {
 			gs.player->motY = 0.42;
 			//TODO: speed potion
-			if (gs.sprinting) {
+			if (gs.player->sprinting) {
 				float v1 = gs.player->yaw * .017453292;
 				gs.player->motX -= sin(v1) * 0.2;
 				gs.player->motZ += cos(v1) * 0.2;
@@ -208,10 +218,10 @@ void ingame_tick() {
 	}
 	float moveForward = gs.moveForward ? 1. : 0.;
 	if (gs.moveBackward) moveForward -= 1;
-	//printf("move %f %i %i\n", moveForward, gs.moveForward, gs.moveBackward);
+//printf("move %f %i %i\n", moveForward, gs.moveForward, gs.moveBackward);
 	float moveStrafe = gs.moveLeft ? -1. : 0.;
 	if (gs.moveRight) moveStrafe += 1;
-	if (gs.crouching) {
+	if (gs.player->sneaking) {
 		moveForward *= .3;
 		moveStrafe *= .3;
 	}
@@ -237,7 +247,7 @@ void ingame_tick() {
 		float v4 = .16277136 / (v3 * v3 * v3);
 		float v5 = .02;
 		if (gs.player->onGround) {
-			v5 = gs.moveSpeed * (gs.sprinting ? 1.3 : 1.) * v4;
+			v5 = gs.moveSpeed * (gs.player->sprinting ? 1.3 : 1.) * v4;
 		} else {
 			v5 = .02;
 		}
@@ -260,7 +270,7 @@ void ingame_tick() {
 		}
 		//
 		//TODO: if in web
-		if (gs.player->onGround && gs.crouching) {		//TODO set crouching
+		if (gs.player->onGround && gs.player->sneaking) {		//TODO set crouching
 			//TODO: crouch bounding
 		}
 		struct boundingbox obb;
@@ -402,7 +412,7 @@ void ingame_tick() {
 		if (gs.player->motZ != nz) gs.player->motZ = 0.;
 
 		if (gs.player->motY != ny) {
-			if (lb != BLK_SLIMEBLOCK || gs.crouching) {
+			if (lb != BLK_SLIMEBLOCK || gs.player->sneaking) {
 				gs.player->motY = 0.;
 			} else {
 				gs.player->motY = -gs.player->motY;
@@ -437,7 +447,7 @@ void ingame_tick() {
 void drawIngame(float partialTick) {
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();
-	float fov = (gs.sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70.;
+	float fov = (gs.player->sprinting && gs.moveForward && !gs.moveBackward) ? 90 : 70.;
 	double whratio = (double) width / (double) height;
 	gluPerspective(fov, whratio, 0.05, viewDistance);
 	glMatrixMode (GL_MODELVIEW);
@@ -448,7 +458,7 @@ void drawIngame(float partialTick) {
 	double py = gs.player->y * (1. - partialTick) + gs.player->ly * partialTick;
 	double pz = gs.player->z * (1. - partialTick) + gs.player->lz * partialTick;
 	eyeX = px;
-	eyeY = py + (gs.crouching ? 1.54 : 1.62);
+	eyeY = py + (gs.player->sneaking ? 1.54 : 1.62);
 	eyeZ = pz;
 	double v3 = cos(-gs.player->lyaw * 0.017453292 - PI);
 	double v4 = sin(-pyaw * 0.017453292 - PI);
@@ -616,6 +626,7 @@ void drawIngame(float partialTick) {
 	glOrtho(0., swidth, sheight, 0., -1., 1.);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	int ci = 0;
 	glClear (GL_DEPTH_BUFFER_BIT);
 	{
 		glBindTexture(GL_TEXTURE_2D, TX_WIDGETS);
@@ -626,6 +637,7 @@ void drawIngame(float partialTick) {
 		}
 	}
 	if (gs.inMenu || gs.openinv != NULL) {
+		ci = 1;
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_DEPTH_TEST);
 		glDepthMask (GL_FALSE);
@@ -664,6 +676,49 @@ void drawIngame(float partialTick) {
 		}
 	}
 	glColor4f(1., 1., 1., 1.);
+	if (!ci && mouseButton == 0) {
+		gs.player->swingProgressInt = getSwingTime(gs.player);
+		struct packet pkt;
+		pkt.id = PKT_PLAY_CLIENT_ANIMATION;
+		pkt.data.play_client.animation.hand = 0;
+		writePacket(gs.conn, &pkt);
+	}
+//
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	fov = 70.;
+	gluPerspective(fov, whratio, 0.05, viewDistance);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	{
+		float swp = gs.player->swingProgress - gs.player->prevSwingProgress;
+		if (swp < 0.) swp++;
+		swp = gs.player->prevSwingProgress + swp * (1. - partialTick);
+		float ewp = 0.;
+		glPushMatrix();
+		float v4 = -.3 * sin(sqrt(swp) * PI);
+		float v5 = .4 * sin(sqrt(swp) * PI * 2);
+		float v6 = -.4 * sin(swp * PI);
+		glTranslatef(v4 + .64000005, v5 - .6 + ewp * -.6, v6 - .71999997);
+		glRotatef(45., 0., 1., 0.);
+		float v7 = sin(swp * swp * PI);
+		float v8 = sin(sqrt(swp) * PI);
+		glRotatef(v8 * 70., 0., 1., 0.);
+		glRotatef(v7 * -20., 0., 0., 1.);
+		glTranslatef(-1., 3.6, 3.5);
+		glRotatef(120., 0., 0., 1.);
+		glRotatef(200., 1., 0., 0.);
+		glRotatef(-135., 0., 1., 0.);
+		glTranslatef(5.6, 0., 0.);
+		glBindTexture(GL_TEXTURE_2D, TX_STEVE);
+		resetModel (&mod_biped);
+		mod_biped.BIPED_RIGHTARM->rotX = 0.;
+		mod_biped.BIPED_RIGHTARM->rotY = 0.;
+		mod_biped.BIPED_RIGHTARM->rotZ = 0.;
+		drawModr(mod_biped.BIPED_RIGHTARM);
+		glPopMatrix();
+	}
 }
 
 void runNetwork(struct conn* conn) {
@@ -698,16 +753,21 @@ void runNetwork(struct conn* conn) {
 			ent->motZ = pkt.data.play_server.spawnmob.velZ;
 			ent->headpitch = pkt.data.play_server.spawnmob.headPitch;
 			ent->lheadpitch = pkt.data.play_server.spawnmob.headPitch;
-			//TODO: metadata
+			readMetadata(ent, pkt.data.play_server.spawnmob.metadata, pkt.data.play_server.spawnmob.metadata_size);
+			free(pkt.data.play_server.spawnmob.metadata);
 			spawnEntity(gs.world, ent);
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNPAINTING) {
 			//TODO:
 		} else if (pkt.id == PKT_PLAY_SERVER_SPAWNPLAYER) {
 			struct entity* ent = newEntity(pkt.data.play_server.spawnplayer.entityID, pkt.data.play_server.spawnplayer.x, pkt.data.play_server.spawnplayer.y, pkt.data.play_server.spawnplayer.z, ENT_MPPLAYER, pkt.data.play_server.spawnplayer.yaw, pkt.data.play_server.spawnplayer.pitch);
+			readMetadata(ent, pkt.data.play_server.spawnplayer.metadata, pkt.data.play_server.spawnplayer.metadata_size);
+			free(pkt.data.play_server.spawnplayer.metadata);
 			spawnEntity(gs.world, ent);
-			//TODO: metadata
 		} else if (pkt.id == PKT_PLAY_SERVER_ANIMATION) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.animation.entityID);
+			if (ent != NULL) {
+				if (pkt.data.play_server.animation.anim == 0) ent->swingProgressInt = getSwingTime(ent);
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_STATISTICS) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_BLOCKBREAKANIMATION) {
@@ -1085,7 +1145,12 @@ void runNetwork(struct conn* conn) {
 			}
 			free(pkt.data.play_server.destroyentities.entityIDs);
 		} else if (pkt.id == PKT_PLAY_SERVER_REMOVEENTITYEFFECT) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.removeentityeffect.entityID);
+			if (ent != NULL) {
+				for (size_t i = 0; i < ent->effect_count; i++) {
+					ent->effects[i].duration = 0;
+				}
+			}
 		} else if (pkt.id == PKT_PLAY_SERVER_RESOURCEPACKSEND) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_RESPAWN) {
@@ -1104,7 +1169,11 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_DISPLAYSCOREBOARD) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYMETADATA) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entitymetadata.entityID);
+			if (ent != NULL) {
+				readMetadata(ent, pkt.data.play_server.entitymetadata.metadata, pkt.data.play_server.entitymetadata.metadata_size);
+			}
+			free(pkt.data.play_server.entitymetadata.metadata);
 		} else if (pkt.id == PKT_PLAY_SERVER_ATTACHENTITY) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYVELOCITY) {
@@ -1154,7 +1223,27 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYPROPERTIES) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_ENTITYEFFECT) {
-
+			struct entity* ent = getEntity(gs.world, pkt.data.play_server.entityeffect.entityID);
+			if (ent != NULL) {
+				for (size_t i = 0; i < ent->effect_count; i++) {
+					if (ent->effects[i].effectID == pkt.data.play_server.entityeffect.effectID) {
+						ent->effects[i].amplifier = pkt.data.play_server.entityeffect.amplifier;
+						ent->effects[i].duration = pkt.data.play_server.entityeffect.duration;
+						ent->effects[i].particles = pkt.data.play_server.entityeffect.hideParticles;
+						goto rcmp;
+					}
+				}
+				if (ent->effects == NULL) {
+					ent->effects = malloc(sizeof(struct potioneffect));
+					ent->effect_count = 0;
+				} else {
+					ent->effects = realloc(ent->effects, sizeof(struct potioneffect) * (ent->effect_count + 1));
+				}
+				ent->effects[ent->effect_count].amplifier = pkt.data.play_server.entityeffect.amplifier;
+				ent->effects[ent->effect_count].effectID = pkt.data.play_server.entityeffect.effectID;
+				ent->effects[ent->effect_count].duration = pkt.data.play_server.entityeffect.duration;
+				ent->effects[ent->effect_count].particles = pkt.data.play_server.entityeffect.hideParticles;
+			}
 		}
 		rcmp: ;
 	}

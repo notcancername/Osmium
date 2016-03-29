@@ -21,6 +21,7 @@
 #include <errno.h>
 #include <string.h>
 #include <pthread.h>
+#include <time.h>
 
 int connectToServer(struct conn* conn, char* ip, uint16_t port) {
 	conn->compthres = -1;
@@ -41,6 +42,11 @@ int connectToServer(struct conn* conn, char* ip, uint16_t port) {
 #else
 	conn->fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (conn->fd < 0) return -1;
+	struct timeval timeout;
+	timeout.tv_sec = 30;
+	timeout.tv_usec = 0;
+	setsockopt(conn->fd, SOL_SOCKET, SO_RCVTIMEO, (char *) &timeout, sizeof(timeout));
+	setsockopt(conn->fd, SOL_SOCKET, SO_SNDTIMEO, (char *) &timeout, sizeof(timeout));
 	struct sockaddr_in sin;
 	sin.sin_family = AF_INET;
 	inet_pton(AF_INET, ip, &sin.sin_addr);
@@ -904,7 +910,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			ps -= 2;
 			swapEndian(&vv, 2);
 			packet->data.play_server.spawnmob.velZ = (float) vv / 8000.;
-			//TODO: metadata
+			packet->data.play_server.spawnmob.metadata_size = ps;
+			packet->data.play_server.spawnmob.metadata = malloc(ps);
+			memcpy(packet->data.play_server.spawnmob.metadata, pbuf, ps);
+			pbuf += ps;
+			ps = 0;
 		} else if (id == PKT_PLAY_SERVER_SPAWNPAINTING) {
 			int rx = readVarInt(&packet->data.play_server.spawnpainting.entityID, pbuf, ps);
 			ps -= rx;
@@ -955,12 +965,16 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			memcpy(&ang, pbuf, 1);
 			pbuf++;
 			ps--;
-			packet->data.play_server.spawnobject.yaw = ((float) ang / 256. * 360.);
+			packet->data.play_server.spawnplayer.yaw = ((float) ang / 256. * 360.);
 			memcpy(&ang, pbuf, 1);
 			pbuf++;
 			ps--;
-			packet->data.play_server.spawnobject.pitch = ((float) ang / 256. * 360.);
-			//TODO metadata
+			packet->data.play_server.spawnplayer.pitch = ((float) ang / 256. * 360.);
+			packet->data.play_server.spawnplayer.metadata_size = ps;
+			packet->data.play_server.spawnplayer.metadata = malloc(ps);
+			memcpy(packet->data.play_server.spawnplayer.metadata, pbuf, ps);
+			pbuf += ps;
+			ps = 0;
 		} else if (id == PKT_PLAY_SERVER_ANIMATION) {
 			int rx = readVarInt(&packet->data.play_server.animation.entityID, pbuf, ps);
 			ps -= rx;
@@ -2137,7 +2151,11 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			int rx = readVarInt(&packet->data.play_server.entitymetadata.entityID, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
-			//todo metadata
+			packet->data.play_server.entitymetadata.metadata_size = ps;
+			packet->data.play_server.entitymetadata.metadata = malloc(ps);
+			memcpy(packet->data.play_server.entitymetadata.metadata, pbuf, ps);
+			pbuf += ps;
+			ps = 0;
 		} else if (id == PKT_PLAY_SERVER_ATTACHENTITY) {
 			if (ps < 8) {
 				free(pktbuf);

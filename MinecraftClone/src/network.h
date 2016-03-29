@@ -426,7 +426,8 @@ struct pkt_play_server_spawnmob {
 		float velX;
 		float velY;
 		float velZ;
-		//TODO: metadata
+		unsigned char* metadata;
+		size_t metadata_size;
 };
 
 struct pkt_play_server_spawnpainting {
@@ -444,7 +445,8 @@ struct pkt_play_server_spawnplayer {
 		double z;
 		float yaw;
 		float pitch;
-		//TODO: metadata
+		unsigned char* metadata;
+		size_t metadata_size;
 };
 
 struct pkt_play_server_animation {
@@ -877,7 +879,8 @@ struct pkt_play_server_displayscoreboard {
 
 struct pkt_play_server_entitymetadata {
 		int32_t entityID;
-		//TODO: metadata
+		unsigned char* metadata;
+		size_t metadata_size;
 };
 
 struct pkt_play_server_attachentity {

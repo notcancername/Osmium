@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include "world.h"
+#include <stdlib.h>
 
 #define ENT_OURPLAYER 1
 #define ENT_MPPLAYER 2
@@ -81,6 +82,13 @@ union entity_data {
 
 };
 
+struct potioneffect {
+		char effectID;
+		char amplifier;
+		int32_t duration;
+		char particles;
+};
+
 struct entity {
 		int32_t id;
 		double x;
@@ -104,7 +112,18 @@ struct entity {
 		float health;
 		int32_t objectData;
 		int markedKill;
+		float swingProgress;
+		float prevSwingProgress;
+		int swingProgressInt;
+		struct potioneffect* effects;
+		size_t effect_count;
+		int sneaking;
+		int sprinting;
 };
+
+void readMetadata(struct entity* ent, unsigned char* meta, size_t size);
+
+int getSwingTime(struct entity* ent);
 
 void load_entities();
 

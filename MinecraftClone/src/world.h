@@ -49,6 +49,8 @@ struct world {
 		uint64_t age;
 };
 
+float interpolateAngle(float ang1, float ang2, float gradiant);
+
 struct chunk* getChunk(struct world* world, int16_t x, int16_t z);
 
 void removeChunk(struct world* world, struct chunk* chunk);
