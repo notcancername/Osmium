@@ -81,7 +81,7 @@ void displayCallback() {
 	//struct timespec ts2;
 	//clock_gettime(CLOCK_MONOTONIC, &ts2);
 	//printf("tick-time: %f\n", ((double) ts2.tv_sec * 1000. + (double) ts2.tv_nsec / 1000000.) - ms2);
-	float partialTick = 1. - ((ms2 - lt) / 50.);
+	float partialTick = ((ms2 - lt) / 50.);
 	//ppitch = ourPlayer->pitch * (1. - partialTick) + ourPlayer->lpitch * partialTick;
 	//pyaw = ourPlayer->yaw * (1. - partialTick) + ourPlayer->lyaw * partialTick;
 	//px = ourPlayer->x * (1. - partialTick) + ourPlayer->lx * partialTick;

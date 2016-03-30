@@ -134,6 +134,13 @@ void ingame_mouseMotionCallback(double x, double y) {
 	lmy = y;
 }
 
+float wrapAngle(float ang) {
+	ang = fmod(ang, 360.);
+	if (ang >= 180.) ang -= 360.;
+	if (ang < -180.) ang += 360.;
+	return ang;
+}
+
 void ingame_tick() {
 	if (!running) return;
 	for (size_t i = 0; i < gs.world->entity_count; i++) {
@@ -144,11 +151,37 @@ void ingame_tick() {
 				freeEntity(ent);
 				continue;
 			}
-			ent->lx = gs.world->entities[i]->x;
-			ent->ly = gs.world->entities[i]->y;
-			ent->lz = gs.world->entities[i]->z;
-			ent->lyaw = gs.world->entities[i]->yaw;
-			ent->lpitch = gs.world->entities[i]->pitch;
+			ent->prevLimbSwingAmount = ent->limbSwingAmount;
+			ent->prevRenderYawOffset = ent->renderYawOffset;
+			float dx = ent->x - ent->lx;
+			float dz = ent->z - ent->lz;
+			float dd = sqrt(dx * dx + dz * dz) * 4.;
+			if (dd > 1.) dd = 1.;
+			ent->limbSwingAmount += (dd - ent->limbSwingAmount) * .4;
+			ent->limbSwing += ent->limbSwingAmount;
+			float adjyo = ent->renderYawOffset;
+			float expd = 0.;
+			if (ent->swingProgress > 0.) {
+				adjyo = ent->yaw;
+				expd = sqrt(dd) * 3.;
+			} else if (dd > 0.0025000002) {
+				expd = sqrt(dd) * 3.;
+				adjyo = atan2(dz, dx) * 180. / PI - 90.;
+			}
+			float wrdelta = wrapAngle(adjyo - ent->renderYawOffset);
+			ent->renderYawOffset += wrdelta * .3;
+			float wroff = wrapAngle(ent->yaw - ent->renderYawOffset);
+			if (wroff < -75) wroff = -75.;
+			if (wroff >= 75.) wroff = 75.;
+			ent->renderYawOffset = ent->yaw - wroff;
+			if (wroff * wroff > 2500.) {
+				ent->renderYawOffset += wroff * .2;
+			}
+			ent->lx = ent->x;
+			ent->ly = ent->y;
+			ent->lz = ent->z;
+			ent->lyaw = ent->yaw;
+			ent->lpitch = ent->pitch;
 			if (fabs(ent->motX) < 0.005) ent->motX = 0.;
 			if (fabs(ent->motY) < 0.005) ent->motY = 0.;
 			if (fabs(ent->motZ) < 0.005) ent->motZ = 0.;
@@ -161,6 +194,7 @@ void ingame_tick() {
 				ent->swingProgressInt = -1;
 				ent->swingProgress = 0.;
 			}
+			ent->ticksExisted++;
 		}
 	}
 	if (gs.player->sprinting && !gs.wsprinting) {
@@ -452,11 +486,11 @@ void drawIngame(float partialTick) {
 	gluPerspective(fov, whratio, 0.05, viewDistance);
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity();
-	float ppitch = gs.player->pitch * (1. - partialTick) + gs.player->lpitch * partialTick;
-	float pyaw = gs.player->yaw * (1. - partialTick) + gs.player->lyaw * partialTick;
-	double px = gs.player->x * (1. - partialTick) + gs.player->lx * partialTick;
-	double py = gs.player->y * (1. - partialTick) + gs.player->ly * partialTick;
-	double pz = gs.player->z * (1. - partialTick) + gs.player->lz * partialTick;
+	float ppitch = interpolateAngle(gs.player->pitch, gs.player->lpitch, partialTick);
+	float pyaw = interpolateAngle(gs.player->yaw, gs.player->lyaw, partialTick);
+	double px = gs.player->x * partialTick + gs.player->lx * (1. - partialTick);
+	double py = gs.player->y * partialTick + gs.player->ly * (1. - partialTick);
+	double pz = gs.player->z * partialTick + gs.player->lz * (1. - partialTick);
 	eyeX = px;
 	eyeY = py + (gs.player->sneaking ? 1.54 : 1.62);
 	eyeZ = pz;
@@ -694,7 +728,7 @@ void drawIngame(float partialTick) {
 	{
 		float swp = gs.player->swingProgress - gs.player->prevSwingProgress;
 		if (swp < 0.) swp++;
-		swp = gs.player->prevSwingProgress + swp * (1. - partialTick);
+		swp = gs.player->prevSwingProgress + swp * partialTick;
 		float ewp = 0.;
 		glPushMatrix();
 		float v4 = -.3 * sin(sqrt(swp) * PI);
@@ -712,11 +746,12 @@ void drawIngame(float partialTick) {
 		glRotatef(-135., 0., 1., 0.);
 		glTranslatef(5.6, 0., 0.);
 		glBindTexture(GL_TEXTURE_2D, TX_STEVE);
-		resetModel (&mod_biped);
-		mod_biped.BIPED_RIGHTARM->rotX = 0.;
-		mod_biped.BIPED_RIGHTARM->rotY = 0.;
-		mod_biped.BIPED_RIGHTARM->rotZ = 0.;
-		drawModr(mod_biped.BIPED_RIGHTARM);
+		resetModel (&mod_player);
+		mod_player.PLAYER_BIPEDRIGHTARM->rotX = 0.;
+		mod_player.PLAYER_BIPEDRIGHTARM->rotY = 0.;
+		mod_player.PLAYER_BIPEDRIGHTARM->rotZ = 0.;
+		glBindTexture(GL_TEXTURE_2D, TX_STEVE);
+		drawModr(mod_player.PLAYER_BIPEDRIGHTARM);
 		glPopMatrix();
 	}
 }

@@ -118,7 +118,15 @@ struct entity {
 		struct potioneffect* effects;
 		size_t effect_count;
 		int sneaking;
+		int usingItem;
 		int sprinting;
+		float limbSwingAmount;
+		float prevLimbSwingAmount;
+		float limbSwing;
+		float renderYawOffset;
+		float prevRenderYawOffset;
+		size_t ticksExisted;
+		int32_t subtype;
 };
 
 void readMetadata(struct entity* ent, unsigned char* meta, size_t size);

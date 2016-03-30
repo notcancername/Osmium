@@ -109,15 +109,29 @@ struct entity* newEntity(int32_t id, float x, float y, float z, uint8_t type, fl
 	e->effect_count = 0;
 	e->sneaking = 0;
 	e->sprinting = 0;
+	e->usingItem = 0;
+	e->limbSwingAmount = 0.;
+	e->prevLimbSwingAmount = 0.;
+	e->limbSwing = 0.;
+	e->renderYawOffset = 0.;
+	e->prevRenderYawOffset = 0.;
+	e->ticksExisted = 0;
+	e->subtype = 0;
 	return e;
 }
 
 void handleMetaByte(struct entity* ent, int index, signed char b) {
-
+	if (index == 0) {
+		ent->sneaking = b & 0x02 ? 1 : 0;
+		ent->sprinting = b & 0x08 ? 1 : 0;
+		ent->usingItem = b & 0x10 ? 1 : 0;
+	}
 }
 
-void handleMetaVarInt(struct entity* ent, int index, int32_t b) {
-
+void handleMetaVarInt(struct entity* ent, int index, int32_t i) {
+	if (ent->type == ENT_SKELETON) {
+		ent->subtype = i;
+	}
 }
 
 void handleMetaFloat(struct entity* ent, int index, float f) {
@@ -256,46 +270,95 @@ void drawEntity(float partialTick, struct entity* ent) {
 	glPushMatrix();
 	float ppitch = interpolateAngle(ent->pitch, ent->lpitch, partialTick);
 	float pyaw = interpolateAngle(ent->yaw, ent->lyaw, partialTick);
-	double px = ent->x * (1. - partialTick) + ent->lx * partialTick;
-	double py = ent->y * (1. - partialTick) + ent->ly * partialTick;
-	double pz = ent->z * (1. - partialTick) + ent->lz * partialTick;
+	double px = ent->x * partialTick + ent->lx * (1. - partialTick);
+	double py = ent->y * partialTick + ent->ly * (1. - partialTick);
+	double pz = ent->z * partialTick + ent->lz * (1. - partialTick);
 	glTranslatef(px, py, pz);
-	glRotatef(-pyaw + 180., 0., 1., 0.);
-	//begin debug draw
+	//
 	if (ent->type == ENT_MPPLAYER) {
-		resetModel (&mod_biped);
-		mod_biped.BIPED_HEAD->rotX = ppitch / (180. / PI);
+		resetModel (&mod_player);
+		mod_player.PLAYER_BIPEDHEAD->rotX = ppitch / (180. / PI);
+		float ryof = interpolateAngle(ent->prevRenderYawOffset, ent->renderYawOffset, partialTick);
+		float yoff = pyaw - ryof;
+		glRotatef(-ryof + 180., 0., 1., 0.);
+		float timeExisted = (float) ent->ticksExisted + partialTick;
+		mod_player.PLAYER_BIPEDHEAD->rotY = yoff / (180. / PI);
+		float sp = ent->limbSwing - ent->limbSwingAmount * partialTick;
+		float rsp = ent->prevLimbSwingAmount + (ent->limbSwingAmount - ent->prevLimbSwingAmount) * (1. - partialTick);
+		mod_player.PLAYER_BIPEDRIGHTARM->rotX = cos(sp * .6662 + PI) * 2. * rsp * .5;
+		mod_player.PLAYER_BIPEDLEFTARM->rotX = cos(sp * .6662) * 2. * rsp * .5;
+		mod_player.PLAYER_BIPEDRIGHTLEG->rotX = cos(sp * .6662) * 1.4 * rsp;
+		mod_player.PLAYER_BIPEDLEFTLEG->rotX = cos(sp * .6662 + PI) * 1.4 * rsp;
 		if (ent->swingProgressInt > -1) {
 			float swp = ent->swingProgress - ent->prevSwingProgress;
 			if (swp < 0.) swp++;
-			swp = ent->prevSwingProgress + swp * (1. - partialTick);
-			mod_biped.BIPED_BODY->rotY = sin(sqrt(swp) * PI * 2.) * .2;
-			mod_biped.BIPED_RIGHTARM->rpZ = sin(mod_biped.BIPED_BODY->rotY) * 5.;
-			mod_biped.BIPED_RIGHTARM->rpX = -cos(mod_biped.BIPED_BODY->rotY) * 5.;
-			mod_biped.BIPED_LEFTARM->rpZ = -sin(mod_biped.BIPED_BODY->rotY) * 5.;
-			mod_biped.BIPED_LEFTARM->rpX = cos(mod_biped.BIPED_BODY->rotY) * 5.;
-			mod_biped.BIPED_RIGHTARM->rotY += mod_biped.BIPED_BODY->rotY;
-			mod_biped.BIPED_LEFTARM->rotY += mod_biped.BIPED_BODY->rotY;
-			mod_biped.BIPED_LEFTARM->rotX += mod_biped.BIPED_BODY->rotY;
+			swp = ent->prevSwingProgress + swp * partialTick;
+			mod_player.PLAYER_BIPEDBODY->rotY += sin(sqrt(swp) * PI * 2.) * .2;
+			mod_player.PLAYER_BIPEDRIGHTARM->rpZ = sin(mod_player.PLAYER_BIPEDBODY->rotY) * 5.;
+			mod_player.PLAYER_BIPEDRIGHTARM->rpX = -cos(mod_player.PLAYER_BIPEDBODY->rotY) * 5.;
+			mod_player.PLAYER_BIPEDLEFTARM->rpZ = -sin(mod_player.PLAYER_BIPEDBODY->rotY) * 5.;
+			mod_player.PLAYER_BIPEDLEFTARM->rpX = cos(mod_player.PLAYER_BIPEDBODY->rotY) * 5.;
+			mod_player.PLAYER_BIPEDRIGHTARM->rotY += mod_player.PLAYER_BIPEDBODY->rotY;
+			mod_player.PLAYER_BIPEDLEFTARM->rotY += mod_player.PLAYER_BIPEDBODY->rotY;
+			mod_player.PLAYER_BIPEDLEFTARM->rotX += mod_player.PLAYER_BIPEDBODY->rotY;
 			float v8 = 1. - swp;
 			v8 *= v8;
 			v8 *= v8;
 			v8 = 1. - v8;
 			float v9 = sin(v8 * PI);
-			float v10 = sin(swp * PI) * -(mod_biped.BIPED_HEAD->rotX - .7) * .75;
-			mod_biped.BIPED_RIGHTARM->rotX -= v9 * 1.2 + v10;
-			mod_biped.BIPED_RIGHTARM->rotY += mod_biped.BIPED_BODY->rotY * 2.;
-			mod_biped.BIPED_RIGHTARM->rotZ += sin(swp * PI) * -.4;
+			float v10 = sin(swp * PI) * -(mod_player.PLAYER_BIPEDHEAD->rotX - .7) * .75;
+			mod_player.PLAYER_BIPEDRIGHTARM->rotX -= v9 * 1.2 + v10;
+			mod_player.PLAYER_BIPEDRIGHTARM->rotY += mod_player.PLAYER_BIPEDBODY->rotY * 2.;
+			mod_player.PLAYER_BIPEDRIGHTARM->rotZ += sin(swp * PI) * -.4;
 		}
-		drawModel(&mod_biped);
+		if (ent->sneaking) {
+			mod_player.PLAYER_BIPEDBODY->rotX = .5;
+			mod_player.PLAYER_BIPEDRIGHTARM->rotX += .4;
+			mod_player.PLAYER_BIPEDLEFTARM->rotX += .4;
+			mod_player.PLAYER_BIPEDRIGHTLEG->rpZ = 4.;
+			mod_player.PLAYER_BIPEDLEFTLEG->rpZ = 4.;
+			mod_player.PLAYER_BIPEDRIGHTLEG->rpY = 9.;
+			mod_player.PLAYER_BIPEDLEFTLEG->rpY = 9.;
+			mod_player.PLAYER_BIPEDHEAD->rpY = 1.;
+		}
+		float tcos = cos(timeExisted * .09) * .05;
+		float tsin = sin(timeExisted * .067) * .05;
+		mod_player.PLAYER_BIPEDRIGHTARM->rotZ += tcos + .05;
+		mod_player.PLAYER_BIPEDLEFTARM->rotZ -= tcos + .05;
+		mod_player.PLAYER_BIPEDRIGHTARM->rotX += tsin;
+		mod_player.PLAYER_BIPEDLEFTARM->rotX -= tsin;
+		glBindTexture(GL_TEXTURE_2D, TX_STEVE);
+		drawModel(&mod_player);
 	} else {
-		struct boundingbox* bb = getEntityCollision(ent);
-		if (bb->minX != bb->maxX && bb->minY != bb->maxY && bb->minZ != bb->maxZ && bb->ovao != NULL) {
-			glDisable (GL_TEXTURE_2D);
-			glColor4f(1., 0., 0., 1.);
-			drawQuads(bb->ovao);
-			glColor4f(1., 1., 1., 1.);
-			glEnable(GL_TEXTURE_2D);
+		glRotatef(-pyaw + 180., 0., 1., 0.);
+		if (ent->type == ENT_CREEPER) {
+			resetModel (&mod_creeper);
+			glBindTexture(GL_TEXTURE_2D, TX_CREEPER);
+			drawModel(&mod_creeper);
+		} else if (ent->type == ENT_SKELETON) {
+			if (ent->subtype == 1) {
+				glPushMatrix();
+				glScalef(1.2, 1.2, 1.2);
+			}
+			resetModel (&mod_skeleton);
+			glBindTexture(GL_TEXTURE_2D, ent->subtype == 1 ? TX_WITHERSKELETON : TX_SKELETON);
+			drawModel(&mod_skeleton);
+			if (ent->subtype == 1) glPopMatrix();
+		} else if (ent->type == ENT_SPIDER) {
+			resetModel (&mod_spider);
+			glBindTexture(GL_TEXTURE_2D, TX_SPIDER);
+			drawModel(&mod_spider);
+		} else if (ent->type == ENT_GIANT || ent->type == ENT_ZOMBIE || ent->type == ENT_ZPIGMAN) {
+			if (ent->type == ENT_GIANT) {
+				glPushMatrix();
+				glScalef(6., 6., 6.);
+			}
+			resetModel (&mod_zombie);
+			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_ZPIGMAN ? TX_ZPIGMAN : TX_ZOMBIE);
+			drawModel(&mod_zombie);
+			if (ent->type == ENT_GIANT) glPopMatrix();
+		} else if (ent->type == ENT_SLIME) {
+
 		}
 	}
 	//end debug draw

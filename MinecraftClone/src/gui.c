@@ -275,8 +275,8 @@ void drawMainMenu(float partialTick) {
 		float v9 = ((((float) i) / 8.) / 7.5) / 64.;
 		glTranslatef(v8, v9, 0.);
 		glRotatef(-90., 0., 0., 1.);
-		glRotatef((sin((mm_pantimer + (1. - partialTick)) / 400.) * 25.) + 20., 1., 0., 0.);
-		glRotatef(-(mm_pantimer + (1. - partialTick)) * 0.1, 0., 1., 0.);
+		glRotatef((sin((mm_pantimer + partialTick) / 400.) * 25.) + 20., 1., 0., 0.);
+		glRotatef(-(mm_pantimer + partialTick) * 0.1, 0., 1., 0.);
 		for (int x = 0; x < 6; x++) {
 			glPushMatrix();
 			if (x == 0) {
