@@ -129,7 +129,7 @@ void handleMetaByte(struct entity* ent, int index, signed char b) {
 }
 
 void handleMetaVarInt(struct entity* ent, int index, int32_t i) {
-	if (ent->type == ENT_SKELETON) {
+	if ((ent->type == ENT_SKELETON || ent->type == ENT_SLIME || ent->type == ENT_MAGMACUBE) && index == 11) {
 		ent->subtype = i;
 	}
 }
@@ -357,8 +357,20 @@ void drawEntity(float partialTick, struct entity* ent) {
 			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_ZPIGMAN ? TX_ZPIGMAN : TX_ZOMBIE);
 			drawModel(&mod_zombie);
 			if (ent->type == ENT_GIANT) glPopMatrix();
-		} else if (ent->type == ENT_SLIME) {
-
+		} else if (ent->type == ENT_SLIME || ent->type == ENT_MAGMACUBE) {
+			glPushMatrix();
+			glScalef(.999, .999, .999);
+			//TODO: squish factor
+			glScalef((float) ent->subtype, (float) ent->subtype, (float) ent->subtype);
+			struct model* mod = ent->type == ENT_SLIME ? &mod_slime : &mod_magmacube;
+			resetModel(mod);
+			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_SLIME ? TX_SLIME : TX_MAGMACUBE);
+			drawModel(mod);
+			if (ent->type == ENT_SLIME) {
+				resetModel (&mod_slimegel);
+				drawModel(&mod_slimegel);
+			}
+			glPopMatrix();
 		}
 	}
 	//end debug draw
