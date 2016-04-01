@@ -129,7 +129,7 @@ void handleMetaByte(struct entity* ent, int index, signed char b) {
 }
 
 void handleMetaVarInt(struct entity* ent, int index, int32_t i) {
-	if ((ent->type == ENT_SKELETON || ent->type == ENT_SLIME || ent->type == ENT_MAGMACUBE) && index == 11) {
+	if ((ent->type == ENT_SKELETON || ent->type == ENT_SLIME || ent->type == ENT_MAGMACUBE || ent->type == ENT_GUARDIAN) && index == 11) {
 		ent->subtype = i;
 	}
 }
@@ -266,6 +266,46 @@ int getSwingTime(struct entity* ent) {
 	return 6;
 }
 
+void copyModrState(struct modr* to, struct modr* from) {
+	to->rotX = from->rotX;
+	to->rotY = from->rotY;
+	to->rotZ = from->rotZ;
+	to->rpX = from->rpX;
+	to->rpY = from->rpY;
+	to->rpZ = from->rpZ;
+}
+
+void animateBipedLimbs(struct modr** modr, int i, struct entity* ent, float partialTick, int flags) {
+	float sp = ent->limbSwing - ent->limbSwingAmount * (1. - partialTick);
+	float rsp = ent->prevLimbSwingAmount + (ent->limbSwingAmount - ent->prevLimbSwingAmount) * (partialTick);
+	if (flags & 0x01) { //arms
+		modr[i]->rotX = cos(sp * .6662 + PI) * 2. * rsp * .5;
+		modr[i + 1]->rotX = cos(sp * .6662) * 2. * rsp * .5;
+	}
+	if (flags & 0x04) {
+		float timeExisted = (float) ent->ticksExisted + partialTick;
+		float tcos = cos(timeExisted * .09) * .05;
+		float tsin = sin(timeExisted * .067) * .05;
+		modr[i]->rotZ += tcos + .05;
+		modr[i + 1]->rotZ -= tcos + .05;
+		modr[i]->rotX += tsin;
+		modr[i + 1]->rotX -= tsin;
+	}
+	if (flags & 0x02) { //legs
+		modr[i + 2]->rotX = cos(sp * .6662) * 1.4 * rsp;
+		modr[i + 3]->rotX = cos(sp * .6662 + PI) * 1.4 * rsp;
+	}
+}
+
+void animateQuadrupedLimbs(struct modr** modr, int i, struct entity* ent, float partialTick) {
+	float sp = ent->limbSwing - ent->limbSwingAmount * (1. - partialTick);
+	float rsp = ent->prevLimbSwingAmount + (ent->limbSwingAmount - ent->prevLimbSwingAmount) * (partialTick);
+	modr[i]->rotX = cos(sp * .6662) * 1.4 * rsp;
+	modr[i + 1]->rotX = cos(sp * .6662 + PI) * 1.4 * rsp;
+	modr[i + 2]->rotX = cos(sp * .6662 + PI) * 1.4 * rsp;
+	modr[i + 3]->rotX = cos(sp * .6662) * 1.4 * rsp;
+}
+
 void drawEntity(float partialTick, struct entity* ent) {
 	glPushMatrix();
 	float ppitch = interpolateAngle(ent->pitch, ent->lpitch, partialTick);
@@ -273,6 +313,11 @@ void drawEntity(float partialTick, struct entity* ent) {
 	double px = ent->x * partialTick + ent->lx * (1. - partialTick);
 	double py = ent->y * partialTick + ent->ly * (1. - partialTick);
 	double pz = ent->z * partialTick + ent->lz * (1. - partialTick);
+	if (ent->type == ENT_MPPLAYER && distEntitySq(ent, gs.player) < 64.) {
+		struct boundingbox* obb = getEntityCollision(ent);
+		double lpy = py + (obb->maxY - obb->minY) + .5 - (ent->sneaking ? .25 : 0.);
+		renderLivingLabel(px, lpy, pz, ent->sneaking, "username ;)", partialTick);
+	}
 	glTranslatef(px, py, pz);
 	//
 	if (ent->type == ENT_MPPLAYER) {
@@ -281,14 +326,8 @@ void drawEntity(float partialTick, struct entity* ent) {
 		float ryof = interpolateAngle(ent->prevRenderYawOffset, ent->renderYawOffset, partialTick);
 		float yoff = pyaw - ryof;
 		glRotatef(-ryof + 180., 0., 1., 0.);
-		float timeExisted = (float) ent->ticksExisted + partialTick;
 		mod_player.PLAYER_BIPEDHEAD->rotY = yoff / (180. / PI);
-		float sp = ent->limbSwing - ent->limbSwingAmount * partialTick;
-		float rsp = ent->prevLimbSwingAmount + (ent->limbSwingAmount - ent->prevLimbSwingAmount) * (1. - partialTick);
-		mod_player.PLAYER_BIPEDRIGHTARM->rotX = cos(sp * .6662 + PI) * 2. * rsp * .5;
-		mod_player.PLAYER_BIPEDLEFTARM->rotX = cos(sp * .6662) * 2. * rsp * .5;
-		mod_player.PLAYER_BIPEDRIGHTLEG->rotX = cos(sp * .6662) * 1.4 * rsp;
-		mod_player.PLAYER_BIPEDLEFTLEG->rotX = cos(sp * .6662 + PI) * 1.4 * rsp;
+		animateBipedLimbs(mod_player.children, 8, ent, partialTick, 0x07);
 		if (ent->swingProgressInt > -1) {
 			float swp = ent->swingProgress - ent->prevSwingProgress;
 			if (swp < 0.) swp++;
@@ -321,18 +360,13 @@ void drawEntity(float partialTick, struct entity* ent) {
 			mod_player.PLAYER_BIPEDLEFTLEG->rpY = 9.;
 			mod_player.PLAYER_BIPEDHEAD->rpY = 1.;
 		}
-		float tcos = cos(timeExisted * .09) * .05;
-		float tsin = sin(timeExisted * .067) * .05;
-		mod_player.PLAYER_BIPEDRIGHTARM->rotZ += tcos + .05;
-		mod_player.PLAYER_BIPEDLEFTARM->rotZ -= tcos + .05;
-		mod_player.PLAYER_BIPEDRIGHTARM->rotX += tsin;
-		mod_player.PLAYER_BIPEDLEFTARM->rotX -= tsin;
 		glBindTexture(GL_TEXTURE_2D, TX_STEVE);
 		drawModel(&mod_player);
 	} else {
 		glRotatef(-pyaw + 180., 0., 1., 0.);
 		if (ent->type == ENT_CREEPER) {
 			resetModel (&mod_creeper);
+			animateQuadrupedLimbs(mod_creeper.children, 3, ent, partialTick);
 			glBindTexture(GL_TEXTURE_2D, TX_CREEPER);
 			drawModel(&mod_creeper);
 		} else if (ent->type == ENT_SKELETON) {
@@ -341,19 +375,34 @@ void drawEntity(float partialTick, struct entity* ent) {
 				glScalef(1.2, 1.2, 1.2);
 			}
 			resetModel (&mod_skeleton);
+			animateBipedLimbs(mod_skeleton.children, 3, ent, partialTick, 0x06);
 			glBindTexture(GL_TEXTURE_2D, ent->subtype == 1 ? TX_WITHERSKELETON : TX_SKELETON);
 			drawModel(&mod_skeleton);
 			if (ent->subtype == 1) glPopMatrix();
-		} else if (ent->type == ENT_SPIDER) {
+		} else if (ent->type == ENT_SPIDER || ent->type == ENT_CAVESPIDER) {
+			if (ent->type == ENT_CAVESPIDER) {
+				glPushMatrix();
+				glScalef(.7, .7, .7);
+			}
 			resetModel (&mod_spider);
-			glBindTexture(GL_TEXTURE_2D, TX_SPIDER);
+			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_SPIDER ? TX_SPIDER : TX_CAVESPIDER);
 			drawModel(&mod_spider);
+			if (ent->type == ENT_CAVESPIDER) glPopMatrix();
 		} else if (ent->type == ENT_GIANT || ent->type == ENT_ZOMBIE || ent->type == ENT_ZPIGMAN) {
 			if (ent->type == ENT_GIANT) {
 				glPushMatrix();
 				glScalef(6., 6., 6.);
 			}
 			resetModel (&mod_zombie);
+			float swp = ent->swingProgress - ent->prevSwingProgress;
+			if (swp < 0.) swp++;
+			swp = ent->prevSwingProgress + swp * partialTick;
+			float f = sin(swp * PI);
+			float f1 = sin((1. - (1. - swp) * (1. - swp)) * PI);
+			mod_zombie.ZOMBIE_BIPEDRIGHTARM->rotY = -(.1 - f * .6);
+			mod_zombie.ZOMBIE_BIPEDLEFTARM->rotY = .1 - f * .6;
+			mod_zombie.ZOMBIE_BIPEDRIGHTARM->rotX = mod_zombie.ZOMBIE_BIPEDLEFTARM->rotX = (-PI / 2.25) + (f * 1.2 - f1 * .4);
+			animateBipedLimbs(mod_zombie.children, 3, ent, partialTick, 0x06);
 			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_ZPIGMAN ? TX_ZPIGMAN : TX_ZOMBIE);
 			drawModel(&mod_zombie);
 			if (ent->type == ENT_GIANT) glPopMatrix();
@@ -371,6 +420,173 @@ void drawEntity(float partialTick, struct entity* ent) {
 				drawModel(&mod_slimegel);
 			}
 			glPopMatrix();
+		} else if (ent->type == ENT_GHAST) {
+			resetModel (&mod_ghast);
+			glBindTexture(GL_TEXTURE_2D, TX_GHAST);
+			drawModel(&mod_ghast);
+		} else if (ent->type == ENT_ENDERMAN) {
+			resetModel (&mod_enderman);
+			glBindTexture(GL_TEXTURE_2D, TX_ENDERMAN);
+			drawModel(&mod_enderman);
+		} else if (ent->type == ENT_SILVERFISH) {
+			resetModel (&mod_silverfish);
+			glBindTexture(GL_TEXTURE_2D, TX_SILVERFISH);
+			drawModel(&mod_silverfish);
+		} else if (ent->type == ENT_BLAZE) {
+			resetModel (&mod_blaze);
+			glBindTexture(GL_TEXTURE_2D, TX_BLAZE);
+			drawModel(&mod_blaze);
+		} else if (ent->type == ENT_ENDERDRAGON) {
+			resetModel (&mod_dragon);
+			glBindTexture(GL_TEXTURE_2D, TX_ENDERDRAGON);
+			drawModel(&mod_dragon);
+		} else if (ent->type == ENT_WITHER) {
+			resetModel (&mod_wither);
+			glBindTexture(GL_TEXTURE_2D, TX_WITHER);
+			drawModel(&mod_wither);
+		} else if (ent->type == ENT_BAT) {
+			resetModel (&mod_bat);
+			glBindTexture(GL_TEXTURE_2D, TX_BAT);
+			drawModel(&mod_bat);
+		} else if (ent->type == ENT_WITCH) {
+			resetModel (&mod_witch);
+			glBindTexture(GL_TEXTURE_2D, TX_WITCH);
+			drawModel(&mod_witch);
+		} else if (ent->type == ENT_ENDERMITE) {
+			resetModel (&mod_endermite);
+			glBindTexture(GL_TEXTURE_2D, TX_ENDERMITE);
+			drawModel(&mod_endermite);
+		} else if (ent->type == ENT_GUARDIAN) {
+			if (ent->subtype & 0x04) {
+				glPushMatrix();
+				glScalef(2.35, 2.35, 2.35);
+			}
+			resetModel (&mod_guardian);
+			glBindTexture(GL_TEXTURE_2D, (ent->subtype & 0x04) ? TX_ELDERGUARDIAN : TX_GUARDIAN);
+			drawModel(&mod_guardian);
+			if (ent->subtype & 0x04) glPopMatrix();
+		} else if (ent->type == ENT_SHULKER) {
+			resetModel (&mod_shulker);
+			glBindTexture(GL_TEXTURE_2D, TX_SHULKER);
+			drawModel(&mod_shulker);
+		} else if (ent->type == ENT_PIG) {
+			resetModel (&mod_pig);
+			glBindTexture(GL_TEXTURE_2D, TX_PIG);
+			drawModel(&mod_pig);
+		} else if (ent->type == ENT_SHEEP) {
+			resetModel (&mod_sheep);
+			glBindTexture(GL_TEXTURE_2D, TX_SHEEP);
+			drawModel(&mod_sheep);
+		} else if (ent->type == ENT_COW || ent->type == ENT_MOOSHROOM) {
+			resetModel (&mod_cow);
+			glBindTexture(GL_TEXTURE_2D, ent->type == ENT_COW ? TX_COW : TX_MOOSHROOM);
+			drawModel(&mod_cow);
+		} else if (ent->type == ENT_CHICKEN) {
+			resetModel (&mod_chicken);
+			glBindTexture(GL_TEXTURE_2D, TX_CHICKEN);
+			drawModel(&mod_chicken);
+		} else if (ent->type == ENT_SQUID) {
+			resetModel (&mod_squid);
+			glBindTexture(GL_TEXTURE_2D, TX_SQUID);
+			drawModel(&mod_squid);
+		} else if (ent->type == ENT_WOLF) {
+			resetModel (&mod_wolf);
+			glBindTexture(GL_TEXTURE_2D, TX_WOLF);
+			drawModel(&mod_wolf);
+		} else if (ent->type == ENT_SNOWMAN) {
+			resetModel (&mod_snowman);
+			glBindTexture(GL_TEXTURE_2D, TX_SNOWMAN);
+			drawModel(&mod_snowman);
+		} else if (ent->type == ENT_OCELOT) {
+			resetModel (&mod_ocelot);
+			glBindTexture(GL_TEXTURE_2D, TX_OCELOT);
+			drawModel(&mod_ocelot);
+		} else if (ent->type == ENT_IRONGOLEM) {
+			resetModel (&mod_irongolem);
+			glBindTexture(GL_TEXTURE_2D, TX_IRONGOLEM);
+			drawModel(&mod_irongolem);
+		} else if (ent->type == ENT_HORSE) {
+			resetModel (&mod_horse);
+			glBindTexture(GL_TEXTURE_2D, TX_HORSEBLACK);
+			drawModel(&mod_horse);
+		} else if (ent->type == ENT_RABBIT) {
+			resetModel (&mod_rabbit);
+			glBindTexture(GL_TEXTURE_2D, TX_RABBITBLACK);
+			drawModel(&mod_rabbit);
+		} else if (ent->type == ENT_VILLAGER) {
+			resetModel (&mod_villager);
+			glBindTexture(GL_TEXTURE_2D, TX_VILLAGER);
+			drawModel(&mod_villager);
+		} else if (ent->type == ENT_BOAT) {
+			resetModel (&mod_boat);
+			glBindTexture(GL_TEXTURE_2D, TX_BOATSPRUCE);
+			drawModel(&mod_boat);
+		} else if (ent->type == ENT_ITEMSTACK) {
+
+		} else if (ent->type == ENT_AREAEFFECT) {
+
+		} else if (ent->type == ENT_MINECART) {
+			resetModel (&mod_minecart);
+			glBindTexture(GL_TEXTURE_2D, TX_MINECART);
+			drawModel(&mod_minecart);
+		} else if (ent->type == ENT_TNT) {
+
+		} else if (ent->type == ENT_ENDERCRYSTAL) {
+			resetModel (&mod_endercrystal);
+			glBindTexture(GL_TEXTURE_2D, TX_ENDERCRYSTAL);
+			drawModel(&mod_endercrystal);
+		} else if (ent->type == ENT_ARROW) {
+
+		} else if (ent->type == ENT_SNOWBALL) {
+
+		} else if (ent->type == ENT_EGG) {
+
+		} else if (ent->type == ENT_FIREBALL) {
+
+		} else if (ent->type == ENT_FIRECHARGE) {
+
+		} else if (ent->type == ENT_ENDERPEARL) {
+
+		} else if (ent->type == ENT_WITHERSKULL) {
+			resetModel (&mod_witherskull);
+			glBindTexture(GL_TEXTURE_2D, TX_WITHER);
+			drawModel(&mod_witherskull);
+		} else if (ent->type == ENT_SHULKERBULLET) {
+			resetModel (&mod_shulkerbullet);
+			glBindTexture(GL_TEXTURE_2D, TX_SHULKERSPARK);
+			drawModel(&mod_shulkerbullet);
+		} else if (ent->type == ENT_FALLINGBLOCK) {
+
+		} else if (ent->type == ENT_ITEMFRAME) {
+
+		} else if (ent->type == ENT_EYEENDER) {
+
+		} else if (ent->type == ENT_THROWNPOTION) {
+
+		} else if (ent->type == ENT_FALLINGEGG) {
+
+		} else if (ent->type == ENT_EXPBOTTLE) {
+
+		} else if (ent->type == ENT_FIREWORK) {
+
+		} else if (ent->type == ENT_LEASHKNOT) {
+			resetModel (&mod_leashknot);
+			glBindTexture(GL_TEXTURE_2D, TX_LEASHKNOT);
+			drawModel(&mod_leashknot);
+		} else if (ent->type == ENT_ARMORSTAND) {
+			resetModel (&mod_armorstand);
+			glBindTexture(GL_TEXTURE_2D, TX_ARMORSTAND);
+			drawModel(&mod_armorstand);
+		} else if (ent->type == ENT_FISHINGFLOAT) {
+
+		} else if (ent->type == ENT_SPECTRALARROW) {
+
+		} else if (ent->type == ENT_TIPPEDARROW) {
+
+		} else if (ent->type == ENT_DRAGONFIREBALL) {
+
+		} else if (ent->type == ENT_EXPERIENCEORB) {
+
 		}
 	}
 	//end debug draw

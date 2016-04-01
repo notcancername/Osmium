@@ -134,6 +134,42 @@ void ingame_mouseMotionCallback(double x, double y) {
 	lmy = y;
 }
 
+double distEntitySq(struct entity* ent1, struct entity* ent2) {
+	return (ent1->x - ent2->x) * (ent1->x - ent2->x) + (ent1->y - ent2->y) * (ent1->y - ent2->y) + (ent1->z - ent2->z) * (ent1->z - ent2->z);
+}
+
+void renderLivingLabel(double x, double y, double z, int hide, char* str, float partialTick) {
+	glPushMatrix();
+	glTranslatef(x, y, z);
+	glNormal3f(0., 1., 0.);
+	float pyaw = interpolateAngle(gs.player->yaw, gs.player->lyaw, partialTick);
+	glRotatef(-pyaw, 0., 1., 0.);
+	glScalef(-.025, -.025, -.025);
+	glDepthMask(0);
+	if (!hide) glDisable (GL_DEPTH_TEST);
+	glEnable (GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable (GL_TEXTURE_2D);
+	int sw = stringWidth(str);
+	glColor4f(0., 0., 0., .25);
+	glBegin (GL_QUADS);
+	glVertex3f((float) -sw / 2. - 1., -1., 0.);
+	glVertex3f((float) -sw / 2. - 1., 8., 0.);
+	glVertex3f((float) sw / 2. + 1., 8., 0.);
+	glVertex3f((float) sw / 2. + 1., -1., 0.);
+	glEnd();
+	glColor4f(1., 1., 1., 1.);
+	glEnable(GL_TEXTURE_2D);
+	if (!hide) {
+		drawString(str, -sw / 2, 0, 553648127);
+		glEnable (GL_DEPTH_TEST);
+	}
+	glDepthMask(1);
+	drawString(str, -sw / 2, 0, hide ? 553648127 : -1);
+	glDisable(GL_BLEND);
+	glPopMatrix();
+}
+
 float wrapAngle(float ang) {
 	ang = fmod(ang, 360.);
 	if (ang >= 180.) ang -= 360.;
@@ -646,6 +682,7 @@ void drawIngame(float partialTick) {
 		glDepthMask (GL_TRUE);
 		glColor4f(1., 1., 1., 1.);
 		glEnable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
 	}
 	glTranslatef(-eyeX, -eyeY, -eyeZ);
 	drawWorld(gs.world);
@@ -671,6 +708,8 @@ void drawIngame(float partialTick) {
 		}
 	}
 	if (gs.inMenu || gs.openinv != NULL) {
+		glEnable (GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		ci = 1;
 		glDisable (GL_TEXTURE_2D);
 		glDisable (GL_DEPTH_TEST);
@@ -684,6 +723,7 @@ void drawIngame(float partialTick) {
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1., 1., 1., 1.);
+		glDisable(GL_BLEND);
 	}
 	if (gs.openinv != NULL) {
 		drawInventory(gs.openinv, gs.playerinv);

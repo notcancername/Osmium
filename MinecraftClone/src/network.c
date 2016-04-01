@@ -609,7 +609,7 @@ int loginToServer(struct conn* conn, char* ip, uint16_t port, char* username, st
 	pkt.id = PKT_HANDSHAKE_CLIENT_HANDSHAKE;
 	pkt.data.handshake_client.handshake.ip = ip;
 	pkt.data.handshake_client.handshake.port = port;
-	pkt.data.handshake_client.handshake.protocol_version = 108;
+	pkt.data.handshake_client.handshake.protocol_version = 109;
 	pkt.data.handshake_client.handshake.state = 2;
 	if (writePacket(conn, &pkt)) return -1;
 	conn->state = STATE_LOGIN;

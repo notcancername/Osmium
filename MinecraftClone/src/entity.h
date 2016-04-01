@@ -127,6 +127,7 @@ struct entity {
 		float prevRenderYawOffset;
 		size_t ticksExisted;
 		int32_t subtype;
+		char* name;
 };
 
 void readMetadata(struct entity* ent, unsigned char* meta, size_t size);

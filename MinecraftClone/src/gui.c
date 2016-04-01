@@ -337,6 +337,7 @@ void drawMainMenu(float partialTick) {
 		glEnable(GL_ALPHA_TEST);
 		glColorMask(1, 1, 1, 1);
 	}
+	glDisable(GL_BLEND);
 	glColor4f(1., 1., 1., 1.);
 	glDeleteRenderbuffers(1, &rb);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -597,6 +598,7 @@ void drawGUI(float partialTick) {
 	} else if (guistate == GSTATE_INGAME) {
 		glEnable (GL_DEPTH_TEST);
 		glDepthMask (GL_TRUE);
+		glDisable (GL_BLEND);
 		drawIngame(partialTick);
 	}
 	if (guistate != GSTATE_INGAME) {

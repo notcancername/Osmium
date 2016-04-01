@@ -43,6 +43,10 @@ struct gamestate {
 		int heldItem;
 };
 
+double distEntitySq(struct entity* ent1, struct entity* ent2);
+
+void renderLivingLabel(double x, double y, double z, int hide, char* str, float partialTick);
+
 void ingame_scrollCallback(double x, double y);
 
 void ingame_keyboardCallback(int key, int scancode, int action, int mods);

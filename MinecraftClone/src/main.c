@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 	glEnable (GL_DEPTH_TEST);
 	glEnable (GL_TEXTURE_2D);
 	glEnable (GL_CULL_FACE);
-	glAlphaFunc(GL_GREATER, 0.5);
+	glAlphaFunc(GL_GREATER, 0.1);
 	glEnable (GL_ALPHA_TEST);
 	loadGUI();
 	loadIngame();
