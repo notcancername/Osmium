@@ -88,7 +88,7 @@ void displayCallback() {
 	//py = ourPlayer->y * (1. - partialTick) + ourPlayer->ly * partialTick;
 	//pz = ourPlayer->z * (1. - partialTick) + ourPlayer->lz * partialTick;
 	glEnable (GL_TEXTURE_2D);
-	glClear (GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glViewport(0, 0, width, height);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();

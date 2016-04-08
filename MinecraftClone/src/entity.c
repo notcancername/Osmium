@@ -610,14 +610,14 @@ void load_entities() {
 	bb_player.maxX = .3;
 	bb_player.maxY = 1.8;
 	bb_player.maxZ = .3;
-	createBBVao(&bb_player);
+	//
 	bb_skeleton.minX = -.3;
 	bb_skeleton.minY = 0.;
 	bb_skeleton.minZ = -.3;
 	bb_skeleton.maxX = .3;
 	bb_skeleton.maxY = 1.95;
 	bb_skeleton.maxZ = .3;
-	createBBVao(&bb_skeleton);
+	//
 }
 
 struct boundingbox* getEntityCollision(struct entity* ent) {

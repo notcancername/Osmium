@@ -38,7 +38,7 @@ void loadIngame() {
 			virtVertex3f(&vts[vi++], x1, 16., x2 + 64.);
 		}
 	}
-	createVAO(vts, 676, &skybox, 0, 0);
+	createVAO(vts, 676, &skybox, 0, 0, 4);
 	gs.playerinv = malloc(sizeof(struct inventory));
 	newInventory(gs.playerinv, INVTYPE_PLAYERINVENTORY, 0);
 	gs.playerinv->slot_count = 46;
@@ -803,7 +803,7 @@ void drawIngame(float partialTick) {
 void runNetwork(struct conn* conn) {
 	spawnedIn = 0;
 	gs.conn = conn;
-	viewDistance = 16. * 25.;
+	viewDistance = 16. * 10.;
 	struct packet pkt;
 	struct packet rpkt;
 	while (1) {

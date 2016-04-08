@@ -39,6 +39,8 @@ struct vao {
 		int vbo;
 		int tex;
 		size_t vertex_count;
+		int vib;
+		size_t index_count;
 };
 
 #define TX_NONE 0
@@ -167,15 +169,13 @@ void virtVertex3f(union uvertex* vert, float x, float y, float z);
 
 void virtTexCoord2f(struct vertex_tex* vert, float x, float y);
 
-void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite);
+void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, uint16_t restart);
 
 void deleteVAO(struct vao* vao);
 
 void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float tx1, float ty1, float tx2, float ty2);
 
 void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2);
-
-void createBBVao(struct boundingbox* bb);
 
 void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2);
 

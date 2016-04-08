@@ -120,7 +120,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderhead, &cubes[0], -4.0, -4.0, -8.0, 8.0, 8.0, 8.0, 0.0, 0);
 			spiderhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderhead->vao, 1, 0);
+			createVAO(cubes, 24, spiderhead->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderhead);
 		}
 		{
@@ -129,7 +129,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderneck, &cubes[0], -3.0, -3.0, -3.0, 6.0, 6.0, 6.0, 0.0, 0);
 			spiderneck->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderneck->vao, 1, 0);
+			createVAO(cubes, 24, spiderneck->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderneck);
 		}
 		{
@@ -138,7 +138,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderbody, &cubes[0], -5.0, -4.0, -6.0, 10.0, 8.0, 12.0, 0.0, 0);
 			spiderbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderbody->vao, 1, 0);
+			createVAO(cubes, 24, spiderbody->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderbody);
 		}
 		{
@@ -147,7 +147,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg1, &cubes[0], -15.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg1->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg1->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg1);
 		}
 		{
@@ -156,7 +156,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg2, &cubes[0], -1.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg2->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg2->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg2);
 		}
 		{
@@ -165,7 +165,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg3, &cubes[0], -15.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg3->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg3->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg3);
 		}
 		{
@@ -174,7 +174,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg4, &cubes[0], -1.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg4->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg4->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg4);
 		}
 		{
@@ -183,7 +183,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg5, &cubes[0], -15.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg5->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg5->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg5);
 		}
 		{
@@ -192,7 +192,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg6, &cubes[0], -1.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg6->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg6->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg6);
 		}
 		{
@@ -201,7 +201,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg7, &cubes[0], -15.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg7->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg7->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg7);
 		}
 		{
@@ -210,7 +210,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(spiderleg8, &cubes[0], -1.0, -1.0, -1.0, 16.0, 2.0, 2.0, 0.0, 0);
 			spiderleg8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, spiderleg8->vao, 1, 0);
+			createVAO(cubes, 24, spiderleg8->vao, 1, 0, 4);
 			addModelChild(&mod_spider, spiderleg8);
 		}
 	}
@@ -224,7 +224,7 @@ void loadBaseModels() {
 			createModelCube(head, &cubes[0], -4.0, -4.0, -8.0, 8.0, 8.0, 8.0, 0.0, 0);
 			createModelCube(head, &cubes[24], -2.0, 0.0, -9.0, 4.0, 3.0, 1.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, head->vao, 1, 0);
+			createVAO(cubes, 48, head->vao, 1, 0, 4);
 			addModelChild(&mod_pig, head);
 		}
 		{
@@ -233,7 +233,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -5.0, -10.0, -7.0, 10.0, 16.0, 8.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_pig, body);
 		}
 		{
@@ -242,7 +242,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_pig, leg1);
 		}
 		{
@@ -251,7 +251,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_pig, leg2);
 		}
 		{
@@ -260,7 +260,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_pig, leg3);
 		}
 		{
@@ -269,7 +269,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_pig, leg4);
 		}
 	}
@@ -283,7 +283,7 @@ void loadBaseModels() {
 			createModelCube(head, &cubes[0], -4.0, -4.0, -8.0, 8.0, 8.0, 8.0, 0.5, 0);
 			createModelCube(head, &cubes[24], -2.0, 0.0, -9.0, 4.0, 3.0, 1.0, 0.5, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, head->vao, 1, 0);
+			createVAO(cubes, 48, head->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, head);
 		}
 		{
@@ -292,7 +292,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -5.0, -10.0, -7.0, 10.0, 16.0, 8.0, 0.5, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, body);
 		}
 		{
@@ -301,7 +301,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, leg1);
 		}
 		{
@@ -310,7 +310,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, leg2);
 		}
 		{
@@ -319,7 +319,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, leg3);
 		}
 		{
@@ -328,7 +328,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_pigsaddle, leg4);
 		}
 	}
@@ -341,7 +341,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -3.0, -4.0, -6.0, 6.0, 6.0, 8.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, head);
 		}
 		{
@@ -350,7 +350,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -4.0, -10.0, -7.0, 8.0, 16.0, 6.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, body);
 		}
 		{
@@ -359,7 +359,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, leg1);
 		}
 		{
@@ -368,7 +368,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, leg2);
 		}
 		{
@@ -377,7 +377,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, leg3);
 		}
 		{
@@ -386,7 +386,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_sheep, leg4);
 		}
 	}
@@ -399,7 +399,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -3.0, -4.0, -4.0, 6.0, 6.0, 6.0, 0.6, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, head);
 		}
 		{
@@ -408,7 +408,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -4.0, -10.0, -7.0, 8.0, 16.0, 6.0, 1.75, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, body);
 		}
 		{
@@ -417,7 +417,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, leg1);
 		}
 		{
@@ -426,7 +426,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, leg2);
 		}
 		{
@@ -435,7 +435,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, leg3);
 		}
 		{
@@ -444,7 +444,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.5, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_sheepwool, leg4);
 		}
 	}
@@ -459,7 +459,7 @@ void loadBaseModels() {
 			createModelCube(head, &cubes[24], -5.0, -5.0, -4.0, 1.0, 3.0, 1.0, 0.0, 0);
 			createModelCube(head, &cubes[48], 4.0, -5.0, -4.0, 1.0, 3.0, 1.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 72, head->vao, 1, 0);
+			createVAO(cubes, 72, head->vao, 1, 0, 4);
 			addModelChild(&mod_cow, head);
 		}
 		{
@@ -469,7 +469,7 @@ void loadBaseModels() {
 			createModelCube(body, &cubes[0], -6.0, -10.0, -7.0, 12.0, 18.0, 10.0, 0.0, 0);
 			createModelCube(body, &cubes[24], -2.0, 2.0, -8.0, 4.0, 6.0, 1.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, body->vao, 1, 0);
+			createVAO(cubes, 48, body->vao, 1, 0, 4);
 			addModelChild(&mod_cow, body);
 		}
 		{
@@ -478,7 +478,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_cow, leg1);
 		}
 		{
@@ -487,7 +487,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_cow, leg2);
 		}
 		{
@@ -496,7 +496,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_cow, leg3);
 		}
 		{
@@ -505,7 +505,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_cow, leg4);
 		}
 	}
@@ -521,7 +521,7 @@ void loadBaseModels() {
 			createModelCube(wolfheadmain, &cubes[48], 2.0, -5.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0);
 			createModelCube(wolfheadmain, &cubes[72], -0.5, 0.0, -5.0, 3.0, 3.0, 4.0, 0.0, 0);
 			wolfheadmain->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 96, wolfheadmain->vao, 1, 0);
+			createVAO(cubes, 96, wolfheadmain->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfheadmain);
 		}
 		{
@@ -530,7 +530,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wolfbody, &cubes[0], -3.0, -2.0, -3.0, 6.0, 9.0, 6.0, 0.0, 0);
 			wolfbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wolfbody->vao, 1, 0);
+			createVAO(cubes, 24, wolfbody->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfbody);
 		}
 		{
@@ -539,7 +539,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wolfleg1, &cubes[0], 0.0, 0.0, -1.0, 2.0, 8.0, 2.0, 0.0, 0);
 			wolfleg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wolfleg1->vao, 1, 0);
+			createVAO(cubes, 24, wolfleg1->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfleg1);
 		}
 		{
@@ -548,7 +548,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wolfleg2, &cubes[0], 0.0, 0.0, -1.0, 2.0, 8.0, 2.0, 0.0, 0);
 			wolfleg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wolfleg2->vao, 1, 0);
+			createVAO(cubes, 24, wolfleg2->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfleg2);
 		}
 		{
@@ -557,7 +557,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wolfleg3, &cubes[0], 0.0, 0.0, -1.0, 2.0, 8.0, 2.0, 0.0, 0);
 			wolfleg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wolfleg3->vao, 1, 0);
+			createVAO(cubes, 24, wolfleg3->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfleg3);
 		}
 		{
@@ -566,7 +566,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wolfleg4, &cubes[0], 0.0, 0.0, -1.0, 2.0, 8.0, 2.0, 0.0, 0);
 			wolfleg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wolfleg4->vao, 1, 0);
+			createVAO(cubes, 24, wolfleg4->vao, 1, 0, 4);
 			addModelChild(&mod_wolf, wolfleg4);
 		}
 	}
@@ -579,7 +579,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -2.0, -6.0, -2.0, 4.0, 6.0, 3.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, head);
 		}
 		{
@@ -588,7 +588,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -3.0, -4.0, -3.0, 6.0, 8.0, 6.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, body);
 		}
 		{
@@ -597,7 +597,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rightleg, &cubes[0], -1.0, 0.0, -3.0, 3.0, 5.0, 3.0, 0.0, 0);
 			rightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rightleg->vao, 1, 0);
+			createVAO(cubes, 24, rightleg->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, rightleg);
 		}
 		{
@@ -606,7 +606,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leftleg, &cubes[0], -1.0, 0.0, -3.0, 3.0, 5.0, 3.0, 0.0, 0);
 			leftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leftleg->vao, 1, 0);
+			createVAO(cubes, 24, leftleg->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, leftleg);
 		}
 		{
@@ -615,7 +615,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rightwing, &cubes[0], 0.0, 0.0, -3.0, 1.0, 4.0, 6.0, 0.0, 0);
 			rightwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rightwing->vao, 1, 0);
+			createVAO(cubes, 24, rightwing->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, rightwing);
 		}
 		{
@@ -624,7 +624,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leftwing, &cubes[0], -1.0, 0.0, -3.0, 1.0, 4.0, 6.0, 0.0, 0);
 			leftwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leftwing->vao, 1, 0);
+			createVAO(cubes, 24, leftwing->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, leftwing);
 		}
 		{
@@ -633,7 +633,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bill, &cubes[0], -2.0, -4.0, -4.0, 4.0, 2.0, 2.0, 0.0, 0);
 			bill->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bill->vao, 1, 0);
+			createVAO(cubes, 24, bill->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, bill);
 		}
 		{
@@ -642,7 +642,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(chin, &cubes[0], -1.0, -2.0, -3.0, 2.0, 2.0, 2.0, 0.0, 0);
 			chin->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, chin->vao, 1, 0);
+			createVAO(cubes, 24, chin->vao, 1, 0, 4);
 			addModelChild(&mod_chicken, chin);
 		}
 	}
@@ -655,7 +655,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelotbackleftleg, &cubes[0], -1.0, 0.0, 1.0, 2.0, 6.0, 2.0, 0.0, 0);
 			ocelotbackleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelotbackleftleg->vao, 1, 0);
+			createVAO(cubes, 24, ocelotbackleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelotbackleftleg);
 		}
 		{
@@ -664,7 +664,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelotbackrightleg, &cubes[0], -1.0, 0.0, 1.0, 2.0, 6.0, 2.0, 0.0, 0);
 			ocelotbackrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelotbackrightleg->vao, 1, 0);
+			createVAO(cubes, 24, ocelotbackrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelotbackrightleg);
 		}
 		{
@@ -673,7 +673,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelotfrontleftleg, &cubes[0], -1.0, 0.0, 0.0, 2.0, 10.0, 2.0, 0.0, 0);
 			ocelotfrontleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelotfrontleftleg->vao, 1, 0);
+			createVAO(cubes, 24, ocelotfrontleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelotfrontleftleg);
 		}
 		{
@@ -682,7 +682,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelotfrontrightleg, &cubes[0], -1.0, 0.0, 0.0, 2.0, 10.0, 2.0, 0.0, 0);
 			ocelotfrontrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelotfrontrightleg->vao, 1, 0);
+			createVAO(cubes, 24, ocelotfrontrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelotfrontrightleg);
 		}
 		{
@@ -691,7 +691,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelottail, &cubes[0], -0.5, 0.0, 0.0, 1.0, 8.0, 1.0, 0.0, 0);
 			ocelottail->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelottail->vao, 1, 0);
+			createVAO(cubes, 24, ocelottail->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelottail);
 		}
 		{
@@ -700,7 +700,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelottail2, &cubes[0], -0.5, 0.0, 0.0, 1.0, 8.0, 1.0, 0.0, 0);
 			ocelottail2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelottail2->vao, 1, 0);
+			createVAO(cubes, 24, ocelottail2->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelottail2);
 		}
 		{
@@ -712,7 +712,7 @@ void loadBaseModels() {
 			createModelCube(ocelothead, &cubes[48], -2.0, -3.0, 0.0, 1.0, 1.0, 2.0, 0.0, 0);
 			createModelCube(ocelothead, &cubes[72], 1.0, -3.0, 0.0, 1.0, 1.0, 2.0, 0.0, 0);
 			ocelothead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 96, ocelothead->vao, 1, 0);
+			createVAO(cubes, 96, ocelothead->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelothead);
 		}
 		{
@@ -721,7 +721,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(ocelotbody, &cubes[0], -2.0, 3.0, -8.0, 4.0, 16.0, 6.0, 0.0, 0);
 			ocelotbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, ocelotbody->vao, 1, 0);
+			createVAO(cubes, 24, ocelotbody->vao, 1, 0, 4);
 			addModelChild(&mod_ocelot, ocelotbody);
 		}
 	}
@@ -734,7 +734,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitleftfoot, &cubes[0], -1.0, 5.5, -3.7, 2.0, 1.0, 7.0, 0.0, 0);
 			rabbitleftfoot->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitleftfoot->vao, 1, 0);
+			createVAO(cubes, 24, rabbitleftfoot->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitleftfoot);
 		}
 		{
@@ -743,7 +743,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitrightfoot, &cubes[0], -1.0, 5.5, -3.7, 2.0, 1.0, 7.0, 0.0, 0);
 			rabbitrightfoot->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitrightfoot->vao, 1, 0);
+			createVAO(cubes, 24, rabbitrightfoot->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitrightfoot);
 		}
 		{
@@ -752,7 +752,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitleftthigh, &cubes[0], -1.0, 0.0, 0.0, 2.0, 4.0, 5.0, 0.0, 0);
 			rabbitleftthigh->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitleftthigh->vao, 1, 0);
+			createVAO(cubes, 24, rabbitleftthigh->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitleftthigh);
 		}
 		{
@@ -761,7 +761,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitrightthigh, &cubes[0], -1.0, 0.0, 0.0, 2.0, 4.0, 5.0, 0.0, 0);
 			rabbitrightthigh->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitrightthigh->vao, 1, 0);
+			createVAO(cubes, 24, rabbitrightthigh->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitrightthigh);
 		}
 		{
@@ -770,7 +770,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitbody, &cubes[0], -3.0, -2.0, -10.0, 6.0, 5.0, 10.0, 0.0, 0);
 			rabbitbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitbody->vao, 1, 0);
+			createVAO(cubes, 24, rabbitbody->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitbody);
 		}
 		{
@@ -779,7 +779,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitleftarm, &cubes[0], -1.0, 0.0, -1.0, 2.0, 7.0, 2.0, 0.0, 0);
 			rabbitleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitleftarm->vao, 1, 0);
+			createVAO(cubes, 24, rabbitleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitleftarm);
 		}
 		{
@@ -788,7 +788,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitrightarm, &cubes[0], -1.0, 0.0, -1.0, 2.0, 7.0, 2.0, 0.0, 0);
 			rabbitrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitrightarm->vao, 1, 0);
+			createVAO(cubes, 24, rabbitrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitrightarm);
 		}
 		{
@@ -797,7 +797,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbithead, &cubes[0], -2.5, -4.0, -5.0, 5.0, 4.0, 5.0, 0.0, 0);
 			rabbithead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbithead->vao, 1, 0);
+			createVAO(cubes, 24, rabbithead->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbithead);
 		}
 		{
@@ -806,7 +806,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitrightear, &cubes[0], -2.5, -9.0, -1.0, 2.0, 5.0, 1.0, 0.0, 0);
 			rabbitrightear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitrightear->vao, 1, 0);
+			createVAO(cubes, 24, rabbitrightear->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitrightear);
 		}
 		{
@@ -815,7 +815,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitleftear, &cubes[0], 0.5, -9.0, -1.0, 2.0, 5.0, 1.0, 0.0, 0);
 			rabbitleftear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitleftear->vao, 1, 0);
+			createVAO(cubes, 24, rabbitleftear->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitleftear);
 		}
 		{
@@ -824,7 +824,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbittail, &cubes[0], -1.5, -1.5, 0.0, 3.0, 3.0, 2.0, 0.0, 0);
 			rabbittail->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbittail->vao, 1, 0);
+			createVAO(cubes, 24, rabbittail->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbittail);
 		}
 		{
@@ -833,7 +833,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rabbitnose, &cubes[0], -0.5, -2.5, -5.5, 1.0, 1.0, 1.0, 0.0, 0);
 			rabbitnose->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rabbitnose->vao, 1, 0);
+			createVAO(cubes, 24, rabbitnose->vao, 1, 0, 4);
 			addModelChild(&mod_rabbit, rabbitnose);
 		}
 	}
@@ -846,7 +846,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts1, &cubes[0], -1.5, 0.0, -1.0, 3.0, 2.0, 2.0, 0.0, 0);
 			silverfishbodyparts1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts1->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts1->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts1);
 		}
 		{
@@ -855,7 +855,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts2, &cubes[0], -2.0, 0.0, -1.0, 4.0, 3.0, 2.0, 0.0, 0);
 			silverfishbodyparts2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts2->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts2->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts2);
 		}
 		{
@@ -864,7 +864,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts3, &cubes[0], -3.0, 0.0, -1.5, 6.0, 4.0, 3.0, 0.0, 0);
 			silverfishbodyparts3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts3->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts3->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts3);
 		}
 		{
@@ -873,7 +873,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts4, &cubes[0], -1.5, 0.0, -1.5, 3.0, 3.0, 3.0, 0.0, 0);
 			silverfishbodyparts4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts4->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts4->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts4);
 		}
 		{
@@ -882,7 +882,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts5, &cubes[0], -1.0, 0.0, -1.5, 2.0, 2.0, 3.0, 0.0, 0);
 			silverfishbodyparts5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts5->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts5->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts5);
 		}
 		{
@@ -891,7 +891,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts6, &cubes[0], -1.0, 0.0, -1.0, 2.0, 1.0, 2.0, 0.0, 0);
 			silverfishbodyparts6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts6->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts6->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts6);
 		}
 		{
@@ -900,7 +900,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishbodyparts7, &cubes[0], -0.5, 0.0, -1.0, 1.0, 1.0, 2.0, 0.0, 0);
 			silverfishbodyparts7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishbodyparts7->vao, 1, 0);
+			createVAO(cubes, 24, silverfishbodyparts7->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishbodyparts7);
 		}
 		{
@@ -909,7 +909,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishwings1, &cubes[0], -5.0, 0.0, -1.5, 10.0, 8.0, 3.0, 0.0, 0);
 			silverfishwings1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishwings1->vao, 1, 0);
+			createVAO(cubes, 24, silverfishwings1->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishwings1);
 		}
 		{
@@ -918,7 +918,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishwings2, &cubes[0], -3.0, 0.0, -1.5, 6.0, 4.0, 3.0, 0.0, 0);
 			silverfishwings2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishwings2->vao, 1, 0);
+			createVAO(cubes, 24, silverfishwings2->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishwings2);
 		}
 		{
@@ -927,7 +927,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(silverfishwings3, &cubes[0], -3.0, 0.0, -1.5, 6.0, 5.0, 2.0, 0.0, 0);
 			silverfishwings3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, silverfishwings3->vao, 1, 0);
+			createVAO(cubes, 24, silverfishwings3->vao, 1, 0, 4);
 			addModelChild(&mod_silverfish, silverfishwings3);
 		}
 	}
@@ -940,7 +940,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(parts1, &cubes[0], -2.0, 0.0, -1.0, 4.0, 3.0, 2.0, 0.0, 0);
 			parts1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, parts1->vao, 1, 0);
+			createVAO(cubes, 24, parts1->vao, 1, 0, 4);
 			addModelChild(&mod_endermite, parts1);
 		}
 		{
@@ -949,7 +949,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(parts2, &cubes[0], -3.0, 0.0, -2.5, 6.0, 4.0, 5.0, 0.0, 0);
 			parts2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, parts2->vao, 1, 0);
+			createVAO(cubes, 24, parts2->vao, 1, 0, 4);
 			addModelChild(&mod_endermite, parts2);
 		}
 		{
@@ -958,7 +958,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(parts3, &cubes[0], -1.5, 0.0, -0.5, 3.0, 3.0, 1.0, 0.0, 0);
 			parts3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, parts3->vao, 1, 0);
+			createVAO(cubes, 24, parts3->vao, 1, 0, 4);
 			addModelChild(&mod_endermite, parts3);
 		}
 		{
@@ -967,7 +967,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(parts4, &cubes[0], -0.5, 0.0, -0.5, 1.0, 2.0, 1.0, 0.0, 0);
 			parts4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, parts4->vao, 1, 0);
+			createVAO(cubes, 24, parts4->vao, 1, 0, 4);
 			addModelChild(&mod_endermite, parts4);
 		}
 	}
@@ -980,7 +980,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, head);
 		}
 		{
@@ -989,7 +989,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(creeperarmor, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			creeperarmor->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, creeperarmor->vao, 1, 0);
+			createVAO(cubes, 24, creeperarmor->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, creeperarmor);
 		}
 		{
@@ -998,7 +998,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, body);
 		}
 		{
@@ -1007,7 +1007,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, leg1);
 		}
 		{
@@ -1016,7 +1016,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, leg2);
 		}
 		{
@@ -1025,7 +1025,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, leg3);
 		}
 		{
@@ -1034,7 +1034,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 0.0, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_creeper, leg4);
 		}
 	}
@@ -1047,7 +1047,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 2.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, head);
 		}
 		{
@@ -1056,7 +1056,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(creeperarmor, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 2.5, 0);
 			creeperarmor->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, creeperarmor->vao, 1, 0);
+			createVAO(cubes, 24, creeperarmor->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, creeperarmor);
 		}
 		{
@@ -1065,7 +1065,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 2.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, body);
 		}
 		{
@@ -1074,7 +1074,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg1, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 2.0, 0);
 			leg1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg1->vao, 1, 0);
+			createVAO(cubes, 24, leg1->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, leg1);
 		}
 		{
@@ -1083,7 +1083,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg2, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 2.0, 0);
 			leg2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg2->vao, 1, 0);
+			createVAO(cubes, 24, leg2->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, leg2);
 		}
 		{
@@ -1092,7 +1092,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg3, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 2.0, 0);
 			leg3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg3->vao, 1, 0);
+			createVAO(cubes, 24, leg3->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, leg3);
 		}
 		{
@@ -1101,7 +1101,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leg4, &cubes[0], -2.0, 0.0, -2.0, 4.0, 6.0, 4.0, 2.0, 0);
 			leg4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leg4->vao, 1, 0);
+			createVAO(cubes, 24, leg4->vao, 1, 0, 4);
 			addModelChild(&mod_creepercharge, leg4);
 		}
 	}
@@ -1114,7 +1114,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedhead);
 		}
 		{
@@ -1123,7 +1123,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, -0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedheadwear);
 		}
 		{
@@ -1132,7 +1132,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedbody);
 		}
 		{
@@ -1141,7 +1141,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -1.0, -2.0, -1.0, 2.0, 30.0, 2.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedrightarm);
 		}
 		{
@@ -1150,7 +1150,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -1.0, 2.0, 30.0, 2.0, 0.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedleftarm);
 		}
 		{
@@ -1159,7 +1159,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 30.0, 2.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedrightleg);
 		}
 		{
@@ -1168,7 +1168,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 30.0, 2.0, 0.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_enderman, bipedleftleg);
 		}
 	}
@@ -1181,7 +1181,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -5.0, -10.0, -5.0, 10.0, 10.0, 10.0, -0.5, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_snowman, body);
 		}
 		{
@@ -1190,7 +1190,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bottombody, &cubes[0], -6.0, -12.0, -6.0, 12.0, 12.0, 12.0, -0.5, 0);
 			bottombody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bottombody->vao, 1, 0);
+			createVAO(cubes, 24, bottombody->vao, 1, 0, 4);
 			addModelChild(&mod_snowman, bottombody);
 		}
 		{
@@ -1199,7 +1199,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, -0.5, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_snowman, head);
 		}
 		{
@@ -1208,7 +1208,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(righthand, &cubes[0], -1.0, 0.0, -1.0, 12.0, 2.0, 2.0, -0.5, 0);
 			righthand->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, righthand->vao, 1, 0);
+			createVAO(cubes, 24, righthand->vao, 1, 0, 4);
 			addModelChild(&mod_snowman, righthand);
 		}
 		{
@@ -1217,7 +1217,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(lefthand, &cubes[0], -1.0, 0.0, -1.0, 12.0, 2.0, 2.0, -0.5, 0);
 			lefthand->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, lefthand->vao, 1, 0);
+			createVAO(cubes, 24, lefthand->vao, 1, 0, 4);
 			addModelChild(&mod_snowman, lefthand);
 		}
 	}
@@ -1230,7 +1230,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedhead);
 		}
 		{
@@ -1239,7 +1239,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedheadwear);
 		}
 		{
@@ -1248,7 +1248,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedbody);
 		}
 		{
@@ -1257,7 +1257,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -1.0, -2.0, -1.0, 2.0, 12.0, 2.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedrightarm);
 		}
 		{
@@ -1266,7 +1266,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -1.0, 2.0, 12.0, 2.0, 0.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedleftarm);
 		}
 		{
@@ -1275,7 +1275,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 12.0, 2.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedrightleg);
 		}
 		{
@@ -1284,7 +1284,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 12.0, 2.0, 0.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeleton, bipedleftleg);
 		}
 	}
@@ -1297,7 +1297,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedhead);
 		}
 		{
@@ -1306,7 +1306,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedheadwear);
 		}
 		{
@@ -1315,7 +1315,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.5, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedbody);
 		}
 		{
@@ -1324,7 +1324,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedrightarm);
 		}
 		{
@@ -1333,7 +1333,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedleftarm);
 		}
 		{
@@ -1342,7 +1342,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedrightleg);
 		}
 		{
@@ -1351,7 +1351,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonleggings, bipedleftleg);
 		}
 	}
@@ -1364,7 +1364,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedhead);
 		}
 		{
@@ -1373,7 +1373,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedheadwear);
 		}
 		{
@@ -1382,7 +1382,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 1.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedbody);
 		}
 		{
@@ -1391,7 +1391,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedrightarm);
 		}
 		{
@@ -1400,7 +1400,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedleftarm);
 		}
 		{
@@ -1409,7 +1409,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedrightleg);
 		}
 		{
@@ -1418,7 +1418,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_skeletonarmor, bipedleftleg);
 		}
 	}
@@ -1431,7 +1431,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(villagerhead, &cubes[0], -4.0, -10.0, -4.0, 8.0, 10.0, 8.0, 0.0, 0);
 			villagerhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, villagerhead->vao, 1, 0);
+			createVAO(cubes, 24, villagerhead->vao, 1, 0, 4);
 			addModelChild(&mod_witch, villagerhead);
 		}
 		{
@@ -1441,7 +1441,7 @@ void loadBaseModels() {
 			createModelCube(villagerbody, &cubes[0], -4.0, 0.0, -3.0, 8.0, 12.0, 6.0, 0.0, 0);
 			createModelCube(villagerbody, &cubes[24], -4.0, 0.0, -3.0, 8.0, 18.0, 6.0, 0.5, 0);
 			villagerbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, villagerbody->vao, 1, 0);
+			createVAO(cubes, 48, villagerbody->vao, 1, 0, 4);
 			addModelChild(&mod_witch, villagerbody);
 		}
 		{
@@ -1452,7 +1452,7 @@ void loadBaseModels() {
 			createModelCube(villagerarms, &cubes[24], 4.0, -2.0, -2.0, 4.0, 8.0, 4.0, 0.0, 0);
 			createModelCube(villagerarms, &cubes[48], -4.0, 2.0, -2.0, 8.0, 4.0, 4.0, 0.0, 0);
 			villagerarms->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 72, villagerarms->vao, 1, 0);
+			createVAO(cubes, 72, villagerarms->vao, 1, 0, 4);
 			addModelChild(&mod_witch, villagerarms);
 		}
 		{
@@ -1461,7 +1461,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rightvillagerleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			rightvillagerleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rightvillagerleg->vao, 1, 0);
+			createVAO(cubes, 24, rightvillagerleg->vao, 1, 0, 4);
 			addModelChild(&mod_witch, rightvillagerleg);
 		}
 		{
@@ -1470,7 +1470,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leftvillagerleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			leftvillagerleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leftvillagerleg->vao, 1, 0);
+			createVAO(cubes, 24, leftvillagerleg->vao, 1, 0, 4);
 			addModelChild(&mod_witch, leftvillagerleg);
 		}
 		{
@@ -1479,7 +1479,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(villagernose, &cubes[0], -1.0, -1.0, -6.0, 2.0, 4.0, 2.0, 0.0, 0);
 			villagernose->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, villagernose->vao, 1, 0);
+			createVAO(cubes, 24, villagernose->vao, 1, 0, 4);
 			addModelChild(&mod_witch, villagernose);
 		}
 	}
@@ -1492,7 +1492,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks1, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks1->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks1->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks1);
 		}
 		{
@@ -1501,7 +1501,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks2, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks2->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks2->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks2);
 		}
 		{
@@ -1510,7 +1510,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks3, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks3->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks3->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks3);
 		}
 		{
@@ -1519,7 +1519,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks4, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks4->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks4->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks4);
 		}
 		{
@@ -1528,7 +1528,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks5, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks5->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks5->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks5);
 		}
 		{
@@ -1537,7 +1537,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks6, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks6->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks6->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks6);
 		}
 		{
@@ -1546,7 +1546,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks7, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks7->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks7->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks7);
 		}
 		{
@@ -1555,7 +1555,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks8, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks8->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks8->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks8);
 		}
 		{
@@ -1564,7 +1564,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks9, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks9->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks9->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks9->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks9);
 		}
 		{
@@ -1573,7 +1573,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks10, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks10->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks10->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks10->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks10);
 		}
 		{
@@ -1582,7 +1582,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks11, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks11->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks11->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks11->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks11);
 		}
 		{
@@ -1591,7 +1591,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazesticks12, &cubes[0], 0.0, 0.0, 0.0, 2.0, 8.0, 2.0, 0.0, 0);
 			blazesticks12->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazesticks12->vao, 1, 0);
+			createVAO(cubes, 24, blazesticks12->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazesticks12);
 		}
 		{
@@ -1600,7 +1600,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(blazehead, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			blazehead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, blazehead->vao, 1, 0);
+			createVAO(cubes, 24, blazehead->vao, 1, 0, 4);
 			addModelChild(&mod_blaze, blazehead);
 		}
 	}
@@ -1613,7 +1613,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedhead);
 		}
 		{
@@ -1622,7 +1622,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedheadwear);
 		}
 		{
@@ -1631,7 +1631,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedbody);
 		}
 		{
@@ -1640,7 +1640,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedrightarm);
 		}
 		{
@@ -1649,7 +1649,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedleftarm);
 		}
 		{
@@ -1658,7 +1658,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedrightleg);
 		}
 		{
@@ -1667,7 +1667,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombie, bipedleftleg);
 		}
 	}
@@ -1680,7 +1680,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedhead);
 		}
 		{
@@ -1689,7 +1689,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedheadwear);
 		}
 		{
@@ -1698,7 +1698,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.5, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedbody);
 		}
 		{
@@ -1707,7 +1707,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedrightarm);
 		}
 		{
@@ -1716,7 +1716,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedleftarm);
 		}
 		{
@@ -1725,7 +1725,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedrightleg);
 		}
 		{
@@ -1734,7 +1734,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombieleggings, bipedleftleg);
 		}
 	}
@@ -1747,7 +1747,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedhead);
 		}
 		{
@@ -1756,7 +1756,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedheadwear);
 		}
 		{
@@ -1765,7 +1765,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 1.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedbody);
 		}
 		{
@@ -1774,7 +1774,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedrightarm);
 		}
 		{
@@ -1783,7 +1783,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedleftarm);
 		}
 		{
@@ -1792,7 +1792,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedrightleg);
 		}
 		{
@@ -1801,7 +1801,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombiearmor, bipedleftleg);
 		}
 	}
@@ -1815,7 +1815,7 @@ void loadBaseModels() {
 			createModelCube(bipedhead, &cubes[0], -4.0, -10.0, -4.0, 8.0, 10.0, 8.0, 0.0, 0);
 			createModelCube(bipedhead, &cubes[24], -1.0, -3.0, -6.0, 2.0, 4.0, 2.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, bipedhead->vao, 1, 0);
+			createVAO(cubes, 48, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedhead);
 		}
 		{
@@ -1824,7 +1824,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedheadwear);
 		}
 		{
@@ -1834,7 +1834,7 @@ void loadBaseModels() {
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -3.0, 8.0, 12.0, 6.0, 0.0, 0);
 			createModelCube(bipedbody, &cubes[24], -4.0, 0.0, -3.0, 8.0, 18.0, 6.0, 0.05, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, bipedbody->vao, 1, 0);
+			createVAO(cubes, 48, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedbody);
 		}
 		{
@@ -1843,7 +1843,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedrightarm);
 		}
 		{
@@ -1852,7 +1852,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedleftarm);
 		}
 		{
@@ -1861,7 +1861,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedrightleg);
 		}
 		{
@@ -1870,7 +1870,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_zombievillager, bipedleftleg);
 		}
 	}
@@ -1883,7 +1883,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(slimebodies, &cubes[0], -3.0, 17.0, -3.0, 6.0, 6.0, 6.0, 0.0, 0);
 			slimebodies->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, slimebodies->vao, 1, 0);
+			createVAO(cubes, 24, slimebodies->vao, 1, 0, 4);
 			addModelChild(&mod_slime, slimebodies);
 		}
 		{
@@ -1892,7 +1892,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(slimerighteye, &cubes[0], -3.25, 18.0, -3.5, 2.0, 2.0, 2.0, 0.0, 0);
 			slimerighteye->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, slimerighteye->vao, 1, 0);
+			createVAO(cubes, 24, slimerighteye->vao, 1, 0, 4);
 			addModelChild(&mod_slime, slimerighteye);
 		}
 		{
@@ -1901,7 +1901,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(slimelefteye, &cubes[0], 1.25, 18.0, -3.5, 2.0, 2.0, 2.0, 0.0, 0);
 			slimelefteye->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, slimelefteye->vao, 1, 0);
+			createVAO(cubes, 24, slimelefteye->vao, 1, 0, 4);
 			addModelChild(&mod_slime, slimelefteye);
 		}
 		{
@@ -1910,7 +1910,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(slimemouth, &cubes[0], 0.0, 21.0, -3.5, 1.0, 1.0, 1.0, 0.0, 0);
 			slimemouth->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, slimemouth->vao, 1, 0);
+			createVAO(cubes, 24, slimemouth->vao, 1, 0, 4);
 			addModelChild(&mod_slime, slimemouth);
 		}
 	}
@@ -1923,7 +1923,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(slimebodies, &cubes[0], -4.0, 16.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			slimebodies->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, slimebodies->vao, 1, 0);
+			createVAO(cubes, 24, slimebodies->vao, 1, 0, 4);
 			addModelChild(&mod_slimegel, slimebodies);
 		}
 	}
@@ -1936,7 +1936,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments1, &cubes[0], -4.0, 16.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments1->vao, 1, 0);
+			createVAO(cubes, 24, segments1->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments1);
 		}
 		{
@@ -1945,7 +1945,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments2, &cubes[0], -4.0, 17.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments2->vao, 1, 0);
+			createVAO(cubes, 24, segments2->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments2);
 		}
 		{
@@ -1954,7 +1954,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments3, &cubes[0], -4.0, 18.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments3->vao, 1, 0);
+			createVAO(cubes, 24, segments3->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments3);
 		}
 		{
@@ -1963,7 +1963,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments4, &cubes[0], -4.0, 19.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments4->vao, 1, 0);
+			createVAO(cubes, 24, segments4->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments4);
 		}
 		{
@@ -1972,7 +1972,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments5, &cubes[0], -4.0, 20.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments5->vao, 1, 0);
+			createVAO(cubes, 24, segments5->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments5);
 		}
 		{
@@ -1981,7 +1981,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments6, &cubes[0], -4.0, 21.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments6->vao, 1, 0);
+			createVAO(cubes, 24, segments6->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments6);
 		}
 		{
@@ -1990,7 +1990,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments7, &cubes[0], -4.0, 22.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments7->vao, 1, 0);
+			createVAO(cubes, 24, segments7->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments7);
 		}
 		{
@@ -1999,7 +1999,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(segments8, &cubes[0], -4.0, 23.0, -4.0, 8.0, 1.0, 8.0, 0.0, 0);
 			segments8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, segments8->vao, 1, 0);
+			createVAO(cubes, 24, segments8->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, segments8);
 		}
 		{
@@ -2008,7 +2008,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(core, &cubes[0], -2.0, 18.0, -2.0, 4.0, 4.0, 4.0, 0.0, 0);
 			core->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, core->vao, 1, 0);
+			createVAO(cubes, 24, core->vao, 1, 0, 4);
 			addModelChild(&mod_magmacube, core);
 		}
 	}
@@ -2021,7 +2021,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -8.0, -8.0, -8.0, 16.0, 16.0, 16.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, body);
 		}
 		{
@@ -2030,7 +2030,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles1, &cubes[0], -1.0, 0.0, -1.0, 2.0, 8.0, 2.0, 0.0, 0);
 			tentacles1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles1->vao, 1, 0);
+			createVAO(cubes, 24, tentacles1->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles1);
 		}
 		{
@@ -2039,7 +2039,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles2, &cubes[0], -1.0, 0.0, -1.0, 2.0, 13.0, 2.0, 0.0, 0);
 			tentacles2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles2->vao, 1, 0);
+			createVAO(cubes, 24, tentacles2->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles2);
 		}
 		{
@@ -2048,7 +2048,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles3, &cubes[0], -1.0, 0.0, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			tentacles3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles3->vao, 1, 0);
+			createVAO(cubes, 24, tentacles3->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles3);
 		}
 		{
@@ -2057,7 +2057,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles4, &cubes[0], -1.0, 0.0, -1.0, 2.0, 11.0, 2.0, 0.0, 0);
 			tentacles4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles4->vao, 1, 0);
+			createVAO(cubes, 24, tentacles4->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles4);
 		}
 		{
@@ -2066,7 +2066,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles5, &cubes[0], -1.0, 0.0, -1.0, 2.0, 11.0, 2.0, 0.0, 0);
 			tentacles5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles5->vao, 1, 0);
+			createVAO(cubes, 24, tentacles5->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles5);
 		}
 		{
@@ -2075,7 +2075,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles6, &cubes[0], -1.0, 0.0, -1.0, 2.0, 10.0, 2.0, 0.0, 0);
 			tentacles6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles6->vao, 1, 0);
+			createVAO(cubes, 24, tentacles6->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles6);
 		}
 		{
@@ -2084,7 +2084,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles7, &cubes[0], -1.0, 0.0, -1.0, 2.0, 12.0, 2.0, 0.0, 0);
 			tentacles7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles7->vao, 1, 0);
+			createVAO(cubes, 24, tentacles7->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles7);
 		}
 		{
@@ -2093,7 +2093,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles8, &cubes[0], -1.0, 0.0, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			tentacles8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles8->vao, 1, 0);
+			createVAO(cubes, 24, tentacles8->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles8);
 		}
 		{
@@ -2102,7 +2102,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tentacles9, &cubes[0], -1.0, 0.0, -1.0, 2.0, 12.0, 2.0, 0.0, 0);
 			tentacles9->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tentacles9->vao, 1, 0);
+			createVAO(cubes, 24, tentacles9->vao, 1, 0, 4);
 			addModelChild(&mod_ghast, tentacles9);
 		}
 	}
@@ -2115,7 +2115,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidbody, &cubes[0], -6.0, -8.0, -6.0, 12.0, 16.0, 12.0, 0.0, 0);
 			squidbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidbody->vao, 1, 0);
+			createVAO(cubes, 24, squidbody->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidbody);
 		}
 		{
@@ -2124,7 +2124,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles1, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles1->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles1->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles1);
 		}
 		{
@@ -2133,7 +2133,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles2, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles2->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles2->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles2);
 		}
 		{
@@ -2142,7 +2142,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles3, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles3->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles3->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles3);
 		}
 		{
@@ -2151,7 +2151,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles4, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles4->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles4->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles4);
 		}
 		{
@@ -2160,7 +2160,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles5, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles5->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles5->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles5);
 		}
 		{
@@ -2169,7 +2169,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles6, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles6->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles6->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles6);
 		}
 		{
@@ -2178,7 +2178,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles7, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles7->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles7->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles7);
 		}
 		{
@@ -2187,7 +2187,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(squidtentacles8, &cubes[0], -1.0, 0.0, -1.0, 2.0, 18.0, 2.0, 0.0, 0);
 			squidtentacles8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, squidtentacles8->vao, 1, 0);
+			createVAO(cubes, 24, squidtentacles8->vao, 1, 0, 4);
 			addModelChild(&mod_squid, squidtentacles8);
 		}
 	}
@@ -2200,7 +2200,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(villagerhead, &cubes[0], -4.0, -10.0, -4.0, 8.0, 10.0, 8.0, 0.0, 0);
 			villagerhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, villagerhead->vao, 1, 0);
+			createVAO(cubes, 24, villagerhead->vao, 1, 0, 4);
 			addModelChild(&mod_villager, villagerhead);
 		}
 		{
@@ -2210,7 +2210,7 @@ void loadBaseModels() {
 			createModelCube(villagerbody, &cubes[0], -4.0, 0.0, -3.0, 8.0, 12.0, 6.0, 0.0, 0);
 			createModelCube(villagerbody, &cubes[24], -4.0, 0.0, -3.0, 8.0, 18.0, 6.0, 0.5, 0);
 			villagerbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, villagerbody->vao, 1, 0);
+			createVAO(cubes, 48, villagerbody->vao, 1, 0, 4);
 			addModelChild(&mod_villager, villagerbody);
 		}
 		{
@@ -2221,7 +2221,7 @@ void loadBaseModels() {
 			createModelCube(villagerarms, &cubes[24], 4.0, -2.0, -2.0, 4.0, 8.0, 4.0, 0.0, 0);
 			createModelCube(villagerarms, &cubes[48], -4.0, 2.0, -2.0, 8.0, 4.0, 4.0, 0.0, 0);
 			villagerarms->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 72, villagerarms->vao, 1, 0);
+			createVAO(cubes, 72, villagerarms->vao, 1, 0, 4);
 			addModelChild(&mod_villager, villagerarms);
 		}
 		{
@@ -2230,7 +2230,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rightvillagerleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			rightvillagerleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rightvillagerleg->vao, 1, 0);
+			createVAO(cubes, 24, rightvillagerleg->vao, 1, 0, 4);
 			addModelChild(&mod_villager, rightvillagerleg);
 		}
 		{
@@ -2239,7 +2239,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(leftvillagerleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 1);
 			leftvillagerleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, leftvillagerleg->vao, 1, 0);
+			createVAO(cubes, 24, leftvillagerleg->vao, 1, 0, 4);
 			addModelChild(&mod_villager, leftvillagerleg);
 		}
 		{
@@ -2248,7 +2248,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(villagernose, &cubes[0], -1.0, -1.0, -6.0, 2.0, 4.0, 2.0, 0.0, 0);
 			villagernose->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, villagernose->vao, 1, 0);
+			createVAO(cubes, 24, villagernose->vao, 1, 0, 4);
 			addModelChild(&mod_villager, villagernose);
 		}
 	}
@@ -2262,7 +2262,7 @@ void loadBaseModels() {
 			createModelCube(irongolemhead, &cubes[0], -4.0, -12.0, -5.5, 8.0, 10.0, 8.0, 0.0, 0);
 			createModelCube(irongolemhead, &cubes[24], -1.0, -5.0, -7.5, 2.0, 4.0, 2.0, 0.0, 0);
 			irongolemhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, irongolemhead->vao, 1, 0);
+			createVAO(cubes, 48, irongolemhead->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolemhead);
 		}
 		{
@@ -2272,7 +2272,7 @@ void loadBaseModels() {
 			createModelCube(irongolembody, &cubes[0], -9.0, -2.0, -6.0, 18.0, 12.0, 11.0, 0.0, 0);
 			createModelCube(irongolembody, &cubes[24], -4.5, 10.0, -3.0, 9.0, 5.0, 6.0, 0.5, 0);
 			irongolembody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, irongolembody->vao, 1, 0);
+			createVAO(cubes, 48, irongolembody->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolembody);
 		}
 		{
@@ -2281,7 +2281,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(irongolemrightarm, &cubes[0], -13.0, -2.5, -3.0, 4.0, 30.0, 6.0, 0.0, 0);
 			irongolemrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, irongolemrightarm->vao, 1, 0);
+			createVAO(cubes, 24, irongolemrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolemrightarm);
 		}
 		{
@@ -2290,7 +2290,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(irongolemleftarm, &cubes[0], 9.0, -2.5, -3.0, 4.0, 30.0, 6.0, 0.0, 0);
 			irongolemleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, irongolemleftarm->vao, 1, 0);
+			createVAO(cubes, 24, irongolemleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolemleftarm);
 		}
 		{
@@ -2299,7 +2299,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(irongolemleftleg, &cubes[0], -3.5, -3.0, -3.0, 6.0, 16.0, 5.0, 0.0, 0);
 			irongolemleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, irongolemleftleg->vao, 1, 0);
+			createVAO(cubes, 24, irongolemleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolemleftleg);
 		}
 		{
@@ -2308,7 +2308,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(irongolemrightleg, &cubes[0], -3.5, -3.0, -3.0, 6.0, 16.0, 5.0, 0.0, 1);
 			irongolemrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, irongolemrightleg->vao, 1, 0);
+			createVAO(cubes, 24, irongolemrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_irongolem, irongolemrightleg);
 		}
 	}
@@ -2321,7 +2321,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bathead, &cubes[0], -3.0, -3.0, -3.0, 6.0, 6.0, 6.0, 0.0, 0);
 			bathead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bathead->vao, 1, 0);
+			createVAO(cubes, 24, bathead->vao, 1, 0, 4);
 			addModelChild(&mod_bat, bathead);
 		}
 		{
@@ -2331,7 +2331,7 @@ void loadBaseModels() {
 			createModelCube(batbody, &cubes[0], -3.0, 4.0, -3.0, 6.0, 12.0, 6.0, 0.0, 0);
 			createModelCube(batbody, &cubes[24], -5.0, 16.0, 0.0, 10.0, 6.0, 1.0, 0.0, 0);
 			batbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, batbody->vao, 1, 0);
+			createVAO(cubes, 48, batbody->vao, 1, 0, 4);
 			addModelChild(&mod_bat, batbody);
 		}
 		{
@@ -2340,7 +2340,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(batrightwing, &cubes[0], -12.0, 1.0, 1.5, 10.0, 16.0, 1.0, 0.0, 0);
 			batrightwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, batrightwing->vao, 1, 0);
+			createVAO(cubes, 24, batrightwing->vao, 1, 0, 4);
 			addModelChild(&mod_bat, batrightwing);
 		}
 		{
@@ -2349,7 +2349,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(batleftwing, &cubes[0], 2.0, 1.0, 1.5, 10.0, 16.0, 1.0, 0.0, 1);
 			batleftwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, batleftwing->vao, 1, 0);
+			createVAO(cubes, 24, batleftwing->vao, 1, 0, 4);
 			addModelChild(&mod_bat, batleftwing);
 		}
 		{
@@ -2358,7 +2358,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(batouterrightwing, &cubes[0], -8.0, 1.0, 0.0, 8.0, 12.0, 1.0, 0.0, 0);
 			batouterrightwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, batouterrightwing->vao, 1, 0);
+			createVAO(cubes, 24, batouterrightwing->vao, 1, 0, 4);
 			addModelChild(&mod_bat, batouterrightwing);
 		}
 		{
@@ -2367,7 +2367,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(batouterleftwing, &cubes[0], 0.0, 1.0, 0.0, 8.0, 12.0, 1.0, 0.0, 1);
 			batouterleftwing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, batouterleftwing->vao, 1, 0);
+			createVAO(cubes, 24, batouterleftwing->vao, 1, 0, 4);
 			addModelChild(&mod_bat, batouterleftwing);
 		}
 	}
@@ -2384,7 +2384,7 @@ void loadBaseModels() {
 			createModelCube(guardianbody, &cubes[72], -6.0, 8.0, -6.0, 12.0, 2.0, 12.0, 0.0, 0);
 			createModelCube(guardianbody, &cubes[96], -6.0, 22.0, -6.0, 12.0, 2.0, 12.0, 0.0, 0);
 			guardianbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 120, guardianbody->vao, 1, 0);
+			createVAO(cubes, 120, guardianbody->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianbody);
 		}
 		{
@@ -2393,7 +2393,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianeye, &cubes[0], -1.0, 15.0, 0.0, 2.0, 2.0, 1.0, 0.0, 0);
 			guardianeye->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianeye->vao, 1, 0);
+			createVAO(cubes, 24, guardianeye->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianeye);
 		}
 		{
@@ -2402,7 +2402,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines1, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines1->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines1->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines1);
 		}
 		{
@@ -2411,7 +2411,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines2, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines2->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines2->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines2);
 		}
 		{
@@ -2420,7 +2420,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines3, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines3->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines3->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines3);
 		}
 		{
@@ -2429,7 +2429,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines4, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines4->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines4->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines4);
 		}
 		{
@@ -2438,7 +2438,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines5, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines5->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines5->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines5);
 		}
 		{
@@ -2447,7 +2447,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines6, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines6->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines6->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines6);
 		}
 		{
@@ -2456,7 +2456,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines7, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines7->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines7->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines7->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines7);
 		}
 		{
@@ -2465,7 +2465,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines8, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines8->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines8->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines8->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines8);
 		}
 		{
@@ -2474,7 +2474,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines9, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines9->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines9->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines9->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines9);
 		}
 		{
@@ -2483,7 +2483,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines10, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines10->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines10->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines10->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines10);
 		}
 		{
@@ -2492,7 +2492,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines11, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines11->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines11->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines11->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines11);
 		}
 		{
@@ -2501,7 +2501,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardianspines12, &cubes[0], -1.0, -4.5, -1.0, 2.0, 9.0, 2.0, 0.0, 0);
 			guardianspines12->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardianspines12->vao, 1, 0);
+			createVAO(cubes, 24, guardianspines12->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardianspines12);
 		}
 		{
@@ -2510,7 +2510,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardiantail1, &cubes[0], -2.0, 14.0, 7.0, 4.0, 4.0, 8.0, 0.0, 0);
 			guardiantail1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardiantail1->vao, 1, 0);
+			createVAO(cubes, 24, guardiantail1->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardiantail1);
 		}
 		{
@@ -2519,7 +2519,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(guardiantail2, &cubes[0], 0.0, 14.0, 0.0, 3.0, 3.0, 7.0, 0.0, 0);
 			guardiantail2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, guardiantail2->vao, 1, 0);
+			createVAO(cubes, 24, guardiantail2->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardiantail2);
 		}
 		{
@@ -2529,7 +2529,7 @@ void loadBaseModels() {
 			createModelCube(guardiantail3, &cubes[0], 0.0, 14.0, 0.0, 2.0, 2.0, 6.0, 0.0, 0);
 			createModelCube(guardiantail3, &cubes[24], 1.0, 10.5, 3.0, 1.0, 9.0, 9.0, 0.0, 0);
 			guardiantail3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, guardiantail3->vao, 1, 0);
+			createVAO(cubes, 48, guardiantail3->vao, 1, 0, 4);
 			addModelChild(&mod_guardian, guardiantail3);
 		}
 	}
@@ -2542,7 +2542,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(field_187066_a, &cubes[0], -3.0, 0.0, -3.0, 6.0, 6.0, 6.0, 0.0, 0);
 			field_187066_a->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, field_187066_a->vao, 1, 0);
+			createVAO(cubes, 24, field_187066_a->vao, 1, 0, 4);
 			addModelChild(&mod_shulker, field_187066_a);
 		}
 	}
@@ -2560,7 +2560,7 @@ void loadBaseModels() {
 			createModelCube(head, &cubes[96], 3.0, -12.0, -4.0, 2.0, 4.0, 6.0, 0.0, 0);
 			createModelCube(head, &cubes[120], 3.0, -3.0, -22.0, 2.0, 2.0, 4.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 144, head->vao, 1, 0);
+			createVAO(cubes, 144, head->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, head);
 		}
 		{
@@ -2570,7 +2570,7 @@ void loadBaseModels() {
 			createModelCube(spine, &cubes[0], -5.0, -5.0, -5.0, 10.0, 10.0, 10.0, 0.0, 0);
 			createModelCube(spine, &cubes[24], -1.0, -9.0, -3.0, 2.0, 4.0, 6.0, 0.0, 0);
 			spine->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, spine->vao, 1, 0);
+			createVAO(cubes, 48, spine->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, spine);
 		}
 		{
@@ -2579,7 +2579,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(jaw, &cubes[0], -6.0, 0.0, -16.0, 12.0, 4.0, 16.0, 0.0, 0);
 			jaw->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, jaw->vao, 1, 0);
+			createVAO(cubes, 24, jaw->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, jaw);
 		}
 		{
@@ -2591,7 +2591,7 @@ void loadBaseModels() {
 			createModelCube(body, &cubes[48], -1.0, -6.0, 10.0, 2.0, 6.0, 12.0, 0.0, 0);
 			createModelCube(body, &cubes[72], -1.0, -6.0, 30.0, 2.0, 6.0, 12.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 96, body->vao, 1, 0);
+			createVAO(cubes, 96, body->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, body);
 		}
 		{
@@ -2600,7 +2600,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rearleg, &cubes[0], -8.0, -4.0, -8.0, 16.0, 32.0, 16.0, 0.0, 0);
 			rearleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rearleg->vao, 1, 0);
+			createVAO(cubes, 24, rearleg->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, rearleg);
 		}
 		{
@@ -2609,7 +2609,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontleg, &cubes[0], -4.0, -4.0, -4.0, 8.0, 24.0, 8.0, 0.0, 0);
 			frontleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontleg->vao, 1, 0);
+			createVAO(cubes, 24, frontleg->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, frontleg);
 		}
 		{
@@ -2618,7 +2618,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rearlegtip, &cubes[0], -6.0, -2.0, 0.0, 12.0, 32.0, 12.0, 0.0, 0);
 			rearlegtip->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rearlegtip->vao, 1, 0);
+			createVAO(cubes, 24, rearlegtip->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, rearlegtip);
 		}
 		{
@@ -2627,7 +2627,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontlegtip, &cubes[0], -3.0, -1.0, -3.0, 6.0, 24.0, 6.0, 0.0, 0);
 			frontlegtip->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontlegtip->vao, 1, 0);
+			createVAO(cubes, 24, frontlegtip->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, frontlegtip);
 		}
 		{
@@ -2636,7 +2636,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(rearfoot, &cubes[0], -9.0, 0.0, -20.0, 18.0, 6.0, 24.0, 0.0, 0);
 			rearfoot->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, rearfoot->vao, 1, 0);
+			createVAO(cubes, 24, rearfoot->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, rearfoot);
 		}
 		{
@@ -2645,7 +2645,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontfoot, &cubes[0], -4.0, 0.0, -12.0, 8.0, 4.0, 16.0, 0.0, 0);
 			frontfoot->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontfoot->vao, 1, 0);
+			createVAO(cubes, 24, frontfoot->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, frontfoot);
 		}
 		{
@@ -2655,7 +2655,7 @@ void loadBaseModels() {
 			createModelCube(wing, &cubes[0], -56.0, -4.0, -4.0, 56.0, 8.0, 8.0, 0.0, 0);
 			createModelCube(wing, &cubes[24], -56.0, 0.0, 2.0, 56.0, 0.0, 56.0, 0.0, 0);
 			wing->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, wing->vao, 1, 0);
+			createVAO(cubes, 48, wing->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, wing);
 		}
 		{
@@ -2665,7 +2665,7 @@ void loadBaseModels() {
 			createModelCube(wingtip, &cubes[0], -56.0, -2.0, -2.0, 56.0, 4.0, 4.0, 0.0, 0);
 			createModelCube(wingtip, &cubes[24], -56.0, 0.0, 2.0, 56.0, 0.0, 56.0, 0.0, 0);
 			wingtip->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, wingtip->vao, 1, 0);
+			createVAO(cubes, 48, wingtip->vao, 1, 0, 4);
 			addModelChild(&mod_dragon, wingtip);
 		}
 	}
@@ -2678,7 +2678,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(cube, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			cube->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, cube->vao, 1, 0);
+			createVAO(cubes, 24, cube->vao, 1, 0, 4);
 			addModelChild(&mod_endercrystal, cube);
 		}
 		{
@@ -2687,7 +2687,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(glass, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			glass->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, glass->vao, 1, 0);
+			createVAO(cubes, 24, glass->vao, 1, 0, 4);
 			addModelChild(&mod_endercrystal, glass);
 		}
 		{
@@ -2696,7 +2696,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(base, &cubes[0], -6.0, 0.0, -6.0, 12.0, 4.0, 12.0, 0.0, 0);
 			base->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, base->vao, 1, 0);
+			createVAO(cubes, 24, base->vao, 1, 0, 4);
 			addModelChild(&mod_endercrystal, base);
 		}
 	}
@@ -2709,7 +2709,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(cube, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			cube->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, cube->vao, 1, 0);
+			createVAO(cubes, 24, cube->vao, 1, 0, 4);
 			addModelChild(&mod_endercrystalbaseless, cube);
 		}
 		{
@@ -2718,7 +2718,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(glass, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			glass->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, glass->vao, 1, 0);
+			createVAO(cubes, 24, glass->vao, 1, 0, 4);
 			addModelChild(&mod_endercrystalbaseless, glass);
 		}
 	}
@@ -2731,7 +2731,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherhead1, &cubes[0], -10.0, 3.9, -0.5, 20.0, 3.0, 3.0, 0.0, 0);
 			witherhead1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherhead1->vao, 1, 0);
+			createVAO(cubes, 24, witherhead1->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherhead1);
 		}
 		{
@@ -2743,7 +2743,7 @@ void loadBaseModels() {
 			createModelCube(witherhead2, &cubes[48], -4.0, 4.0, 0.5, 11.0, 2.0, 2.0, 0.0, 0);
 			createModelCube(witherhead2, &cubes[72], -4.0, 6.5, 0.5, 11.0, 2.0, 2.0, 0.0, 0);
 			witherhead2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 96, witherhead2->vao, 1, 0);
+			createVAO(cubes, 96, witherhead2->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherhead2);
 		}
 		{
@@ -2752,7 +2752,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherhead3, &cubes[0], 0.0, 0.0, 0.0, 3.0, 6.0, 3.0, 0.0, 0);
 			witherhead3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherhead3->vao, 1, 0);
+			createVAO(cubes, 24, witherhead3->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherhead3);
 		}
 		{
@@ -2761,7 +2761,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody1, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			witherbody1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody1->vao, 1, 0);
+			createVAO(cubes, 24, witherbody1->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherbody1);
 		}
 		{
@@ -2770,7 +2770,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody2, &cubes[0], -4.0, -4.0, -4.0, 6.0, 6.0, 6.0, 0.0, 0);
 			witherbody2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody2->vao, 1, 0);
+			createVAO(cubes, 24, witherbody2->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherbody2);
 		}
 		{
@@ -2779,7 +2779,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody3, &cubes[0], -4.0, -4.0, -4.0, 6.0, 6.0, 6.0, 0.0, 0);
 			witherbody3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody3->vao, 1, 0);
+			createVAO(cubes, 24, witherbody3->vao, 1, 0, 4);
 			addModelChild(&mod_wither, witherbody3);
 		}
 	}
@@ -2792,7 +2792,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherhead1, &cubes[0], -10.0, 3.9, -0.5, 20.0, 3.0, 3.0, 0.5, 0);
 			witherhead1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherhead1->vao, 1, 0);
+			createVAO(cubes, 24, witherhead1->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherhead1);
 		}
 		{
@@ -2804,7 +2804,7 @@ void loadBaseModels() {
 			createModelCube(witherhead2, &cubes[48], -4.0, 4.0, 0.5, 11.0, 2.0, 2.0, 0.5, 0);
 			createModelCube(witherhead2, &cubes[72], -4.0, 6.5, 0.5, 11.0, 2.0, 2.0, 0.5, 0);
 			witherhead2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 96, witherhead2->vao, 1, 0);
+			createVAO(cubes, 96, witherhead2->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherhead2);
 		}
 		{
@@ -2813,7 +2813,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherhead3, &cubes[0], 0.0, 0.0, 0.0, 3.0, 6.0, 3.0, 0.5, 0);
 			witherhead3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherhead3->vao, 1, 0);
+			createVAO(cubes, 24, witherhead3->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherhead3);
 		}
 		{
@@ -2822,7 +2822,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody1, &cubes[0], -4.0, -4.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			witherbody1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody1->vao, 1, 0);
+			createVAO(cubes, 24, witherbody1->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherbody1);
 		}
 		{
@@ -2831,7 +2831,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody2, &cubes[0], -4.0, -4.0, -4.0, 6.0, 6.0, 6.0, 0.5, 0);
 			witherbody2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody2->vao, 1, 0);
+			createVAO(cubes, 24, witherbody2->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherbody2);
 		}
 		{
@@ -2840,7 +2840,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(witherbody3, &cubes[0], -4.0, -4.0, -4.0, 6.0, 6.0, 6.0, 0.5, 0);
 			witherbody3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, witherbody3->vao, 1, 0);
+			createVAO(cubes, 24, witherbody3->vao, 1, 0, 4);
 			addModelChild(&mod_witheraura, witherbody3);
 		}
 	}
@@ -2853,7 +2853,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(field_110723_a, &cubes[0], -3.0, -6.0, -3.0, 6.0, 8.0, 6.0, 0.0, 0);
 			field_110723_a->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, field_110723_a->vao, 1, 0);
+			createVAO(cubes, 24, field_110723_a->vao, 1, 0, 4);
 			addModelChild(&mod_leashknot, field_110723_a);
 		}
 	}
@@ -2866,7 +2866,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(skeletonhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			skeletonhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, skeletonhead->vao, 1, 0);
+			createVAO(cubes, 24, skeletonhead->vao, 1, 0, 4);
 			addModelChild(&mod_witherskull, skeletonhead);
 		}
 	}
@@ -2881,7 +2881,7 @@ void loadBaseModels() {
 			createModelCube(field_187069_a, &cubes[24], -1.0, -4.0, -4.0, 2.0, 8.0, 8.0, 0.0, 0);
 			createModelCube(field_187069_a, &cubes[48], -4.0, -1.0, -4.0, 8.0, 2.0, 8.0, 0.0, 0);
 			field_187069_a->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 72, field_187069_a->vao, 1, 0);
+			createVAO(cubes, 72, field_187069_a->vao, 1, 0, 4);
 			addModelChild(&mod_shulkerbullet, field_187069_a);
 		}
 	}
@@ -2894,7 +2894,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(standrightside, &cubes[0], -3.0, 3.0, -1.0, 2.0, 7.0, 2.0, 0.0, 0);
 			standrightside->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, standrightside->vao, 1, 0);
+			createVAO(cubes, 24, standrightside->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, standrightside);
 		}
 		{
@@ -2903,7 +2903,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(standleftside, &cubes[0], 1.0, 3.0, -1.0, 2.0, 7.0, 2.0, 0.0, 0);
 			standleftside->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, standleftside->vao, 1, 0);
+			createVAO(cubes, 24, standleftside->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, standleftside);
 		}
 		{
@@ -2912,7 +2912,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(standwaist, &cubes[0], -4.0, 10.0, -1.0, 8.0, 2.0, 2.0, 0.0, 0);
 			standwaist->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, standwaist->vao, 1, 0);
+			createVAO(cubes, 24, standwaist->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, standwaist);
 		}
 		{
@@ -2921,7 +2921,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(standbase, &cubes[0], -6.0, 11.0, -6.0, 12.0, 1.0, 12.0, 0.0, 0);
 			standbase->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, standbase->vao, 1, 0);
+			createVAO(cubes, 24, standbase->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, standbase);
 		}
 		{
@@ -2930,7 +2930,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -1.0, -7.0, -1.0, 2.0, 7.0, 2.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedhead);
 		}
 		{
@@ -2939,7 +2939,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedheadwear);
 		}
 		{
@@ -2948,7 +2948,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -6.0, 0.0, -1.5, 12.0, 3.0, 3.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedbody);
 		}
 		{
@@ -2957,7 +2957,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -2.0, -2.0, -1.0, 2.0, 12.0, 2.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedrightarm);
 		}
 		{
@@ -2966,7 +2966,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], 0.0, -2.0, -1.0, 2.0, 12.0, 2.0, 0.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedleftarm);
 		}
 		{
@@ -2975,7 +2975,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 11.0, 2.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedrightleg);
 		}
 		{
@@ -2984,7 +2984,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -1.0, 0.0, -1.0, 2.0, 11.0, 2.0, 0.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstand, bipedleftleg);
 		}
 	}
@@ -2997,7 +2997,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedhead);
 		}
 		{
@@ -3006,7 +3006,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedheadwear);
 		}
 		{
@@ -3015,7 +3015,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.5, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedbody);
 		}
 		{
@@ -3024,7 +3024,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedrightarm);
 		}
 		{
@@ -3033,7 +3033,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedleftarm);
 		}
 		{
@@ -3042,7 +3042,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedrightleg);
 		}
 		{
@@ -3051,7 +3051,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandleggings, bipedleftleg);
 		}
 	}
@@ -3064,7 +3064,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedhead);
 		}
 		{
@@ -3073,7 +3073,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedheadwear);
 		}
 		{
@@ -3082,7 +3082,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 1.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedbody);
 		}
 		{
@@ -3091,7 +3091,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedrightarm);
 		}
 		{
@@ -3100,7 +3100,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedleftarm);
 		}
 		{
@@ -3109,7 +3109,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedrightleg);
 		}
 		{
@@ -3118,7 +3118,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_armorstandarmor, bipedleftleg);
 		}
 	}
@@ -3131,7 +3131,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels1, &cubes[0], -10.0, -8.0, -1.0, 20.0, 16.0, 2.0, 0.0, 0);
 			sidemodels1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels1->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels1->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels1);
 		}
 		{
@@ -3140,7 +3140,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels2, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels2->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels2->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels2);
 		}
 		{
@@ -3149,7 +3149,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels3, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels3->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels3->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels3);
 		}
 		{
@@ -3158,7 +3158,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels4, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels4->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels4->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels4);
 		}
 		{
@@ -3167,7 +3167,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels5, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels5->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels5->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels5);
 		}
 		{
@@ -3176,7 +3176,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels6, &cubes[0], -9.0, -7.0, -1.0, 18.0, 14.0, 1.0, 0.0, 0);
 			sidemodels6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels6->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels6->vao, 1, 0, 4);
 			addModelChild(&mod_minecarttnt, sidemodels6);
 		}
 	}
@@ -3189,7 +3189,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels1, &cubes[0], -10.0, -8.0, -1.0, 20.0, 16.0, 2.0, 0.0, 0);
 			sidemodels1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels1->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels1->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels1);
 		}
 		{
@@ -3198,7 +3198,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels2, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels2->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels2->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels2);
 		}
 		{
@@ -3207,7 +3207,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels3, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels3->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels3->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels3);
 		}
 		{
@@ -3216,7 +3216,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels4, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels4->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels4->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels4);
 		}
 		{
@@ -3225,7 +3225,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels5, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels5->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels5->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels5);
 		}
 		{
@@ -3234,7 +3234,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels6, &cubes[0], -9.0, -7.0, -1.0, 18.0, 14.0, 1.0, 0.0, 0);
 			sidemodels6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels6->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels6->vao, 1, 0, 4);
 			addModelChild(&mod_minecartmobspawner, sidemodels6);
 		}
 	}
@@ -3247,7 +3247,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels1, &cubes[0], -10.0, -8.0, -1.0, 20.0, 16.0, 2.0, 0.0, 0);
 			sidemodels1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels1->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels1->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels1);
 		}
 		{
@@ -3256,7 +3256,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels2, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels2->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels2->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels2);
 		}
 		{
@@ -3265,7 +3265,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels3, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels3->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels3->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels3);
 		}
 		{
@@ -3274,7 +3274,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels4, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels4->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels4->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels4);
 		}
 		{
@@ -3283,7 +3283,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels5, &cubes[0], -8.0, -9.0, -1.0, 16.0, 8.0, 2.0, 0.0, 0);
 			sidemodels5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels5->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels5->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels5);
 		}
 		{
@@ -3292,7 +3292,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(sidemodels6, &cubes[0], -9.0, -7.0, -1.0, 18.0, 14.0, 1.0, 0.0, 0);
 			sidemodels6->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, sidemodels6->vao, 1, 0);
+			createVAO(cubes, 24, sidemodels6->vao, 1, 0, 4);
 			addModelChild(&mod_minecart, sidemodels6);
 		}
 	}
@@ -3305,7 +3305,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(boatsides1, &cubes[0], -14.0, -9.0, -3.0, 28.0, 16.0, 3.0, 0.0, 0);
 			boatsides1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, boatsides1->vao, 1, 0);
+			createVAO(cubes, 24, boatsides1->vao, 1, 0, 4);
 			addModelChild(&mod_boat, boatsides1);
 		}
 		{
@@ -3314,7 +3314,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(boatsides2, &cubes[0], -13.0, -7.0, -1.0, 18.0, 6.0, 2.0, 0.0, 0);
 			boatsides2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, boatsides2->vao, 1, 0);
+			createVAO(cubes, 24, boatsides2->vao, 1, 0, 4);
 			addModelChild(&mod_boat, boatsides2);
 		}
 		{
@@ -3323,7 +3323,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(boatsides3, &cubes[0], -8.0, -7.0, -1.0, 16.0, 6.0, 2.0, 0.0, 0);
 			boatsides3->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, boatsides3->vao, 1, 0);
+			createVAO(cubes, 24, boatsides3->vao, 1, 0, 4);
 			addModelChild(&mod_boat, boatsides3);
 		}
 		{
@@ -3332,7 +3332,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(boatsides4, &cubes[0], -14.0, -7.0, -1.0, 28.0, 6.0, 2.0, 0.0, 0);
 			boatsides4->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, boatsides4->vao, 1, 0);
+			createVAO(cubes, 24, boatsides4->vao, 1, 0, 4);
 			addModelChild(&mod_boat, boatsides4);
 		}
 		{
@@ -3341,7 +3341,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(boatsides5, &cubes[0], -14.0, -7.0, -1.0, 28.0, 6.0, 2.0, 0.0, 0);
 			boatsides5->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, boatsides5->vao, 1, 0);
+			createVAO(cubes, 24, boatsides5->vao, 1, 0, 4);
 			addModelChild(&mod_boat, boatsides5);
 		}
 		{
@@ -3351,7 +3351,7 @@ void loadBaseModels() {
 			createModelCube(field_187057_b1, &cubes[0], -1.0, 0.0, -5.0, 2.0, 2.0, 18.0, 0.0, 0);
 			createModelCube(field_187057_b1, &cubes[24], -1.001, -3.0, 8.0, 1.0, 6.0, 7.0, 0.0, 0);
 			field_187057_b1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, field_187057_b1->vao, 1, 0);
+			createVAO(cubes, 48, field_187057_b1->vao, 1, 0, 4);
 			addModelChild(&mod_boat, field_187057_b1);
 		}
 		{
@@ -3361,7 +3361,7 @@ void loadBaseModels() {
 			createModelCube(field_187057_b2, &cubes[0], -1.0, 0.0, -5.0, 2.0, 2.0, 18.0, 0.0, 0);
 			createModelCube(field_187057_b2, &cubes[24], 0.001, -3.0, 8.0, 1.0, 6.0, 7.0, 0.0, 0);
 			field_187057_b2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 48, field_187057_b2->vao, 1, 0);
+			createVAO(cubes, 48, field_187057_b2->vao, 1, 0, 4);
 			addModelChild(&mod_boat, field_187057_b2);
 		}
 		{
@@ -3370,7 +3370,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(field_187058_c, &cubes[0], -14.0, -9.0, -3.0, 28.0, 16.0, 3.0, 0.0, 0);
 			field_187058_c->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, field_187058_c->vao, 1, 0);
+			createVAO(cubes, 24, field_187058_c->vao, 1, 0, 4);
 			addModelChild(&mod_boat, field_187058_c);
 		}
 	}
@@ -3383,7 +3383,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(head, &cubes[0], -2.5, -10.0, -1.5, 5.0, 5.0, 7.0, 0.0, 0);
 			head->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, head->vao, 1, 0);
+			createVAO(cubes, 24, head->vao, 1, 0, 4);
 			addModelChild(&mod_horse, head);
 		}
 		{
@@ -3392,7 +3392,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseunk2, &cubes[0], -2.0, -10.0, -7.0, 4.0, 3.0, 6.0, 0.0, 0);
 			horseunk2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseunk2->vao, 1, 0);
+			createVAO(cubes, 24, horseunk2->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseunk2);
 		}
 		{
@@ -3401,7 +3401,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseunk1, &cubes[0], -2.0, -7.0, -6.5, 4.0, 2.0, 5.0, 0.0, 0);
 			horseunk1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseunk1->vao, 1, 0);
+			createVAO(cubes, 24, horseunk1->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseunk1);
 		}
 		{
@@ -3410,7 +3410,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseleftear, &cubes[0], 0.45, -12.0, 4.0, 2.0, 3.0, 1.0, 0.0, 0);
 			horseleftear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseleftear->vao, 1, 0);
+			createVAO(cubes, 24, horseleftear->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseleftear);
 		}
 		{
@@ -3419,7 +3419,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horserightear, &cubes[0], -2.45, -12.0, 4.0, 2.0, 3.0, 1.0, 0.0, 0);
 			horserightear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horserightear->vao, 1, 0);
+			createVAO(cubes, 24, horserightear->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horserightear);
 		}
 		{
@@ -3428,7 +3428,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(muleleftear, &cubes[0], -2.0, -16.0, 4.0, 2.0, 7.0, 1.0, 0.0, 0);
 			muleleftear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, muleleftear->vao, 1, 0);
+			createVAO(cubes, 24, muleleftear->vao, 1, 0, 4);
 			addModelChild(&mod_horse, muleleftear);
 		}
 		{
@@ -3437,7 +3437,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(mulerightear, &cubes[0], 0.0, -16.0, 4.0, 2.0, 7.0, 1.0, 0.0, 0);
 			mulerightear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, mulerightear->vao, 1, 0);
+			createVAO(cubes, 24, mulerightear->vao, 1, 0, 4);
 			addModelChild(&mod_horse, mulerightear);
 		}
 		{
@@ -3446,7 +3446,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(neck, &cubes[0], -2.05, -9.8, -2.0, 4.0, 14.0, 8.0, 0.0, 0);
 			neck->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, neck->vao, 1, 0);
+			createVAO(cubes, 24, neck->vao, 1, 0, 4);
 			addModelChild(&mod_horse, neck);
 		}
 		{
@@ -3455,7 +3455,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horsefaceropes, &cubes[0], -2.5, -10.1, -7.0, 5.0, 5.0, 12.0, 0.2, 0);
 			horsefaceropes->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horsefaceropes->vao, 1, 0);
+			createVAO(cubes, 24, horsefaceropes->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horsefaceropes);
 		}
 		{
@@ -3464,7 +3464,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(mane, &cubes[0], -1.0, -11.5, 5.0, 2.0, 16.0, 4.0, 0.0, 0);
 			mane->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, mane->vao, 1, 0);
+			createVAO(cubes, 24, mane->vao, 1, 0, 4);
 			addModelChild(&mod_horse, mane);
 		}
 		{
@@ -3473,7 +3473,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(body, &cubes[0], -5.0, -8.0, -19.0, 10.0, 10.0, 24.0, 0.0, 0);
 			body->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, body->vao, 1, 0);
+			createVAO(cubes, 24, body->vao, 1, 0, 4);
 			addModelChild(&mod_horse, body);
 		}
 		{
@@ -3482,7 +3482,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tailbase, &cubes[0], -1.0, -1.0, 0.0, 2.0, 2.0, 3.0, 0.0, 0);
 			tailbase->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tailbase->vao, 1, 0);
+			createVAO(cubes, 24, tailbase->vao, 1, 0, 4);
 			addModelChild(&mod_horse, tailbase);
 		}
 		{
@@ -3491,7 +3491,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tailmiddle, &cubes[0], -1.5, -2.0, 3.0, 3.0, 4.0, 7.0, 0.0, 0);
 			tailmiddle->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tailmiddle->vao, 1, 0);
+			createVAO(cubes, 24, tailmiddle->vao, 1, 0, 4);
 			addModelChild(&mod_horse, tailmiddle);
 		}
 		{
@@ -3500,7 +3500,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(tailtip, &cubes[0], -1.5, -4.5, 9.0, 3.0, 4.0, 7.0, 0.0, 0);
 			tailtip->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, tailtip->vao, 1, 0);
+			createVAO(cubes, 24, tailtip->vao, 1, 0, 4);
 			addModelChild(&mod_horse, tailtip);
 		}
 		{
@@ -3509,7 +3509,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backleftleg, &cubes[0], -2.5, -2.0, -2.5, 4.0, 9.0, 5.0, 0.0, 0);
 			backleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backleftleg->vao, 1, 0);
+			createVAO(cubes, 24, backleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backleftleg);
 		}
 		{
@@ -3518,7 +3518,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backleftshin, &cubes[0], -2.0, 0.0, -1.5, 3.0, 5.0, 3.0, 0.0, 0);
 			backleftshin->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backleftshin->vao, 1, 0);
+			createVAO(cubes, 24, backleftshin->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backleftshin);
 		}
 		{
@@ -3527,7 +3527,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backlefthoof, &cubes[0], -2.5, 5.1, -2.0, 4.0, 3.0000005, 4.0, 0.0, 0);
 			backlefthoof->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backlefthoof->vao, 1, 0);
+			createVAO(cubes, 24, backlefthoof->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backlefthoof);
 		}
 		{
@@ -3536,7 +3536,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backrightleg, &cubes[0], -1.5, -2.0, -2.5, 4.0, 9.0, 5.0, 0.0, 0);
 			backrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backrightleg->vao, 1, 0);
+			createVAO(cubes, 24, backrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backrightleg);
 		}
 		{
@@ -3545,7 +3545,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backrightshin, &cubes[0], -1.0, 0.0, -1.5, 3.0, 5.0, 3.0, 0.0, 0);
 			backrightshin->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backrightshin->vao, 1, 0);
+			createVAO(cubes, 24, backrightshin->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backrightshin);
 		}
 		{
@@ -3554,7 +3554,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(backrighthoof, &cubes[0], -1.5, 5.1, -2.0, 4.0, 3.0000005, 4.0, 0.0, 0);
 			backrighthoof->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, backrighthoof->vao, 1, 0);
+			createVAO(cubes, 24, backrighthoof->vao, 1, 0, 4);
 			addModelChild(&mod_horse, backrighthoof);
 		}
 		{
@@ -3563,7 +3563,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontleftleg, &cubes[0], -1.9, -1.0, -2.1, 3.0, 8.0, 4.0, 0.0, 0);
 			frontleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontleftleg->vao, 1, 0);
+			createVAO(cubes, 24, frontleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontleftleg);
 		}
 		{
@@ -3572,7 +3572,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontleftshin, &cubes[0], -1.9, 0.0, -1.6, 3.0, 5.0, 3.0, 0.0, 0);
 			frontleftshin->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontleftshin->vao, 1, 0);
+			createVAO(cubes, 24, frontleftshin->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontleftshin);
 		}
 		{
@@ -3581,7 +3581,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontlefthoof, &cubes[0], -2.4, 5.1, -2.1, 4.0, 3.0000005, 4.0, 0.0, 0);
 			frontlefthoof->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontlefthoof->vao, 1, 0);
+			createVAO(cubes, 24, frontlefthoof->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontlefthoof);
 		}
 		{
@@ -3590,7 +3590,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontrightleg, &cubes[0], -1.1, -1.0, -2.1, 3.0, 8.0, 4.0, 0.0, 0);
 			frontrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontrightleg->vao, 1, 0);
+			createVAO(cubes, 24, frontrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontrightleg);
 		}
 		{
@@ -3599,7 +3599,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontrightshin, &cubes[0], -1.1, 0.0, -1.6, 3.0, 5.0, 3.0, 0.0, 0);
 			frontrightshin->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontrightshin->vao, 1, 0);
+			createVAO(cubes, 24, frontrightshin->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontrightshin);
 		}
 		{
@@ -3608,7 +3608,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(frontrighthoof, &cubes[0], -1.6, 5.1, -2.1, 4.0, 3.0000005, 4.0, 0.0, 0);
 			frontrighthoof->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, frontrighthoof->vao, 1, 0);
+			createVAO(cubes, 24, frontrighthoof->vao, 1, 0, 4);
 			addModelChild(&mod_horse, frontrighthoof);
 		}
 		{
@@ -3617,7 +3617,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(muleleftchest, &cubes[0], -3.0, 0.0, 0.0, 8.0, 8.0, 3.0, 0.0, 0);
 			muleleftchest->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, muleleftchest->vao, 1, 0);
+			createVAO(cubes, 24, muleleftchest->vao, 1, 0, 4);
 			addModelChild(&mod_horse, muleleftchest);
 		}
 		{
@@ -3626,7 +3626,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(mulerightchest, &cubes[0], -3.0, 0.0, 0.0, 8.0, 8.0, 3.0, 0.0, 0);
 			mulerightchest->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, mulerightchest->vao, 1, 0);
+			createVAO(cubes, 24, mulerightchest->vao, 1, 0, 4);
 			addModelChild(&mod_horse, mulerightchest);
 		}
 		{
@@ -3635,7 +3635,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horsesaddlebottom, &cubes[0], -5.0, 0.0, -3.0, 10.0, 1.0, 8.0, 0.0, 0);
 			horsesaddlebottom->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horsesaddlebottom->vao, 1, 0);
+			createVAO(cubes, 24, horsesaddlebottom->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horsesaddlebottom);
 		}
 		{
@@ -3644,7 +3644,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horsesaddlefront, &cubes[0], -1.5, -1.0, -3.0, 3.0, 1.0, 2.0, 0.0, 0);
 			horsesaddlefront->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horsesaddlefront->vao, 1, 0);
+			createVAO(cubes, 24, horsesaddlefront->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horsesaddlefront);
 		}
 		{
@@ -3653,7 +3653,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horsesaddleback, &cubes[0], -4.0, -1.0, 3.0, 8.0, 1.0, 2.0, 0.0, 0);
 			horsesaddleback->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horsesaddleback->vao, 1, 0);
+			createVAO(cubes, 24, horsesaddleback->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horsesaddleback);
 		}
 		{
@@ -3662,7 +3662,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseleftsaddlerope, &cubes[0], -0.5, 0.0, -0.5, 1.0, 6.0, 1.0, 0.0, 0);
 			horseleftsaddlerope->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseleftsaddlerope->vao, 1, 0);
+			createVAO(cubes, 24, horseleftsaddlerope->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseleftsaddlerope);
 		}
 		{
@@ -3671,7 +3671,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseleftsaddlemetal, &cubes[0], -0.5, 6.0, -1.0, 1.0, 2.0, 2.0, 0.0, 0);
 			horseleftsaddlemetal->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseleftsaddlemetal->vao, 1, 0);
+			createVAO(cubes, 24, horseleftsaddlemetal->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseleftsaddlemetal);
 		}
 		{
@@ -3680,7 +3680,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horserightsaddlerope, &cubes[0], -0.5, 0.0, -0.5, 1.0, 6.0, 1.0, 0.0, 0);
 			horserightsaddlerope->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horserightsaddlerope->vao, 1, 0);
+			createVAO(cubes, 24, horserightsaddlerope->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horserightsaddlerope);
 		}
 		{
@@ -3689,7 +3689,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horserightsaddlemetal, &cubes[0], -0.5, 6.0, -1.0, 1.0, 2.0, 2.0, 0.0, 0);
 			horserightsaddlemetal->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horserightsaddlemetal->vao, 1, 0);
+			createVAO(cubes, 24, horserightsaddlemetal->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horserightsaddlemetal);
 		}
 		{
@@ -3698,7 +3698,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseleftfacemetal, &cubes[0], 1.5, -8.0, -4.0, 1.0, 2.0, 2.0, 0.0, 0);
 			horseleftfacemetal->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseleftfacemetal->vao, 1, 0);
+			createVAO(cubes, 24, horseleftfacemetal->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseleftfacemetal);
 		}
 		{
@@ -3707,7 +3707,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horserightfacemetal, &cubes[0], -2.5, -8.0, -4.0, 1.0, 2.0, 2.0, 0.0, 0);
 			horserightfacemetal->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horserightfacemetal->vao, 1, 0);
+			createVAO(cubes, 24, horserightfacemetal->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horserightfacemetal);
 		}
 		{
@@ -3716,7 +3716,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horseleftrein, &cubes[0], 2.6, -6.0, -6.0, 0.0, 3.0, 16.0, 0.0, 0);
 			horseleftrein->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horseleftrein->vao, 1, 0);
+			createVAO(cubes, 24, horseleftrein->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horseleftrein);
 		}
 		{
@@ -3725,7 +3725,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(horserightrein, &cubes[0], -2.6, -6.0, -6.0, 0.0, 3.0, 16.0, 0.0, 0);
 			horserightrein->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, horserightrein->vao, 1, 0);
+			createVAO(cubes, 24, horserightrein->vao, 1, 0, 4);
 			addModelChild(&mod_horse, horserightrein);
 		}
 	}
@@ -3738,7 +3738,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarmwear, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedleftarmwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarmwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarmwear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedleftarmwear);
 		}
 		{
@@ -3747,7 +3747,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarmwear, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedrightarmwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarmwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarmwear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedrightarmwear);
 		}
 		{
@@ -3756,7 +3756,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftlegwear, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedleftlegwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftlegwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftlegwear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedleftlegwear);
 		}
 		{
@@ -3765,7 +3765,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightlegwear, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedrightlegwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightlegwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightlegwear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedrightlegwear);
 		}
 		{
@@ -3774,7 +3774,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbodywear, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.25, 0);
 			bipedbodywear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbodywear->vao, 1, 0);
+			createVAO(cubes, 24, bipedbodywear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedbodywear);
 		}
 		{
@@ -3783,7 +3783,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedhead);
 		}
 		{
@@ -3792,7 +3792,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedheadwear);
 		}
 		{
@@ -3801,7 +3801,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedbody);
 		}
 		{
@@ -3810,7 +3810,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedrightarm);
 		}
 		{
@@ -3819,7 +3819,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedleftarm);
 		}
 		{
@@ -3828,7 +3828,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedrightleg);
 		}
 		{
@@ -3837,7 +3837,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_player, bipedleftleg);
 		}
 	}
@@ -3850,7 +3850,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedhead);
 		}
 		{
@@ -3859,7 +3859,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedheadwear);
 		}
 		{
@@ -3868,7 +3868,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.5, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedbody);
 		}
 		{
@@ -3877,7 +3877,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedrightarm);
 		}
 		{
@@ -3886,7 +3886,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedleftarm);
 		}
 		{
@@ -3895,7 +3895,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedrightleg);
 		}
 		{
@@ -3904,7 +3904,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_playerleggings, bipedleftleg);
 		}
 	}
@@ -3917,7 +3917,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedhead);
 		}
 		{
@@ -3926,7 +3926,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedheadwear);
 		}
 		{
@@ -3935,7 +3935,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 1.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedbody);
 		}
 		{
@@ -3944,7 +3944,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedrightarm);
 		}
 		{
@@ -3953,7 +3953,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedleftarm);
 		}
 		{
@@ -3962,7 +3962,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedrightleg);
 		}
 		{
@@ -3971,7 +3971,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_playerarmor, bipedleftleg);
 		}
 	}
@@ -3984,7 +3984,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wing1, &cubes[0], 0.0, 0.0, 0.0, 10.0, 20.0, 2.0, 1.0, 1);
 			wing1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wing1->vao, 1, 0);
+			createVAO(cubes, 24, wing1->vao, 1, 0, 4);
 			addModelChild(&mod_playerelytra, wing1);
 		}
 		{
@@ -3993,7 +3993,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wing2, &cubes[0], -10.0, 0.0, 0.0, 10.0, 20.0, 2.0, 1.0, 0);
 			wing2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wing2->vao, 1, 0);
+			createVAO(cubes, 24, wing2->vao, 1, 0, 4);
 			addModelChild(&mod_playerelytra, wing2);
 		}
 	}
@@ -4006,7 +4006,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarmwear, &cubes[0], -1.0, -2.0, -2.0, 3.0, 12.0, 4.0, 0.25, 0);
 			bipedleftarmwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarmwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarmwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedleftarmwear);
 		}
 		{
@@ -4015,7 +4015,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarmwear, &cubes[0], -2.0, -2.0, -2.0, 3.0, 12.0, 4.0, 0.25, 0);
 			bipedrightarmwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarmwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarmwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedrightarmwear);
 		}
 		{
@@ -4024,7 +4024,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftlegwear, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedleftlegwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftlegwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftlegwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedleftlegwear);
 		}
 		{
@@ -4033,7 +4033,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightlegwear, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.25, 0);
 			bipedrightlegwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightlegwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightlegwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedrightlegwear);
 		}
 		{
@@ -4042,7 +4042,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbodywear, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.25, 0);
 			bipedbodywear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbodywear->vao, 1, 0);
+			createVAO(cubes, 24, bipedbodywear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedbodywear);
 		}
 		{
@@ -4051,7 +4051,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedhead);
 		}
 		{
@@ -4060,7 +4060,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedheadwear);
 		}
 		{
@@ -4069,7 +4069,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedbody);
 		}
 		{
@@ -4078,7 +4078,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -2.0, -2.0, -2.0, 3.0, 12.0, 4.0, 0.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedrightarm);
 		}
 		{
@@ -4087,7 +4087,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 3.0, 12.0, 4.0, 0.0, 0);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedleftarm);
 		}
 		{
@@ -4096,7 +4096,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedrightleg);
 		}
 		{
@@ -4105,7 +4105,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.0, 0);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayer, bipedleftleg);
 		}
 	}
@@ -4118,7 +4118,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 0.5, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedhead);
 		}
 		{
@@ -4127,7 +4127,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedheadwear);
 		}
 		{
@@ -4136,7 +4136,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 0.5, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedbody);
 		}
 		{
@@ -4145,7 +4145,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedrightarm);
 		}
 		{
@@ -4154,7 +4154,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedleftarm);
 		}
 		{
@@ -4163,7 +4163,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedrightleg);
 		}
 		{
@@ -4172,7 +4172,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 0.5, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayerleggings, bipedleftleg);
 		}
 	}
@@ -4185,7 +4185,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedhead, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.0, 0);
 			bipedhead->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedhead->vao, 1, 0);
+			createVAO(cubes, 24, bipedhead->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedhead);
 		}
 		{
@@ -4194,7 +4194,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedheadwear, &cubes[0], -4.0, -8.0, -4.0, 8.0, 8.0, 8.0, 1.5, 0);
 			bipedheadwear->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedheadwear->vao, 1, 0);
+			createVAO(cubes, 24, bipedheadwear->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedheadwear);
 		}
 		{
@@ -4203,7 +4203,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedbody, &cubes[0], -4.0, 0.0, -2.0, 8.0, 12.0, 4.0, 1.0, 0);
 			bipedbody->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedbody->vao, 1, 0);
+			createVAO(cubes, 24, bipedbody->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedbody);
 		}
 		{
@@ -4212,7 +4212,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightarm, &cubes[0], -3.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedrightarm);
 		}
 		{
@@ -4221,7 +4221,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftarm, &cubes[0], -1.0, -2.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftarm->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftarm->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftarm->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedleftarm);
 		}
 		{
@@ -4230,7 +4230,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedrightleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 0);
 			bipedrightleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedrightleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedrightleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedrightleg);
 		}
 		{
@@ -4239,7 +4239,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(bipedleftleg, &cubes[0], -2.0, 0.0, -2.0, 4.0, 12.0, 4.0, 1.0, 1);
 			bipedleftleg->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, bipedleftleg->vao, 1, 0);
+			createVAO(cubes, 24, bipedleftleg->vao, 1, 0, 4);
 			addModelChild(&mod_splayerarmor, bipedleftleg);
 		}
 	}
@@ -4252,7 +4252,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wing1, &cubes[0], 0.0, 0.0, 0.0, 10.0, 20.0, 2.0, 1.0, 1);
 			wing1->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wing1->vao, 1, 0);
+			createVAO(cubes, 24, wing1->vao, 1, 0, 4);
 			addModelChild(&mod_splayerelytra, wing1);
 		}
 		{
@@ -4261,7 +4261,7 @@ void loadBaseModels() {
 			struct vertex_tex cubes[24];
 			createModelCube(wing2, &cubes[0], -10.0, 0.0, 0.0, 10.0, 20.0, 2.0, 1.0, 0);
 			wing2->vao = malloc(sizeof(struct vao));
-			createVAO(cubes, 24, wing2->vao, 1, 0);
+			createVAO(cubes, 24, wing2->vao, 1, 0, 4);
 			addModelChild(&mod_splayerelytra, wing2);
 		}
 	}

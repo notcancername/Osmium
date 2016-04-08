@@ -154,38 +154,38 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z + inset);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z + inset);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z + inset);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z + inset);
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z + inset);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z + inset);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z + inset);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z + inset);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z + inset);
 		//
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z - inset + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z - inset + 1.);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z - inset + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z - inset + 1.);
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff, z - inset + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + 1., y - yoff + 1., z - inset + 1.);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z - inset + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff + 1., z - inset + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x, y - yoff, z - inset + 1.);
 		//
 		//
 		//
@@ -193,38 +193,38 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z + 1.);
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z + 1.);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x + inset, y - yoff, z);
 		//
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z + 1.);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z + 1.);
 		//
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z + 1.);
 		virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z + 1.);
-		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z);
 		virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff + 1., z);
+		virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+		virtVertex3f(&(*vex)[(*cvec)++], x - inset + 1., y - yoff, z);
 	} else if (blk >> 4 == BLK_FARMLAND >> 4) {
 		if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + 6 * 4 * sizeof(struct vertex_tex)) {
 			*vexs += 2048 * 4 * 6 * sizeof(struct vertex_tex);
@@ -1783,38 +1783,38 @@ void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, u
 				virtVertex3f(&(*vex)[(*cvec)++], x, y, z);
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x, y + 1., z);
-				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z + 1.);
 				virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y + 1., z + 1.);
+				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z + 1.);
 				//
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z);
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y + 1., z);
-				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-				virtVertex3f(&(*vex)[(*cvec)++], x, y, z + 1.);
 				virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x, y + 1., z + 1.);
+				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+				virtVertex3f(&(*vex)[(*cvec)++], x, y, z + 1.);
 				//
 				//
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z + 1.);
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y + 1., z + 1.);
-				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-				virtVertex3f(&(*vex)[(*cvec)++], x, y, z);
 				virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x, y + 1., z);
+				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+				virtVertex3f(&(*vex)[(*cvec)++], x, y, z);
 				//
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty2);
 				virtVertex3f(&(*vex)[(*cvec)++], x, y, z + 1.);
 				virtTexCoord2f(&(*vex)[*cvec], tx2, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x, y + 1., z + 1.);
-				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
-				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z);
 				virtTexCoord2f(&(*vex)[*cvec], tx1, ty1);
 				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y + 1., z);
+				virtTexCoord2f(&(*vex)[*cvec], tx1, ty2);
+				virtVertex3f(&(*vex)[(*cvec)++], x + 1., y, z);
 				return;
 			}
 			if (*vexs <= (*cvec * sizeof(struct vertex_tex)) + fc * 4 * sizeof(struct vertex_tex)) {

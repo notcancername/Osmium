@@ -33,23 +33,39 @@ void virtTexCoord2f(struct vertex_tex* vert, float x, float y) {
 	vert->texY = y;
 }
 
-void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite) {
+void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, uint16_t restart) {
 	if (!overwrite) glGenVertexArrays(1, &vao->vao);
 	glBindVertexArray(vao->vao);
-	if (!overwrite) glGenBuffers(1, &vao->vbo);
+	if (!overwrite) {
+		glGenBuffers(1, &vao->vbo);
+		glGenBuffers(1, &vao->vib);
+	}
 	glBindBuffer(GL_ARRAY_BUFFER, vao->vbo);
 	glBufferData(GL_ARRAY_BUFFER, count * (textures ? sizeof(struct vertex_tex) : sizeof(struct vertex)), verticies, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vao->vib);
+	vao->index_count = count; // restart ? (count + (count / restart) - 1) : count;
+	vao->vertex_count = count;
+	uint16_t indicies[vao->index_count];
+	size_t vi = 0;
+	for (size_t i = 0; i < vao->index_count; i++) {
+		//if (restart && i > 0 && ((i + 1) % (restart + 1)) == 0) {
+		//	indicies[i] = 16000;
+		//} else {
+		indicies[i] = vi++;
+		//}
+	}
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * vao->index_count, indicies, GL_STATIC_DRAW);
 	glVertexPointer(3, GL_FLOAT, textures ? sizeof(struct vertex_tex) : sizeof(struct vertex), 0);
 	if (textures) glTexCoordPointer(2, GL_FLOAT, sizeof(struct vertex_tex), (void*) (sizeof(struct vertex)));
 	glEnableClientState (GL_VERTEX_ARRAY);
 	if (textures) glEnableClientState (GL_TEXTURE_COORD_ARRAY);
 	glBindVertexArray(0);
 	vao->tex = textures;
-	vao->vertex_count = count;
 }
 
 void deleteVAO(struct vao* vao) {
 	glDeleteBuffers(1, &vao->vbo);
+	glDeleteBuffers(1, &vao->vib);
 	glDeleteVertexArrays(1, &vao->vao);
 }
 
@@ -68,20 +84,20 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[2], ty2[2]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx2[2], ty1[2]);
-		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[2], ty1[2]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx2[2], ty1[2]);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 	}
 	if (faceMask & 0x02) {
 		virtTexCoord2f(&vrt[vx], tx2[3], ty2[3]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[3], ty1[3]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[3], ty2[3]);
-		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[3], ty1[3]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[3], ty2[3]);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 	}
 	//
 	if (faceMask & 0x04) {
@@ -89,20 +105,20 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[0], ty2[0]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx2[0], ty1[0]);
-		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[0], ty2[0]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx2[0], ty1[0]);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 	}
 	if (faceMask & 0x08) {
 		virtTexCoord2f(&vrt[vx], tx1[1], ty1[1]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[1], ty1[1]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[1], ty2[1]);
-		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[1], ty2[1]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[1], ty2[1]);
+		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 	}
 	//
 	if (faceMask & 0x10) {
@@ -110,31 +126,21 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[4], ty1[4]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[4], ty2[4]);
-		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[4], ty1[4]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[4], ty2[4]);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 	}
 	if (faceMask & 0x20) {
 		virtTexCoord2f(&vrt[vx], tx2[5], ty2[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[5], ty2[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx2[5], ty1[5]);
-		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[5], ty1[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx2[5], ty1[5]);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 	}
-}
-
-void createBBVao(struct boundingbox* bb) {
-	struct vertex_tex vrt[6 * 4];
-	float tg[6];
-	for (int i = 0; i < 6; i++)
-		tg[i] = 0.;
-	createMultSub((float) (bb->maxX - bb->minX) / 2., (float) (bb->maxY - bb->minY) / 2., (float) (bb->maxZ - bb->minZ) / 2., vrt, (float) (bb->maxX + bb->minX) / 2., (float) (bb->maxY + bb->minY) / 2., (float) (bb->maxZ + bb->minZ) / 2., 0xFF, tg, tg, tg, tg);
-	bb->ovao = malloc(sizeof(struct vao));
-	createVAO(vrt, 6 * 4, bb->ovao, 1, 0);
 }
 
 void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
@@ -144,21 +150,13 @@ void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, flo
 void createTexCube(float size, struct vao* vao) {
 	struct vertex_tex vrt[24];
 	createSubCube(size, vrt, 0xFF, 0., 0., 0., 0., 0., 1., 1.);
-	createVAO(vrt, 24, vao, 1, 0);
+	createVAO(vrt, 24, vao, 1, 0, 4);
 }
 
 void drawSkeleton(struct vao* vao) {
 	if (vao->vertex_count % 2 != 0) return;
 	glBindVertexArray(vao->vao);
-	size_t lc = vao->vertex_count / 2;
-	GLsizei count[lc];
-	GLint first[lc];
-	for (size_t i = 0; i < lc; i++) {
-		count[i] = 2;
-		first[i] = i * 2;
-	}
-	glMultiDrawArrays(GL_LINES, first, count, lc);
-	glBindVertexArray(0);
+	glDrawElements(GL_LINES, vao->index_count, GL_UNSIGNED_SHORT, NULL);
 }
 
 int acc = 0;
@@ -169,6 +167,7 @@ int updateChunk(struct chunk* chunk) {
 	struct chunk* chxp = getChunk(gs.world, chunk->x + 1, chunk->z);
 	struct chunk* chxn = getChunk(gs.world, chunk->x - 1, chunk->z);
 	size_t tvcx = 0;
+	int ia = 0;
 	for (int i = 0; i < 16; i++) {
 		if (chunk->needsUpdate[i]) {
 			//struct timespec ts;
@@ -221,15 +220,15 @@ int updateChunk(struct chunk* chunk) {
 			//clock_gettime(CLOCK_MONOTONIC, &ts);
 			//ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
 			//printf("chunk took: %f opaq = %i/4096\n", ms2, opaw);
-			if (vtsx > 0) {
+			if (cvts > 0) {
 				//printf("pic (opaque) = %i\n", cvts);
-				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1);
+				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1, 4);
 				free(vts);
 				if (chunk->calls[i] == -1) {
 					chunk->calls[i] = glGenLists(1);
 				}
 				glNewList(chunk->calls[i], GL_COMPILE);
-				drawTriangleStrips4(&chunk->vaos[i]);
+				drawQuads(&chunk->vaos[i]);
 				glEndList();
 			} else {
 				if (chunk->vaos[i].vao >= 0) {
@@ -238,6 +237,7 @@ int updateChunk(struct chunk* chunk) {
 					chunk->vaos[i].vao = -1;
 					chunk->vaos[i].vbo = -1;
 				}
+				chunk->vaos[i].vertex_count = 0;
 			}
 			//if (tvtsx > 0) {
 			//printf("pic (trans) = %i\n", tcvts);
@@ -253,6 +253,7 @@ int updateChunk(struct chunk* chunk) {
 			acc++;
 			tvc += cvts;			// + tcvts;
 			//printf("%i chunks, %i verticies, %f verticies/chunk\n", acc, tvc, ((float) tvc / (float) acc));
+			ia++;
 		}
 		if (chunk->vaos[i].vao >= 0) tvcx += chunk->vaos[i].vertex_count;
 	}
@@ -376,7 +377,7 @@ void drawWorld(struct world* world) {
 	frust[FR_TOP].px = ncx + (yp[0] * hnear);
 	frust[FR_TOP].py = ncy + (yp[1] * hnear);
 	frust[FR_TOP].pz = ncz + (yp[2] * hnear);
-	//
+//
 	aux[0] = ncx - (yp[0] * hnear) - eyeX;
 	aux[1] = ncy - (yp[1] * hnear) - eyeY;
 	aux[2] = ncz - (yp[2] * hnear) - eyeZ;
@@ -414,7 +415,7 @@ void drawWorld(struct world* world) {
 	frust[FR_LEFT].px = ncx - (xp[0] * wnear);
 	frust[FR_LEFT].py = ncy - (xp[1] * wnear);
 	frust[FR_LEFT].pz = ncz - (xp[2] * wnear);
-	//
+//
 	aux[0] = ncx + (xp[0] * wnear) - eyeX;
 	aux[1] = ncy + (xp[1] * wnear) - eyeY;
 	aux[2] = ncz + (xp[2] * wnear) - eyeZ;
@@ -442,53 +443,37 @@ void drawWorld(struct world* world) {
 			}
 		}
 	}
-	//for (size_t i = 0; i < world->chunk_count; i++) {
-	//	if (world->chunks[i] != NULL) {
-	//		glPushMatrix();
-	//		glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
-	//		drawChunk(world->chunks[i], 1, frust);
-	//		glPopMatrix();
-	//	}
-	//}
+//for (size_t i = 0; i < world->chunk_count; i++) {
+//	if (world->chunks[i] != NULL) {
+//		glPushMatrix();
+//		glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
+//		drawChunk(world->chunks[i], 1, frust);
+//		glPopMatrix();
+//	}
+//}
 }
 
 void drawTriangles(struct vao* vao) {
 	if (vao->vertex_count % 3 != 0) return;
 	glBindVertexArray(vao->vao);
-	size_t lc = vao->vertex_count / 3;
-	GLsizei count[lc];
-	GLint first[lc];
-	for (size_t i = 0; i < lc; i++) {
-		count[i] = 3;
-		first[i] = i * 3;
-	}
-	glMultiDrawArrays(GL_TRIANGLES, first, count, lc);
+	glDrawElements(GL_TRIANGLES, vao->index_count, GL_UNSIGNED_SHORT, NULL);
 }
 
 void drawTriangleStrips4(struct vao* vao) {
 	if (vao->vertex_count % 4 != 0) return;
 	glBindVertexArray(vao->vao);
-	size_t lc = vao->vertex_count / 4;
-	GLsizei count[lc];
-	GLint first[lc];
-	for (size_t i = 0; i < lc; i++) {
-		count[i] = 4;
-		first[i] = i * 4;
-	}
-	glMultiDrawArrays(GL_TRIANGLE_STRIP, first, count, lc);
+	//if (vao->index_count != vao->vertex_count) {
+	//glEnable (GL_PRIMITIVE_RESTART);
+	//glPrimitiveRestartIndex(16000);
+	//}
+	glDrawElements(GL_TRIANGLE_STRIP, vao->index_count, GL_UNSIGNED_SHORT, NULL);
+	//if (vao->index_count != vao->vertex_count) glDisable (GL_PRIMITIVE_RESTART);
 }
 
 void drawQuads(struct vao* vao) {
 	if (vao->vertex_count % 4 != 0) return;
 	glBindVertexArray(vao->vao);
-	size_t lc = vao->vertex_count / 4;
-	GLsizei count[lc];
-	GLint first[lc];
-	for (size_t i = 0; i < lc; i++) {
-		count[i] = 4;
-		first[i] = i * 4;
-	}
-	glMultiDrawArrays(GL_QUADS, first, count, lc);
+	glDrawElements(GL_QUADS, vao->index_count, GL_UNSIGNED_SHORT, NULL);
 }
 
 void drawChar(char c, int italic) {
