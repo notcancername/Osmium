@@ -88,7 +88,7 @@ void displayCallback() {
 	//py = ourPlayer->y * (1. - partialTick) + ourPlayer->ly * partialTick;
 	//pz = ourPlayer->z * (1. - partialTick) + ourPlayer->lz * partialTick;
 	glEnable (GL_TEXTURE_2D);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear (GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, width, height);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();
@@ -197,7 +197,7 @@ int main(int argc, char *argv[]) {
 	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
 	//glfwWindowHint(GLFW_SAMPLES, 4); //TODO: use shaders and a 2D texture array so we can antialias.
 	glfwSetErrorCallback(error_callback);
-	window = glfwCreateWindow(800, 600, "Minecraft 1.9.1 (C Version)", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "Minecraft 1.9.2 (C Version)", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return -1;

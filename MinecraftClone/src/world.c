@@ -76,11 +76,14 @@ struct chunk* newChunk(int16_t x, int16_t z) {
 	memset(chunk, 0, sizeof(struct chunk));
 	chunk->x = x;
 	chunk->z = z;
+	chunk->empty = 0;
 	chunk->vaos = malloc(sizeof(struct vao) * 16);
+	chunk->calls = malloc(sizeof(int) * 16);
 	//chunk->tvaos = malloc(sizeof(struct vao) * 16);
 	for (int i = 0; i < 16; i++) {
 		chunk->vaos[i].vao = -1;
 		chunk->vaos[i].vbo = -1;
+		chunk->calls[i] = -1;
 		//chunk->tvaos[i].vao = -1;
 		//chunk->tvaos[i].vbo = -1;
 		chunk->needsUpdate[i] = 1;

@@ -9,6 +9,7 @@
 #define NBT_H_
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #define NBT_TAG_END 0
 #define NBT_TAG_BYTE 1

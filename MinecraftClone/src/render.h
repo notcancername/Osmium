@@ -15,13 +15,13 @@
 unsigned char fontColors[32][3];
 unsigned char fontWidth[256];
 
-struct vertex {
+struct __attribute__((packed)) vertex {
 		float x;
 		float y;
 		float z;
 };
 
-struct vertex_tex {
+struct __attribute__((packed)) vertex_tex {
 		float x;
 		float y;
 		float z;
@@ -185,6 +185,8 @@ void drawSkeleton(struct vao* vao);
 
 void drawTriangles(struct vao* vao);
 
+void drawTriangleStrips4(struct vao* vao);
+
 void drawQuads(struct vao* vao);
 
 struct plane {
@@ -196,7 +198,7 @@ struct plane {
 		double pz;
 };
 
-void drawChunk(struct chunk* chunk, int t, struct plane* planes);
+void drawChunk(struct chunk* chunk, struct plane* planes);
 
 void drawWorld(struct world* world);
 

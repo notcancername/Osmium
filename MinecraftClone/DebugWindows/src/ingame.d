@@ -1,4 +1,4 @@
-src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
+src/ingame.d: ../src/ingame.c ../src/ingame.h \
  /usr/share/mingw-w64/include/stdint.h \
  /usr/share/mingw-w64/include/crtdefs.h \
  /usr/share/mingw-w64/include/_mingw.h \
@@ -7,7 +7,7 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
  /usr/share/mingw-w64/include/vadefs.h \
  /usr/share/mingw-w64/include/sdks/_mingw_directx.h \
  /usr/share/mingw-w64/include/sdks/_mingw_ddk.h \
- /usr/share/mingw-w64/include/stddef.h \
+ /usr/share/mingw-w64/include/stddef.h ../src/network.h \
  /usr/share/mingw-w64/include/stdlib.h \
  /usr/share/mingw-w64/include/limits.h \
  /usr/share/mingw-w64/include/sec_api/stdlib_s.h \
@@ -22,7 +22,7 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
  /usr/share/mingw-w64/include/sys/timeb.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
- /usr/share/mingw-w64/include/pthread_unistd.h \
+ /usr/share/mingw-w64/include/pthread_unistd.h ../src/inventory.h \
  /usr/share/mingw-w64/include/winsock2.h \
  /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
@@ -170,8 +170,6 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
 
 ../src/ingame.h:
 
-../src/network.h:
-
 /usr/share/mingw-w64/include/stdint.h:
 
 /usr/share/mingw-w64/include/crtdefs.h:
@@ -189,6 +187,8 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
 /usr/share/mingw-w64/include/sdks/_mingw_ddk.h:
 
 /usr/share/mingw-w64/include/stddef.h:
+
+../src/network.h:
 
 /usr/share/mingw-w64/include/stdlib.h:
 
@@ -221,6 +221,8 @@ src/ingame.d: ../src/ingame.c ../src/ingame.h ../src/network.h \
 /usr/share/mingw-w64/include/pthread_compat.h:
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
+
+../src/inventory.h:
 
 /usr/share/mingw-w64/include/winsock2.h:
 

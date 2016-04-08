@@ -8,8 +8,10 @@ C_SRCS += \
 ../src/entity.c \
 ../src/gui.c \
 ../src/ingame.c \
+../src/inventory.c \
 ../src/main.c \
 ../src/models.c \
+../src/nbt.c \
 ../src/network.c \
 ../src/render.c \
 ../src/world.c \
@@ -20,8 +22,10 @@ OBJS += \
 ./src/entity.o \
 ./src/gui.o \
 ./src/ingame.o \
+./src/inventory.o \
 ./src/main.o \
 ./src/models.o \
+./src/nbt.o \
 ./src/network.o \
 ./src/render.o \
 ./src/world.o \
@@ -32,8 +36,10 @@ C_DEPS += \
 ./src/entity.d \
 ./src/gui.d \
 ./src/ingame.d \
+./src/inventory.d \
 ./src/main.d \
 ./src/models.d \
+./src/nbt.d \
 ./src/network.d \
 ./src/render.d \
 ./src/world.d \

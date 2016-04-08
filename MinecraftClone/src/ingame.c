@@ -698,7 +698,9 @@ void drawIngame(float partialTick) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	int ci = 0;
-	glClear (GL_DEPTH_BUFFER_BIT);
+	glDisable (GL_DEPTH_TEST);
+	glDepthMask(0);
+	//glClear (GL_DEPTH_BUFFER_BIT);
 	{
 		glBindTexture(GL_TEXTURE_2D, TX_WIDGETS);
 		drawTexturedModalRect(swidth / 2 - 91, sheight - 22, 0, 0, 0, 182, 22);
@@ -712,7 +714,7 @@ void drawIngame(float partialTick) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		ci = 1;
 		glDisable (GL_TEXTURE_2D);
-		glDisable (GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 		glDepthMask (GL_FALSE);
 		glColor4f(0.0625, 0.0625, 0.0625, 0.75);
 		glBegin (GL_QUADS);
@@ -730,7 +732,7 @@ void drawIngame(float partialTick) {
 	}
 	if (gs.inMenu) {
 		drawString("Game menu", swidth / 2 - stringWidth("Game menu") / 2, 36, 16777215);
-		glEnable (GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 		glDepthMask (GL_TRUE);
 		if (drawButton(swidth / 2 - 100, sheight / 4 + 120 - 16, 200, 20, "Disconnect", 1) && mouseButton == 0) {
 
@@ -758,13 +760,15 @@ void drawIngame(float partialTick) {
 		writePacket(gs.conn, &pkt);
 	}
 //
+	glDepthMask(1);
+	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	fov = 70.;
 	gluPerspective(fov, whratio, 0.05, viewDistance);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear (GL_DEPTH_BUFFER_BIT);
 	{
 		float swp = gs.player->swingProgress - gs.player->prevSwingProgress;
 		if (swp < 0.) swp++;

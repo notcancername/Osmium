@@ -4521,10 +4521,12 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 	int rh = 0;
 	int mo = 0;
 	for (int mi = 0; mi < maps;) {
+		//printf("s-%i %s\n", mi, map[mi]);
 		char* me = map[mi];
 		char cx[strlen(path) + strlen(me) + 1];
 		memcpy(cx, path, strlen(path));
 		memcpy(cx + strlen(path), me, strlen(me) + 1);
+		//printf("1\n");
 		FILE* fd = fopen(cx, "rb");
 		if (!fd) return -1;
 		png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -4544,7 +4546,10 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 		int height = png_get_image_height(png, info);
 		if (rh == 0) rh = height + (2 * TEXTURE_BUFFER);
 		if (tpngd == NULL) {
-			tpngd = malloc((rh * 4 * rw) * maps);
+			int tw = (maps < wrap ? maps : wrap);
+			int th = ((int) ceil((float) maps / (float) tw)) * rh;
+			tw *= rw;
+			tpngd = malloc(tw * th * 4);
 		}
 		png_byte color_type = png_get_color_type(png, info);
 		png_byte bit_depth = png_get_bit_depth(png, info);
@@ -4556,7 +4561,9 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 		if (color_type == PNG_COLOR_TYPE_GRAY || color_type == PNG_COLOR_TYPE_GRAY_ALPHA) png_set_gray_to_rgb(png);
 		png_read_update_info(png, info);
 		smap[mi] = mo;
-		png_byte** row_pointers = (png_byte**) malloc(sizeof(png_byte*) * height);
+		uint64_t* row_pointersoff = malloc(sizeof(uint64_t) * height);
+		//printf("2\n");
+
 		int rx = mo % wrap;
 		int ry = mo / wrap;
 		int prx = rx;
@@ -4581,14 +4588,18 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				tpngd = realloc(tpngd, *h * *w * 4);
 			}
 			//printf("ri = %i size = %i len = %i\n", (ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4), (rh * 4 * rw) * (maps + (mo - (mi - 1))), png_get_rowbytes(png, info));
-			row_pointers[bry] = (png_byte*) ((ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4)) + (4 * TEXTURE_BUFFER);
+			row_pointersoff[bry] = ((ry * rw * 4 * rh * wrap) + (y * 4 * rw * wrap) + (rx * rw * 4)) + (4 * TEXTURE_BUFFER);
 			bry++;
 		}
+		//printf("3\n");
+		png_bytep* row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * ph);
 		height = ph;
-		for (int y = 0; y < bry; y++) {
-			row_pointers[y] = (uint64_t) row_pointers[y] + (uint64_t) tpngd;
+		for (int y = 0; y < height; y++) {
+			row_pointers[y] = row_pointersoff[y] + tpngd;
+			//if (mi == 320) printf("%i = %u, %u, %i %i\n", y, row_pointers[y], tpngd, row_pointersoff[y], );
 		}
 		png_read_image(png, row_pointers);
+		//printf("4\n");
 		rx = prx;
 		ry = pry;
 		for (int y = 0; y < height + (2 * TEXTURE_BUFFER); y++) {
@@ -4623,6 +4634,8 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 				}
 			}
 		}
+		//printf("5\n");
+
 		if (streq(me, "grass_top.png") || streq(me, "fern.png") || streq(me, "tallgrass.png") || startsWith(me, "double_plant_grass") || startsWith(me, "double_plant_fern") || startsWith(me, "leaves_")) { // TODO: implement dynamic textures better than this
 			for (int y = 0; y < bry; y++) {
 				uint32_t* pix = row_pointers[y];
@@ -4658,6 +4671,7 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 		free(row_pointers);
 		png_destroy_read_struct(&png, &info, (png_infopp) 0);
 		fclose(fd);
+		//printf("6\n");
 		mi++;
 	}
 	*w = wrap * rw;

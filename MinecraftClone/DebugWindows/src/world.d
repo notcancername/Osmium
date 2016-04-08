@@ -7,11 +7,11 @@ src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
  /usr/share/mingw-w64/include/vadefs.h \
  /usr/share/mingw-w64/include/sdks/_mingw_directx.h \
  /usr/share/mingw-w64/include/sdks/_mingw_ddk.h \
- /usr/share/mingw-w64/include/stddef.h ../src/render.h \
+ /usr/share/mingw-w64/include/stddef.h \
  /usr/share/mingw-w64/include/stdlib.h \
  /usr/share/mingw-w64/include/limits.h \
  /usr/share/mingw-w64/include/sec_api/stdlib_s.h \
- /usr/share/mingw-w64/include/malloc.h ../src/models.h \
+ /usr/share/mingw-w64/include/malloc.h ../src/render.h ../src/models.h \
  /usr/share/mingw-w64/include/stdio.h \
  /usr/share/mingw-w64/include/_mingw_print_push.h \
  /usr/share/mingw-w64/include/_mingw_off_t.h \
@@ -26,7 +26,7 @@ src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
  /usr/share/mingw-w64/include/sys/timeb.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
- /usr/share/mingw-w64/include/pthread_unistd.h \
+ /usr/share/mingw-w64/include/pthread_unistd.h ../src/inventory.h \
  /usr/share/mingw-w64/include/winsock2.h \
  /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
@@ -184,8 +184,6 @@ src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
 
 /usr/share/mingw-w64/include/stddef.h:
 
-../src/render.h:
-
 /usr/share/mingw-w64/include/stdlib.h:
 
 /usr/share/mingw-w64/include/limits.h:
@@ -193,6 +191,8 @@ src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
 /usr/share/mingw-w64/include/sec_api/stdlib_s.h:
 
 /usr/share/mingw-w64/include/malloc.h:
+
+../src/render.h:
 
 ../src/models.h:
 
@@ -229,6 +229,8 @@ src/world.d: ../src/world.c ../src/world.h ../src/entity.h \
 /usr/share/mingw-w64/include/pthread_compat.h:
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
+
+../src/inventory.h:
 
 /usr/share/mingw-w64/include/winsock2.h:
 

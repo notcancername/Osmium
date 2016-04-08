@@ -39,7 +39,7 @@ src/main.d: ../src/main.c /usr/share/mingw-w64/include/stdio.h \
  /usr/share/mingw-w64/include/sec_api/string_s.h \
  /usr/share/mingw-w64/include/math.h ../src/entity.h ../src/world.h \
  ../src/render.h ../src/models.h ../src/network.h ../src/nbt.h \
- /usr/share/mingw-w64/include/winsock2.h \
+ ../src/inventory.h /usr/share/mingw-w64/include/winsock2.h \
  /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
  /usr/share/mingw-w64/include/sdkddkver.h \
@@ -276,6 +276,8 @@ src/main.d: ../src/main.c /usr/share/mingw-w64/include/stdio.h \
 ../src/network.h:
 
 ../src/nbt.h:
+
+../src/inventory.h:
 
 /usr/share/mingw-w64/include/winsock2.h:
 

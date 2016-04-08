@@ -22,7 +22,7 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/sys/timeb.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
- /usr/share/mingw-w64/include/pthread_unistd.h \
+ /usr/share/mingw-w64/include/pthread_unistd.h ../src/inventory.h \
  /usr/share/mingw-w64/include/winsock2.h \
  /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
@@ -167,7 +167,8 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
  /usr/share/mingw-w64/include/GL/gl.h ../src/xstring.h \
  /usr/share/mingw-w64/include/dirent.h /usr/share/mingw-w64/include/io.h \
  /usr/share/mingw-w64/include/sec_api/io_s.h \
- /usr/share/mingw-w64/include/math.h
+ /usr/share/mingw-w64/include/math.h ../src/globals.h \
+ /mingw/include/GLFW/glfw3.h
 
 ../src/models.h:
 
@@ -228,6 +229,8 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/pthread_compat.h:
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
+
+../src/inventory.h:
 
 /usr/share/mingw-w64/include/winsock2.h:
 
@@ -540,3 +543,7 @@ src/models.d: ../src/models.c ../src/models.h ../src/render.h \
 /usr/share/mingw-w64/include/sec_api/io_s.h:
 
 /usr/share/mingw-w64/include/math.h:
+
+../src/globals.h:
+
+/mingw/include/GLFW/glfw3.h:

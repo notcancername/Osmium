@@ -54,69 +54,11 @@ void deleteVAO(struct vao* vao) {
 }
 
 void createSubCube(float size, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float tx1, float ty1, float tx2, float ty2) {
-	int vx = 0;
-	if (faceMask & 0x01) {
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
-	}
-	if (faceMask & 0x02) {
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
-	}
-	//
-	if (faceMask & 0x04) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
-	}
-	if (faceMask & 0x08) {
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
-	}
-	//
-	if (faceMask & 0x10) {
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], size + x, size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], size + x, size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], size + x, -size + y, size + z);
-	}
-	if (faceMask & 0x20) {
-		virtTexCoord2f(&vrt[vx], tx2, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, -size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty2);
-		virtVertex3f(&vrt[vx++], -size + x, -size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx1, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, size + z);
-		virtTexCoord2f(&vrt[vx], tx2, ty1);
-		virtVertex3f(&vrt[vx++], -size + x, size + y, -size + z);
-	}
+	float tx1t[6] = { tx1, tx1, tx1, tx1, tx1, tx1 };
+	float ty1t[6] = { ty1, ty1, ty1, ty1, ty1, ty1 };
+	float tx2t[6] = { tx2, tx2, tx2, tx2, tx2, tx2 };
+	float ty2t[6] = { ty2, ty2, ty2, ty2, ty2, ty2 };
+	createMultSub(size, size, size, vrt, x, y, z, faceMask, tx1t, ty1t, tx2t, ty2t);
 }
 
 void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, float x, float y, float z, unsigned char faceMask, float* tx1, float* ty1, float* tx2, float* ty2) {
@@ -126,20 +68,20 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[2], ty2[2]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[2], ty1[2]);
-		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[2], ty1[2]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[2], ty1[2]);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 	}
 	if (faceMask & 0x02) {
 		virtTexCoord2f(&vrt[vx], tx2[3], ty2[3]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[3], ty1[3]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[3], ty1[3]);
-		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[3], ty2[3]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[3], ty1[3]);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
 	}
 	//
 	if (faceMask & 0x04) {
@@ -147,20 +89,20 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[0], ty2[0]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx2[0], ty2[0]);
-		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[0], ty1[0]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
+		virtTexCoord2f(&vrt[vx], tx2[0], ty2[0]);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 	}
 	if (faceMask & 0x08) {
 		virtTexCoord2f(&vrt[vx], tx1[1], ty1[1]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[1], ty1[1]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx2[1], ty2[1]);
-		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[1], ty2[1]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx2[1], ty2[1]);
+		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
 	}
 	//
 	if (faceMask & 0x10) {
@@ -168,20 +110,20 @@ void createMultSub(float xwid, float ywid, float zwid, struct vertex_tex* vrt, f
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[4], ty1[4]);
 		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, -zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[4], ty1[4]);
-		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[4], ty2[4]);
 		virtVertex3f(&vrt[vx++], xwid + x, -ywid + y, zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[4], ty1[4]);
+		virtVertex3f(&vrt[vx++], xwid + x, ywid + y, zwid + z);
 	}
 	if (faceMask & 0x20) {
 		virtTexCoord2f(&vrt[vx], tx2[5], ty2[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, -zwid + z);
 		virtTexCoord2f(&vrt[vx], tx1[5], ty2[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, -ywid + y, zwid + z);
-		virtTexCoord2f(&vrt[vx], tx1[5], ty1[5]);
-		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 		virtTexCoord2f(&vrt[vx], tx2[5], ty1[5]);
 		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, -zwid + z);
+		virtTexCoord2f(&vrt[vx], tx1[5], ty1[5]);
+		virtVertex3f(&vrt[vx++], -xwid + x, ywid + y, zwid + z);
 	}
 }
 
@@ -218,6 +160,7 @@ void drawSkeleton(struct vao* vao) {
 	glMultiDrawArrays(GL_LINES, first, count, lc);
 	glBindVertexArray(0);
 }
+
 int acc = 0;
 int tvc = 0;
 int updateChunk(struct chunk* chunk) {
@@ -225,6 +168,7 @@ int updateChunk(struct chunk* chunk) {
 	struct chunk* chzn = getChunk(gs.world, chunk->x, chunk->z - 1);
 	struct chunk* chxp = getChunk(gs.world, chunk->x + 1, chunk->z);
 	struct chunk* chxn = getChunk(gs.world, chunk->x - 1, chunk->z);
+	size_t tvcx = 0;
 	for (int i = 0; i < 16; i++) {
 		if (chunk->needsUpdate[i]) {
 			//struct timespec ts;
@@ -281,9 +225,16 @@ int updateChunk(struct chunk* chunk) {
 				//printf("pic (opaque) = %i\n", cvts);
 				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1);
 				free(vts);
+				if (chunk->calls[i] == -1) {
+					chunk->calls[i] = glGenLists(1);
+				}
+				glNewList(chunk->calls[i], GL_COMPILE);
+				drawTriangleStrips4(&chunk->vaos[i]);
+				glEndList();
 			} else {
 				if (chunk->vaos[i].vao >= 0) {
 					deleteVAO(&chunk->vaos[i]);
+					glDeleteLists(chunk->calls[i], 1);
 					chunk->vaos[i].vao = -1;
 					chunk->vaos[i].vbo = -1;
 				}
@@ -303,7 +254,9 @@ int updateChunk(struct chunk* chunk) {
 			tvc += cvts;			// + tcvts;
 			//printf("%i chunks, %i verticies, %f verticies/chunk\n", acc, tvc, ((float) tvc / (float) acc));
 		}
+		if (chunk->vaos[i].vao >= 0) tvcx += chunk->vaos[i].vertex_count;
 	}
+	chunk->empty = (tvcx == 0);
 	return 0;
 }
 
@@ -314,42 +267,51 @@ int updateChunk(struct chunk* chunk) {
 #define FR_NEAR 4
 #define FR_FAR 5
 
-void drawChunk(struct chunk* chunk, int t, struct plane* planes) {
-	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
-	glPushMatrix();
+void drawChunk(struct chunk* chunk, struct plane* planes) {
+	int t = 0;
+	float ltc = 0.;
 	for (int i = 0; i < 16; i++) {
-		for (int x = 0; x < 6; x++) {			//TODO: check all 6 planes
-			struct plane* pl = &planes[x];
-			double cpx = chunk->x << 4;
-			if (pl->nx >= 0.) cpx += 16.;
-			double cpy = i << 4;
-			if (pl->ny >= 0.) cpy += 16.;
-			double cpz = chunk->z << 4;
-			if (pl->nz >= 0.) cpz += 16.;
-			double cnx = (chunk->x + 1) << 4;
-			if (pl->nx >= 0.) cnx -= 16.;
-			double cny = (i + 1) << 4;
-			if (pl->ny >= 0.) cny -= 16.;
-			double cnz = (chunk->z + 1) << 4;
-			if (pl->nz >= 0.) cnz -= 16.;
-			double sdist = pl->nx * (cpx - pl->px) + pl->ny * (cpy - pl->py) + pl->nz * (cpz - pl->pz);
-			double sdist2 = pl->nx * (cnx - pl->px) + pl->ny * (cny - pl->py) + pl->nz * (cnz - pl->pz);
-			if (sdist < 0 && sdist2 < 0) {
-				goto cnt;
+		if (chunk->vaos[i].vertex_count > 0) {
+			for (int x = 0; x < 6; x++) {
+				struct plane* pl = &planes[x];
+				double cpx = chunk->x << 4;
+				if (pl->nx >= 0.) cpx += 16.;
+				double cpy = i << 4;
+				if (pl->ny >= 0.) cpy += 16.;
+				double cpz = chunk->z << 4;
+				if (pl->nz >= 0.) cpz += 16.;
+				double cnx = (chunk->x + 1) << 4;
+				if (pl->nx >= 0.) cnx -= 16.;
+				double cny = (i + 1) << 4;
+				if (pl->ny >= 0.) cny -= 16.;
+				double cnz = (chunk->z + 1) << 4;
+				if (pl->nz >= 0.) cnz -= 16.;
+				double sdist = pl->nx * (cpx - pl->px) + pl->ny * (cpy - pl->py) + pl->nz * (cpz - pl->pz);
+				double sdist2 = pl->nx * (cnx - pl->px) + pl->ny * (cny - pl->py) + pl->nz * (cnz - pl->pz);
+				if (sdist < 0 && sdist2 < 0) {
+					ltc++;
+					goto pcnt;
+				}
 			}
-			//sdist = pl->nx * (pl->px - cnx) + pl->ny * (pl->py - cny) + pl->nz * (pl->pz - cnz);
-			//if (sdist > 0) {
-			//goto cnt;
-			//}
+			if (!t) {
+				glPushMatrix();
+				glTranslatef((float) (chunk->x << 4), 0., (float) (chunk->z << 4));
+				t = 1;
+			}
+			if (ltc > 0) {
+				glTranslatef(0., 16. * ltc, 0.);
+				ltc = 0.;
+			}
+			if (chunk->vaos[i].vao >= 0) {
+				glCallList(chunk->calls[i]);
+			}
+			ltc++;
+			pcnt: ;
+		} else {
+			ltc++;
 		}
-		//if (t) {
-		//	if (chunk->tvaos[i].vao >= 0) drawQuads(&chunk->tvaos[i]);
-		//} else
-		if (chunk->vaos[i].vao >= 0) drawQuads(&chunk->vaos[i]);
-		cnt: ;
-		glTranslatef(0., 16., 0.);
 	}
-	glPopMatrix();
+	if (t) glPopMatrix();
 }
 
 void crossp(double* v1, double* v2, double* res) {
@@ -471,13 +433,13 @@ void drawWorld(struct world* world) {
 	frust[FR_RIGHT].px = ncx + (xp[0] * wnear);
 	frust[FR_RIGHT].py = ncy + (xp[1] * wnear);
 	frust[FR_RIGHT].pz = ncz + (xp[2] * wnear);
+	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
 			updateChunk(world->chunks[i]);
-			glPushMatrix();
-			glTranslatef((float) (world->chunks[i]->x << 4), 0., (float) (world->chunks[i]->z << 4));
-			drawChunk(world->chunks[i], 0, frust);
-			glPopMatrix();
+			if (!world->chunks[i]->empty) {
+				drawChunk(world->chunks[i], frust);
+			}
 		}
 	}
 	//for (size_t i = 0; i < world->chunk_count; i++) {
@@ -501,7 +463,19 @@ void drawTriangles(struct vao* vao) {
 		first[i] = i * 3;
 	}
 	glMultiDrawArrays(GL_TRIANGLES, first, count, lc);
-	glBindVertexArray(0);
+}
+
+void drawTriangleStrips4(struct vao* vao) {
+	if (vao->vertex_count % 4 != 0) return;
+	glBindVertexArray(vao->vao);
+	size_t lc = vao->vertex_count / 4;
+	GLsizei count[lc];
+	GLint first[lc];
+	for (size_t i = 0; i < lc; i++) {
+		count[i] = 4;
+		first[i] = i * 4;
+	}
+	glMultiDrawArrays(GL_TRIANGLE_STRIP, first, count, lc);
 }
 
 void drawQuads(struct vao* vao) {
@@ -515,7 +489,6 @@ void drawQuads(struct vao* vao) {
 		first[i] = i * 4;
 	}
 	glMultiDrawArrays(GL_QUADS, first, count, lc);
-	glBindVertexArray(0);
 }
 
 void drawChar(char c, int italic) {

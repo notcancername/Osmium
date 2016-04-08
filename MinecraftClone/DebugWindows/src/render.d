@@ -26,7 +26,7 @@ src/render.d: ../src/render.c ../src/render.h \
  /usr/share/mingw-w64/include/sys/timeb.h \
  /usr/share/mingw-w64/include/sec_api/sys/timeb_s.h \
  /usr/share/mingw-w64/include/pthread_compat.h \
- /usr/share/mingw-w64/include/pthread_unistd.h \
+ /usr/share/mingw-w64/include/pthread_unistd.h ../src/inventory.h \
  /usr/share/mingw-w64/include/winsock2.h \
  /usr/share/mingw-w64/include/_mingw_unicode.h \
  /usr/share/mingw-w64/include/windows.h \
@@ -237,6 +237,8 @@ src/render.d: ../src/render.c ../src/render.h \
 /usr/share/mingw-w64/include/pthread_compat.h:
 
 /usr/share/mingw-w64/include/pthread_unistd.h:
+
+../src/inventory.h:
 
 /usr/share/mingw-w64/include/winsock2.h:
 

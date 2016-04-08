@@ -6,6 +6,10 @@
  */
 #include "gui.h"
 #include <stdlib.h>
+#ifdef __MINGW32__
+#define GLEW_STATIC
+#include <GL/glew.h>
+#endif
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GLFW/glfw3.h>
