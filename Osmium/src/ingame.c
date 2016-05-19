@@ -1283,8 +1283,6 @@ void runNetwork(struct conn* conn) {
 			gs.world->age = pkt.data.play_server.timeupdate.worldAge;
 		} else if (pkt.id == PKT_PLAY_SERVER_TITLE) {
 
-		} else if (pkt.id == PKT_PLAY_SERVER_UPDATESIGN) {
-
 		} else if (pkt.id == PKT_PLAY_SERVER_SOUNDEFFECT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERLISTHEADERFOOTER) {

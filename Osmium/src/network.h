@@ -158,13 +158,12 @@ typedef uint8_t mcbool;
 #define PKT_PLAY_SERVER_SPAWNPOSITION 0x43
 #define PKT_PLAY_SERVER_TIMEUPDATE 0x44
 #define PKT_PLAY_SERVER_TITLE 0x45
-#define PKT_PLAY_SERVER_UPDATESIGN 0x46
-#define PKT_PLAY_SERVER_SOUNDEFFECT 0x47
-#define PKT_PLAY_SERVER_PLAYERLISTHEADERFOOTER 0x48
-#define PKT_PLAY_SERVER_COLLECTITEM 0x49
-#define PKT_PLAY_SERVER_ENTITYTELEPORT 0x4A
-#define PKT_PLAY_SERVER_ENTITYPROPERTIES 0x4B
-#define PKT_PLAY_SERVER_ENTITYEFFECT 0x4C
+#define PKT_PLAY_SERVER_SOUNDEFFECT 0x46
+#define PKT_PLAY_SERVER_PLAYERLISTHEADERFOOTER 0x47
+#define PKT_PLAY_SERVER_COLLECTITEM 0x48
+#define PKT_PLAY_SERVER_ENTITYTELEPORT 0x49
+#define PKT_PLAY_SERVER_ENTITYPROPERTIES 0x4A
+#define PKT_PLAY_SERVER_ENTITYEFFECT 0x4B
 
 struct pkt_handshake_client_handshake {
 		int32_t protocol_version;
@@ -645,6 +644,8 @@ struct pkt_play_server_chunkdata {
 		int32_t size;
 		unsigned char* data;
 		unsigned char biomes[256];
+		int32_t nbtc;
+		struct nbt_tag** nbts;
 };
 
 struct pkt_play_server_effect {
@@ -973,14 +974,6 @@ struct pkt_play_server_title {
 		union title_action act;
 };
 
-struct pkt_play_server_updatesign {
-		struct encpos pos;
-		char* line1;
-		char* line2;
-		char* line3;
-		char* line4;
-};
-
 struct pkt_play_server_soundeffect {
 		int32_t id;
 		int32_t category;
@@ -1153,7 +1146,6 @@ union pkt_state_play_server {
 		struct pkt_play_server_spawnposition spawnposition;
 		struct pkt_play_server_timeupdate timeupdate;
 		struct pkt_play_server_title title;
-		struct pkt_play_server_updatesign updatesign;
 		struct pkt_play_server_soundeffect soundeffect;
 		struct pkt_play_server_playerlistheaderfooter playerlistheaderfooter;
 		struct pkt_play_server_collectitem collectitem;

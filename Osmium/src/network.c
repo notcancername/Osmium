@@ -609,7 +609,7 @@ int loginToServer(struct conn* conn, char* ip, uint16_t port, char* username, st
 	pkt.id = PKT_HANDSHAKE_CLIENT_HANDSHAKE;
 	pkt.data.handshake_client.handshake.ip = ip;
 	pkt.data.handshake_client.handshake.port = port;
-	pkt.data.handshake_client.handshake.protocol_version = 109;
+	pkt.data.handshake_client.handshake.protocol_version = 110;
 	pkt.data.handshake_client.handshake.state = 2;
 	if (writePacket(conn, &pkt)) return -1;
 	conn->state = STATE_LOGIN;
@@ -1481,6 +1481,18 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				pbuf += 256;
 				ps -= 256;
 			} // else biomes is undefined
+			rx = readVarInt(&packet->data.play_server.chunkdata.nbtc, pbuf, ps);
+			pbuf += rx;
+			ps -= rx;
+			if (packet->data.play_server.chunkdata.nbtc > 0) {
+				packet->data.play_server.chunkdata.nbts = malloc(sizeof(struct nbt_tag*) * packet->data.play_server.chunkdata.nbtc);
+				for (int32_t i = 0; i < packet->data.play_server.chunkdata.nbtc; i++) {
+					packet->data.play_server.chunkdata.nbts[i] = malloc(sizeof(struct nbt_tag));
+					rx = readNBT(&packet->data.play_server.chunkdata.nbts[i], pbuf, ps);
+					pbuf += rx;
+					ps -= rx;
+				}
+			} else packet->data.play_server.chunkdata.nbts = NULL;
 		} else if (id == PKT_PLAY_SERVER_EFFECT) {
 			if (ps < (9 + sizeof(struct encpos))) {
 				free(pktbuf);
@@ -2409,27 +2421,6 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				ps -= 4;
 				swapEndian(&packet->data.play_server.title.act.set.fadeout, 4);
 			}
-		} else if (id == PKT_PLAY_SERVER_UPDATESIGN) {
-			if (ps < sizeof(struct encpos)) {
-				free(pktbuf);
-				return -1;
-			}
-			memcpy(&packet->data.play_server.updatesign.pos, pbuf, sizeof(struct encpos));
-			pbuf += sizeof(struct encpos);
-			ps -= sizeof(struct encpos);
-			swapEndian(&packet->data.play_server.updatesign.pos, sizeof(struct encpos));
-			int rx = readString(&packet->data.play_server.updatesign.line1, pbuf, ps);
-			pbuf += rx;
-			ps -= rx;
-			rx = readString(&packet->data.play_server.updatesign.line2, pbuf, ps);
-			pbuf += rx;
-			ps -= rx;
-			rx = readString(&packet->data.play_server.updatesign.line3, pbuf, ps);
-			pbuf += rx;
-			ps -= rx;
-			rx = readString(&packet->data.play_server.updatesign.line4, pbuf, ps);
-			pbuf += rx;
-			ps -= rx;
 		} else if (id == PKT_PLAY_SERVER_SOUNDEFFECT) {
 			int rx = readVarInt(&packet->data.play_server.soundeffect.id, pbuf, ps);
 			pbuf += rx;
