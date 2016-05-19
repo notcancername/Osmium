@@ -1,5 +1,5 @@
-# MinecraftClone
-A MC clone in C, protocol-compatible with 1.9.
+# Osmium
+A MC clone in C, protocol-compatible with 1.9.4
 
 Dependencies (Linux): 
 - libpng
