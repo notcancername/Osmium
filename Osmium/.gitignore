@@ -1,9 +1,6 @@
 *.[do]
 *.exe
 *.dll
-
-.cproject
-.project
-
-/DebugWindows/
-/Debug/
+/DebugWindows/Osmium
+/DebugLinux/Osmium
+/DebugLinux/
