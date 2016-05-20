@@ -1124,7 +1124,7 @@ void runNetwork(struct conn* conn) {
 							size--;
 						}
 					}
-				}
+				} else chunk->skyLight = NULL;
 			}
 			if (pkt.data.play_server.chunkdata.continuous) {
 				struct chunk* cc = getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
@@ -1135,6 +1135,10 @@ void runNetwork(struct conn* conn) {
 				addChunk(gs.world, chunk);
 			}
 			free(pkt.data.play_server.chunkdata.data);
+			for (int32_t i = 0; i < pkt.data.play_server.chunkdata.nbtc; i++) {
+				freeNBT(pkt.data.play_server.chunkdata.nbts[i]);
+			}
+			if (pkt.data.play_server.chunkdata.nbts != NULL) free(pkt.data.play_server.chunkdata.nbts);
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PARTICLE) {

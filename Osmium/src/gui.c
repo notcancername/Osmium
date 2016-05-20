@@ -246,13 +246,13 @@ int drawTextbox(int x, int y, int width, int height, char* text, int* cursorPos,
 void drawMainMenu(float partialTick) {
 	int fbid;
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_BGR, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 	glGenFramebuffers(1, &fbid);
 	glBindFramebuffer(GL_FRAMEBUFFER, fbid);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TX_MMTT, 0);
-	int rb;
+	static int rb;
 	glGenRenderbuffers(1, &rb);
 	glBindRenderbuffer(GL_RENDERBUFFER, rb);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 256, 256);
@@ -343,9 +343,9 @@ void drawMainMenu(float partialTick) {
 	}
 	glDisable(GL_BLEND);
 	glColor4f(1., 1., 1., 1.);
-	glDeleteRenderbuffers(1, &rb);
+	//glDeleteRenderbuffers(1, &rb);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &fbid);
+	//glDeleteFramebuffers(1, &fbid);
 	glViewport(0, 0, width, height);
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
 	float vr = swidth > sheight ? 120. / (float) swidth : 120. / (float) sheight;

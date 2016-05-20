@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 	glfwWindowHint(GLFW_DOUBLEBUFFER, 1);
 	//glfwWindowHint(GLFW_SAMPLES, 4); //TODO: use shaders and a 2D texture array so we can antialias.
 	glfwSetErrorCallback(error_callback);
-	window = glfwCreateWindow(800, 600, "Minecraft 1.9.2 (C Version)", NULL, NULL);
+	window = glfwCreateWindow(800, 600, "Minecraft 1.9.4 (C Version)", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		return -1;

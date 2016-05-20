@@ -231,6 +231,7 @@ int updateChunk(struct chunk* chunk) {
 				drawQuads(&chunk->vaos[i]);
 				glEndList();
 			} else {
+				free(vts);
 				if (chunk->vaos[i].vao >= 0) {
 					deleteVAO(&chunk->vaos[i]);
 					glDeleteLists(chunk->calls[i], 1);
