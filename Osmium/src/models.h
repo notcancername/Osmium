@@ -14,6 +14,13 @@
 
 #define TEXTURE_BUFFER 4
 
+struct model {
+		float txh;
+		float txw;
+		struct modr** children;
+		size_t child_count;
+};
+
 void loadBaseModels();
 
 struct model mod_spider;
@@ -588,13 +595,6 @@ struct modr {
 		float rpZ;
 		float defrpZ;
 		struct vao* vao;
-		struct modr** children;
-		size_t child_count;
-};
-
-struct model {
-		float txh;
-		float txw;
 		struct modr** children;
 		size_t child_count;
 };
