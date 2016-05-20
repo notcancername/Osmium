@@ -3,3 +3,6 @@
 *.dll
 /DebugWindows/Osmium
 /DebugLinux/Osmium
+/DebugLinux/assets
+/DebugWindows/assets
+/DebugLinux/

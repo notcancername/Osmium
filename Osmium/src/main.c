@@ -190,7 +190,13 @@ int main(int argc, char *argv[]) {
 	WSADATA wsaData;
 	WSAStartup(versionWanted, &wsaData);
 #endif
-	printf("Loading... [FROM=%s]\n", INSTALLDIR);
+	char ncwd[strlen(argv[0]) + 1];
+	memcpy(ncwd, argv[0], strlen(argv[0]) + 1);
+	char* ecwd = strrchr(ncwd, '/');
+	ecwd++;
+	ecwd[0] = 0;
+	chdir(ncwd);
+	printf("Loading... [FROM=%s]\n", strlen(INSTALLDIR) == 0 ? ncwd : INSTALLDIR);
 	width = 800;
 	height = 600;
 	if (!glfwInit()) return -1;

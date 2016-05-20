@@ -42,9 +42,9 @@ int viewBobbing;
 #define PI 3.141592653589793
 
 #ifdef __MINGW32__
-#define INSTALLDIR "C:/oglt/"
+#define INSTALLDIR ""
 #else
-#define INSTALLDIR "/dsk/ogla/"
+#define INSTALLDIR ""
 #endif
 
 #endif /* GLOBALS_H_ */
