@@ -195,7 +195,12 @@ int main(int argc, char *argv[]) {
 #endif
 	char ncwd[strlen(argv[0]) + 1];
 	memcpy(ncwd, argv[0], strlen(argv[0]) + 1);
-	char* ecwd = strrchr(ncwd, '/');
+	char* ecwd =
+#ifdef __MINGW32__
+			strrchr(ncwd, '\\');
+#else
+			strrchr(ncwd, '/');
+#endif
 	ecwd++;
 	ecwd[0] = 0;
 	chdir(ncwd);

@@ -245,19 +245,19 @@ int drawTextbox(int x, int y, int width, int height, char* text, int* cursorPos,
 }
 
 void drawMainMenu(float partialTick) {
-	int fbid;
+	//static int fbid = -1;
 	glBindTexture(GL_TEXTURE_2D, TX_MMTT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_BGR, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glGenFramebuffers(1, &fbid);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbid);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TX_MMTT, 0);
-	static int rb;
-	glGenRenderbuffers(1, &rb);
-	glBindRenderbuffer(GL_RENDERBUFFER, rb);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 256, 256);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rb);
+	//if (fbid == -1) glGenFramebuffers(1, &fbid);
+	//glBindFramebuffer(GL_FRAMEBUFFER, fbid);
+	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, TX_MMTT, 0);
+	//static int rb = -1;
+	//if (rb == -1) glGenRenderbuffers(1, &rb);
+	//glBindRenderbuffer(GL_RENDERBUFFER, rb);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 256, 256);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rb);
 	glViewport(0, 0, 256, 256);
 	glMatrixMode (GL_PROJECTION);
 	glPushMatrix();
@@ -268,7 +268,7 @@ void drawMainMenu(float partialTick) {
 	glLoadIdentity();
 	glColor4f(1., 1., 1., 1.);
 	glRotatef(180., 1., 0., 0.);
-	glRotatef(90., 0., 0., 1.);
+	glRotatef(180., 0., 0., 1.);
 	glEnable (GL_BLEND);
 	glDisable (GL_CULL_FACE);
 	glDisable (GL_ALPHA_TEST);
