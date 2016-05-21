@@ -38,6 +38,9 @@ double lookY;
 double lookZ;
 float viewDistance;
 int viewBobbing;
+char* username;
+char* uuid;
+char* accessToken;
 
 #define PI 3.141592653589793
 

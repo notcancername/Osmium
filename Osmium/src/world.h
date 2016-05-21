@@ -29,13 +29,13 @@ struct chunk {
 		int16_t x;
 		int16_t z;
 		struct vao *vaos;
-		int* calls;
 		block blocks[16][16][256]; // x, z, y
 		unsigned char biomes[16][16]; // x, z
 		unsigned char blockLight[16][16][128]; // x, z, y(4-bit)
 		unsigned char* skyLight; // if non-NULL, points to a 2048-byte nibble-array.
 		int needsUpdate[16];
 		int empty;
+		int kill;
 };
 
 struct world {

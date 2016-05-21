@@ -188,6 +188,31 @@ void cursorEnterCallback(GLFWwindow* window, int entered) {
 }
 
 int main(int argc, char *argv[]) {
+	int cs = 0;
+	for (int i = 1; i < argc; i++) {
+		if (cs == 0) {
+			if (streq_nocase(argv[i], "--username")) {
+				cs = 1;
+			} else if (streq_nocase(argv[i], "--uuid")) {
+				cs = 2;
+			} else if (streq_nocase(argv[i], "--accessToken")) {
+				cs = 3;
+			}
+		} else if (cs == 1) {
+			username = argv[i];
+			cs = 0;
+		} else if (cs == 2) {
+			uuid = argv[i];
+			cs = 0;
+		} else if (cs == 3) {
+			accessToken = argv[i];
+			cs = 0;
+		}
+	}
+	if (username == NULL) {
+		username = malloc(10);
+		snprintf(username, 9, "Player%i", rand() % 1000);
+	}
 #ifdef __MINGW32__
 	WORD versionWanted = MAKEWORD(1, 1);
 	WSADATA wsaData;

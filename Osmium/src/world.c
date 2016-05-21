@@ -30,12 +30,7 @@ struct chunk* getChunk(struct world* world, int16_t x, int16_t z) {
 }
 
 void removeChunk(struct world* world, struct chunk* chunk) {
-	for (size_t i = 0; i < world->chunk_count; i++) {
-		if (world->chunks[i] == chunk) {
-			world->chunks[i] = NULL;
-			return;
-		}
-	}
+	chunk->kill = 1;
 }
 
 int getBiome(struct world* world, int32_t x, int32_t z) {
@@ -78,12 +73,11 @@ struct chunk* newChunk(int16_t x, int16_t z) {
 	chunk->z = z;
 	chunk->empty = 0;
 	chunk->vaos = malloc(sizeof(struct vao) * 16);
-	chunk->calls = malloc(sizeof(int) * 16);
+	chunk->kill = 0;
 	//chunk->tvaos = malloc(sizeof(struct vao) * 16);
 	for (int i = 0; i < 16; i++) {
 		chunk->vaos[i].vao = -1;
 		chunk->vaos[i].vbo = -1;
-		chunk->calls[i] = -1;
 		//chunk->tvaos[i].vao = -1;
 		//chunk->tvaos[i].vbo = -1;
 		chunk->needsUpdate[i] = 1;

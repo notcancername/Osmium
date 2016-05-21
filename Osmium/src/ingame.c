@@ -522,8 +522,8 @@ void drawIngame(float partialTick) {
 	gluPerspective(fov, whratio, 0.05, viewDistance);
 	glMatrixMode (GL_MODELVIEW);
 	glLoadIdentity();
-	float ppitch = interpolateAngle(gs.player->pitch, gs.player->lpitch, partialTick);
-	float pyaw = interpolateAngle(gs.player->yaw, gs.player->lyaw, partialTick);
+	float ppitch = interpolateAngle(gs.player->pitch, gs.player->lpitch, 1. - partialTick);
+	float pyaw = interpolateAngle(gs.player->yaw, gs.player->lyaw, 1. - partialTick);
 	double px = gs.player->x * partialTick + gs.player->lx * (1. - partialTick);
 	double py = gs.player->y * partialTick + gs.player->ly * (1. - partialTick);
 	double pz = gs.player->z * partialTick + gs.player->lz * (1. - partialTick);
@@ -1005,7 +1005,6 @@ void runNetwork(struct conn* conn) {
 			struct chunk* ch = getChunk(gs.world, pkt.data.play_server.unloadchunk.chunkX, pkt.data.play_server.unloadchunk.chunkZ);
 			if (ch != NULL) {
 				removeChunk(gs.world, ch);
-				freeChunk(ch);
 			}
 		} else if (pkt.id == PKT_PLAY_SERVER_CHANGEGAMESTATE) {
 
@@ -1129,7 +1128,6 @@ void runNetwork(struct conn* conn) {
 			if (pkt.data.play_server.chunkdata.continuous) {
 				struct chunk* cc = getChunk(gs.world, pkt.data.play_server.chunkdata.x, pkt.data.play_server.chunkdata.z);
 				if (cc != NULL) {
-					free(cc); //remove chunk does not dereference the chunk
 					removeChunk(gs.world, cc);
 				}
 				addChunk(gs.world, chunk);
@@ -1138,6 +1136,7 @@ void runNetwork(struct conn* conn) {
 			for (int32_t i = 0; i < pkt.data.play_server.chunkdata.nbtc; i++) {
 				if (pkt.data.play_server.chunkdata.nbts[i] != NULL) {
 					freeNBT(pkt.data.play_server.chunkdata.nbts[i]);
+					free(pkt.data.play_server.chunkdata.nbts[i]);
 				}
 			}
 			if (pkt.data.play_server.chunkdata.nbts != NULL) free(pkt.data.play_server.chunkdata.nbts);

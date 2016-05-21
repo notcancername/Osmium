@@ -224,17 +224,15 @@ int updateChunk(struct chunk* chunk) {
 				//printf("pic (opaque) = %i\n", cvts);
 				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1, 4);
 				free(vts);
-				if (chunk->calls[i] == -1) {
-					chunk->calls[i] = glGenLists(1);
-				}
-				glNewList(chunk->calls[i], GL_COMPILE);
-				drawQuads(&chunk->vaos[i]);
-				glEndList();
+				//if (chunk->calls[i] == -1) {
+				//	chunk->calls[i] = glGenLists(1);
+				//}
+				//glNewList(chunk->calls[i], GL_COMPILE);
+				//glEndList();
 			} else {
 				free(vts);
 				if (chunk->vaos[i].vao >= 0) {
 					deleteVAO(&chunk->vaos[i]);
-					glDeleteLists(chunk->calls[i], 1);
 					chunk->vaos[i].vao = -1;
 					chunk->vaos[i].vbo = -1;
 				}
@@ -305,7 +303,7 @@ void drawChunk(struct chunk* chunk, struct plane* planes) {
 				ltc = 0.;
 			}
 			if (chunk->vaos[i].vao >= 0) {
-				glCallList(chunk->calls[i]);
+				drawQuads(&chunk->vaos[i]);
 			}
 			ltc++;
 			pcnt: ;
@@ -438,6 +436,12 @@ void drawWorld(struct world* world) {
 	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
+			if (world->chunks[i]->kill) {
+				deleteVAO(world->chunks[i]->vaos);
+				freeChunk(world->chunks[i]);
+				world->chunks[i] = NULL;
+				continue;
+			}
 			updateChunk(world->chunks[i]);
 			if (!world->chunks[i]->empty) {
 				drawChunk(world->chunks[i], frust);
