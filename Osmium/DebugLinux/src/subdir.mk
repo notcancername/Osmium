@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/block.c \
+../src/bmodel.c \
 ../src/entity.c \
 ../src/gui.c \
 ../src/ingame.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 
 OBJS += \
 ./src/block.o \
+./src/bmodel.o \
 ./src/entity.o \
 ./src/gui.o \
 ./src/ingame.o \
@@ -35,6 +37,7 @@ OBJS += \
 
 C_DEPS += \
 ./src/block.d \
+./src/bmodel.d \
 ./src/entity.d \
 ./src/gui.d \
 ./src/ingame.d \
