@@ -159,6 +159,7 @@ void loadGUI() {
 	}
 	loadTextureData(TX_ASCII, width, height, pngd, 1);
 	free(pngd);
+	png_destroy_read_struct(&png, &info, NULL);
 	fclose (fd);
 	ppn: ;
 	loadInventoryGUI();

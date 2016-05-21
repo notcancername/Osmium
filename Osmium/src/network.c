@@ -375,6 +375,7 @@ int __recurReadNBT(struct nbt_tag** root, unsigned char* buffer, size_t buflen, 
 		for (size_t i = 0; i < count; i++) {
 			st = NULL;
 			int nr = __recurReadNBT(&st, buffer, buflen, lt);
+			if (nr == 0) continue;
 			buffer += nr;
 			buflen -= nr;
 			r += nr;
@@ -1488,6 +1489,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				packet->data.play_server.chunkdata.nbts = malloc(sizeof(struct nbt_tag*) * packet->data.play_server.chunkdata.nbtc);
 				for (int32_t i = 0; i < packet->data.play_server.chunkdata.nbtc; i++) {
 					packet->data.play_server.chunkdata.nbts[i] = malloc(sizeof(struct nbt_tag));
+					memset(packet->data.play_server.chunkdata.nbts[i], 0, sizeof(struct nbt_tag));
 					rx = readNBT(&packet->data.play_server.chunkdata.nbts[i], pbuf, ps);
 					pbuf += rx;
 					ps -= rx;

@@ -1136,7 +1136,9 @@ void runNetwork(struct conn* conn) {
 			}
 			free(pkt.data.play_server.chunkdata.data);
 			for (int32_t i = 0; i < pkt.data.play_server.chunkdata.nbtc; i++) {
-				freeNBT(pkt.data.play_server.chunkdata.nbts[i]);
+				if (pkt.data.play_server.chunkdata.nbts[i] != NULL) {
+					freeNBT(pkt.data.play_server.chunkdata.nbts[i]);
+				}
 			}
 			if (pkt.data.play_server.chunkdata.nbts != NULL) free(pkt.data.play_server.chunkdata.nbts);
 		} else if (pkt.id == PKT_PLAY_SERVER_EFFECT) {
