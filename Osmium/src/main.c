@@ -28,6 +28,8 @@
 #include "ingame.h"
 #include "block.h"
 #include <unistd.h>
+#include <fcntl.h>
+#include "json.h"
 
 int fr = 30;
 int rr = 0;

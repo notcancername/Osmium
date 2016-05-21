@@ -9,6 +9,7 @@ C_SRCS += \
 ../src/gui.c \
 ../src/ingame.c \
 ../src/inventory.c \
+../src/json.c \
 ../src/main.c \
 ../src/models.c \
 ../src/nbt.c \
@@ -23,6 +24,7 @@ OBJS += \
 ./src/gui.o \
 ./src/ingame.o \
 ./src/inventory.o \
+./src/json.o \
 ./src/main.o \
 ./src/models.o \
 ./src/nbt.o \
@@ -37,6 +39,7 @@ C_DEPS += \
 ./src/gui.d \
 ./src/ingame.d \
 ./src/inventory.d \
+./src/json.d \
 ./src/main.d \
 ./src/models.d \
 ./src/nbt.d \
