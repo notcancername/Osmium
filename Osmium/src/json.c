@@ -112,16 +112,15 @@ int __readJSONValue(char* json, size_t* i, struct json_object* into) {
 				}
 			}
 		} else if (startsWith_nocase(json + *i, "true")) {
-			(*i) += 4;
+			(*i) += 3;
 			into->type = JSON_TRUE;
 		} else if (startsWith_nocase(json + *i, "false")) {
-			(*i) += 5;
+			(*i) += 4;
 			into->type = JSON_FALSE;
 		} else if (startsWith_nocase(json + *i, "null")) {
-			(*i) += 4;
+			(*i) += 3;
 			into->type = JSON_NULL;
 		} else if (json[*i] == ']') {
-			(*i)++;
 			into->type = JSON_EOA;
 		} else continue;
 		break;

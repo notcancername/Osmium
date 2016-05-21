@@ -9,6 +9,7 @@
 #define BMODEL_H_
 
 #include <stdint.h>
+#include <stdlib.h>
 
 #define BD_TP_RIGHT 0
 #define BD_TP_LEFT 1
@@ -61,6 +62,7 @@ struct belement {
 };
 
 struct bmodel {
+		char* name;
 		char* parent;
 		uint8_t ambientocc;
 		struct bdisplay display[8];
@@ -70,10 +72,16 @@ struct bmodel {
 		size_t element_count;
 };
 
+struct bnamespace {
+		char* name;
+		struct bmodel** bmodels;
+		size_t bmodel_count;
+};
+
 struct bmodel* readBmodel(char* path);
 
 int readAllBmodels(char* directory, struct bmodel*** bmodels, size_t* bmodel_count);
 
-void resolveBmodels(struct bmodel** bmodels, size_t bmodel_count, char* type);
+void resolveBmodels(struct bnamespace** bns, size_t bns_count);
 
 #endif /* BMODEL_H_ */
