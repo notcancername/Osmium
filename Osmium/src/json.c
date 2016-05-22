@@ -22,6 +22,7 @@ char* __readJSONString(char* json, size_t* i) {
 		} else if (cs == 1) {
 			if (json[*i] == '\"') {
 				errno = 0;
+				ret[rs] = 0;
 				return ret;
 			} else if (json[*i] == '\\') {
 				(*i)++;
@@ -55,6 +56,7 @@ char* __readJSONString(char* json, size_t* i) {
 		}
 	}
 	if (ret == NULL) errno = EINVAL;
+	else ret[rs] = 0;
 	return ret;
 }
 

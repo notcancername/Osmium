@@ -197,6 +197,7 @@ struct bmodel* readBmodel(char* path) {
 			}
 		}
 	}
+	freeJSON(&json);
 	return bm;
 }
 
@@ -208,6 +209,7 @@ int readAllBmodels(char* directory, struct bmodel*** bmodels, size_t* bmodel_cou
 	size_t dl = strlen(directory);
 	struct dirent* de;
 	while ((de = readdir(dir))) {
+		if (streq(de->d_name, ".") || streq(de->d_name, "..")) continue;
 		size_t snl = strlen(de->d_name);
 		char tp[dl + snl + 2];
 		memcpy(tp, directory, dl);
@@ -229,18 +231,25 @@ void resolveBmodels(struct bnamespace** bns, size_t bns_count) {
 			struct bmodel* bm = bn->bmodels[i];
 			if (bm == NULL) continue;
 			char* bmpsp = NULL;
-			while (bm->parent != NULL && (bmpsp = strchr(bm->parent, '/'))) {
+			char* cp = bm->parent;
+			while (cp != NULL && (bmpsp = strchr(cp, '/'))) {
 				bmpsp[0] = 0;
 				bmpsp++;
+				int f = 0;
 				for (size_t o = 0; o < bns_count; o++) {
-					if (streq_nocase(bn->name, bm->parent)) {
+					if (streq_nocase(bn->name, cp)) {
 						for (size_t p = 0; p < bns[o]->bmodel_count; p++) {
 							if (streq_nocase(bn->bmodels[p]->name, bmpsp)) {
-								free(bm->parent);
-								bm->parent = bn->bmodels[p]->parent;
-								if (bm->elements != NULL) free(bm->elements);
-								bm->elements = bn->bmodels[p]->elements;
-								bm->element_count = bn->bmodels[p]->element_count;
+								f = 1;
+								cp = bn->bmodels[p]->parent;
+								if (bm->elements == NULL) {
+									bm->element_count = bn->bmodels[p]->element_count;
+									bm->elements = malloc(bm->element_count * sizeof(struct belement));
+									memcpy(bm->elements, bn->bmodels[p]->elements, bm->element_count * sizeof(struct belement));
+								} else {
+									bm->elements = realloc(bm->elements, sizeof(struct belement) * (bn->bmodels[p]->element_count + bm->element_count));
+									memcpy(bm->elements + bm->element_count, bn->bmodels[p]->elements, bn->bmodels[p]->element_count * sizeof(struct belement));
+								}
 								if (bm->textures == NULL) {
 									bm->texture_count = bn->bmodels[p]->texture_count;
 									bm->textures = malloc(bm->texture_count * sizeof(struct btexture));
@@ -249,12 +258,76 @@ void resolveBmodels(struct bnamespace** bns, size_t bns_count) {
 									bm->textures = realloc(bm->textures, sizeof(struct btexture) * (bn->bmodels[p]->texture_count + bm->texture_count));
 									memcpy(bm->textures + bm->texture_count, bn->bmodels[p]->textures, bn->bmodels[p]->texture_count * sizeof(struct btexture));
 								}
+								break;
 							}
 						}
 						break;
 					}
 				}
+				bmpsp--;
+				bmpsp[0] = '/';
+				if (!f) {
+					printf("Warning: model <%s> has an invalid parent!\n", bm->name);
+					break;
+				}
+			}
+			for (size_t p = 0; p < bm->texture_count; p++) {
+				struct btexture* btp = &bm->textures[p];
+				if (streq(btp->name, "particle")) continue;
+				while (btp->path != NULL && strlen(btp->path) >= 1 && btp->path[0] == '#') {
+					for (size_t o = 0; o < bm->texture_count; o++) {
+						struct btexture* bto = &bm->textures[o];
+						if (streq_nocase(bto->name, btp->path + 1)) {
+							btp->path = bto->path;
+							goto cntdd;
+						}
+					}
+					break;
+					cntdd: ;
+				}
 			}
 		}
 	}
 }
+
+struct blockstate* readBlockstate(char* path) {
+	char* nplx = strrchr(path, '/');
+	if (nplx == NULL) {
+		errno = EINVAL;
+		return NULL;
+	}
+	nplx++;
+	nplx = strdup(nplx);
+	{
+		char* tx = strchr(nplx, '.');
+		tx[0] = 0;
+	}
+	int bfd = open(path, O_RDONLY);
+	if (bfd < 0) return NULL;
+	char* buf = malloc(4097);
+	size_t cr = 0;
+	size_t cp = 4096;
+	ssize_t r = 0;
+	while ((r = read(bfd, buf + cr, cp - cr - 1)) > 0) {
+		cr += r;
+		if (cp - cr <= 2048) {
+			cp += 4096;
+			buf = realloc(buf, cp + 1);
+		}
+	}
+	buf[cr] = 0;
+	close(bfd);
+	struct json_object json;
+	if (parseJSON(&json, buf) < 0) return -1;
+	struct bmodel* bm = malloc(sizeof(struct bmodel));
+	memset(bm, 0, sizeof(struct bmodel));
+	bm->name = nplx;
+
+	freeJSON(&json);
+	return bm;
+}
+
+int readAllBlockstates(char* directory, struct blockstate*** bss, size_t* bs_count) {
+
+}
+

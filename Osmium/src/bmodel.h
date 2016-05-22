@@ -78,10 +78,73 @@ struct bnamespace {
 		size_t bmodel_count;
 };
 
+struct bsmodel {
+		char* model;
+		float x;
+		float y;
+		uint8_t uvlock;
+		float weight;
+};
+
+struct bsvariant {
+		char* name;
+		struct bsmodel* bsmodels;
+		size_t bsmodel_count;
+};
+
+struct bsvariants {
+		struct bsvariant* variants;
+		size_t variant_count;
+};
+
+struct bsmpclause {
+		char* name;
+		char** values;
+		size_t value_count;
+};
+
+struct bsmpclauses {
+		struct bsmpclause* clauses;
+		size_t cause_count;
+};
+
+struct bsmpwhen {
+		uint8_t or;
+		struct bsmpclauses** pclauses;
+		size_t pclause_count;
+};
+
+struct bsmpcase {
+		struct bsmpwhen** whens;
+		size_t when_count;
+		struct bsvariants** applies;
+		size_t apply_count;
+};
+
+struct bsmultipart {
+		struct bsmpcase* cases;
+		size_t case_count;
+};
+
+union blockstateu {
+		struct bsvariants variants;
+		struct bsmultipart multipart;
+};
+
+struct blockstate {
+		uint8_t multipart;
+		union blockstateu bsu;
+		char* name;
+};
+
 struct bmodel* readBmodel(char* path);
 
 int readAllBmodels(char* directory, struct bmodel*** bmodels, size_t* bmodel_count);
 
 void resolveBmodels(struct bnamespace** bns, size_t bns_count);
+
+struct blockstate* readBlockstate(char* path);
+
+int readAllBlockstates(char* directory, struct blockstate*** bss, size_t* bs_count);
 
 #endif /* BMODEL_H_ */

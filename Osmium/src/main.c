@@ -269,6 +269,21 @@ int main(int argc, char *argv[]) {
 	loadIngame();
 	loadBlocks();
 	load_entities();
+	gbns = malloc(sizeof(struct bnamespace*) * 2);
+	gbn_count = 2;
+	gbns[0] = malloc(sizeof(struct bnamespace));
+	gbns[0]->name = "block";
+	gbns[0]->bmodels = NULL;
+	gbns[0]->bmodel_count = 0;
+	gbns[1] = malloc(sizeof(struct bnamespace));
+	gbns[1]->name = "item";
+	gbns[1]->bmodels = NULL;
+	gbns[1]->bmodel_count = 0;
+	readAllBmodels(INSTALLDIR "assets/minecraft/models/block/", &gbns[0]->bmodels, &gbns[0]->bmodel_count);
+	//TODO: read items
+	resolveBmodels(gbns, gbn_count);
+	//for (int i = 0; i < gbns[0]->bmodel_count; i++)
+	//	printf("%s %s %i %i\n", gbns[0]->bmodels[i]->name, gbns[0]->bmodels[i]->parent, gbns[0]->bmodels[i]->element_count, gbns[0]->bmodels[i]->texture_count);
 	loadBaseModels();
 	def_wrap = 32;
 	blockMapLength = 410;

@@ -9,6 +9,7 @@
 #define GLOBALS_H_
 
 #include <GLFW/glfw3.h>
+#include "bmodel.h"
 
 int width;
 int height;
@@ -41,6 +42,8 @@ int viewBobbing;
 char* username;
 char* uuid;
 char* accessToken;
+struct bnamespace** gbns;
+size_t gbn_count;
 
 #define PI 3.141592653589793
 
