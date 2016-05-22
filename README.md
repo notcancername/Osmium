@@ -28,13 +28,14 @@ Dependencies (Windows):
 - libpng
 
 Installation: 
+
 1. Download executable from releases tab above.
 2. Put in a folder of your choosing.
 3. Open a 1.9.4 minecraft.jar from Mojang, and copy the assets folder into that directory. (ie INSTALLDIR/assets/minecraft/etc)
 4. Run it!
 
-Windows: 
-Requires: MinGW, dependencies for windows listed above.
+Windows: Requires MinGW, dependencies for windows listed above.
+
 1. Go into (project root)/Osmium/Osmium/DebugWindows
 2. Run 'make all'
 3. Create an empty directory somewhere, this will be your installation directory.
@@ -42,7 +43,8 @@ Requires: MinGW, dependencies for windows listed above.
 5. Open a 1.9.4 minecraft.jar from Mojang, and copy the assets folder into that directory. (ie INSTALLDIR/assets/minecraft/etc)
 6. Run it!
 
-Linux: Requires GCC, depenendcies for linux listed above.
+Linux: Requires GCC, depenencies for linux listed above.
+
 1. Go into (project root)/Osmium/Osmium/DebugLinux
 2. Run 'make all'
 3. Create an empty directory somewhere, this will be your installation directory.
