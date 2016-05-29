@@ -319,12 +319,58 @@ struct blockstate* readBlockstate(char* path) {
 	close(bfd);
 	struct json_object json;
 	if (parseJSON(&json, buf) < 0) return -1;
-	struct bmodel* bm = malloc(sizeof(struct bmodel));
-	memset(bm, 0, sizeof(struct bmodel));
-	bm->name = nplx;
-
+	struct blockstate* bs = malloc(sizeof(struct blockstate));
+	memset(bs, 0, sizeof(struct blockstate));
+	bs->name = nplx;
+	struct json_object* mpv = getJSONValue(&json, "variants");
+	if (mpv == NULL || mpv->type != JSON_OBJECT) {
+		mpv = getJSONValue(&json, "multipart");
+		if (mpv == NULL || mpv->type != JSON_OBJECT) goto mpvn;
+		bs->multipart = 1;
+		bs->bsu.multipart.case_count = mpv->child_count;
+		bs->bsu.multipart.cases = malloc(sizeof(struct bsmpcase) * mpv->child_count);
+		memset(&bs->bsu.multipart.cases, 0, sizeof(struct bsmpcase) * mpv->child_count);
+	} else {
+		bs->multipart = 0;
+		bs->bsu.variants.variant_count = mpv->child_count;
+		bs->bsu.variants.variants = malloc(sizeof(struct bsvariant) * mpv->child_count);
+		for (size_t i = 0; i < mpv->child_count; i++) {
+			struct json_object* v = mpv->children[i];
+			if (v == NULL) {
+				memset(&bs->bsu.variants.variants[i], 0, sizeof(struct bsvariant));
+				continue;
+			}
+			bs->bsu.variants.variants[i].name = v->name;
+			struct json_object* mc = v;
+			if (v->child_count == 1 && v->children[0] != NULL && v->children[0]->type == JSON_ARRAY) {
+				mc = v->children[0];
+			}
+			bs->bsu.variants.variants[i].bsmodel_count = mc->child_count;
+			bs->bsu.variants.variants[i].bsmodels = malloc(mc->child_count * sizeof(struct bsmodel));
+			for (size_t o = 0; o < mc->child_count; o++) {
+				memset(&bs->bsu.variants.variants[i].bsmodels[o], 0, sizeof(struct bsmodel));
+				bs->bsu.variants.variants[i].bsmodels[o].weight = 1.;
+				struct json_object* mcs = mc->children[o];
+				if (mcs == NULL || mcs->type != JSON_OBJECT) continue;
+				struct json_object* mcsx = getJSONValue(mcs, "model");
+				if (mcsx != NULL && mcsx->type == JSON_STRING) {
+					bs->bsu.variants.variants[i].bsmodels[o].model = mcsx->data.string;
+					mcsx->data.string = NULL;
+				}
+				mcsx = getJSONValue(mcs, "x");
+				if (mcsx != NULL && mcsx->type == JSON_NUMBER) bs->bsu.variants.variants[i].bsmodels[o].x = mcsx->data.number;
+				mcsx = getJSONValue(mcs, "y");
+				if (mcsx != NULL && mcsx->type == JSON_NUMBER) bs->bsu.variants.variants[i].bsmodels[o].y = mcsx->data.number;
+				mcsx = getJSONValue(mcs, "weight");
+				if (mcsx != NULL && mcsx->type == JSON_NUMBER) bs->bsu.variants.variants[i].bsmodels[o].weight = mcsx->data.number;
+				mcsx = getJSONValue(mcs, "uvlock");
+				if (mcsx != NULL && mcsx->type == JSON_TRUE) bs->bsu.variants.variants[i].bsmodels[o].uvlock = 1;
+			}
+		}
+	}
+	mpvn: ;
 	freeJSON(&json);
-	return bm;
+	return bs;
 }
 
 int readAllBlockstates(char* directory, struct blockstate*** bss, size_t* bs_count) {
