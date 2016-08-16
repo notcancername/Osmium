@@ -33,7 +33,7 @@ void virtTexCoord2f(struct vertex_tex* vert, float x, float y) {
 	vert->texY = y;
 }
 
-void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, uint16_t restart) {
+void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, int vattrib) {
 	if (!overwrite) glGenVertexArrays(1, &vao->vao);
 	glBindVertexArray(vao->vao);
 	if (!overwrite) {
@@ -55,10 +55,12 @@ void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int text
 		//}
 	}
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint16_t) * vao->index_count, indicies, GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, textures ? sizeof(struct vertex_tex) : sizeof(struct vertex), 0);
-	if (textures) glTexCoordPointer(2, GL_FLOAT, sizeof(struct vertex_tex), (void*) (sizeof(struct vertex)));
+	size_t rz = vattrib ? ((vattrib == GL_BYTE || vattrib == GL_UNSIGNED_BYTE) ? 1 : ((vattrib == GL_SHORT || vattrib == GL_UNSIGNED_SHORT) ? 2 : 4)) : 0;
+	glVertexPointer(3, GL_FLOAT, (textures ? sizeof(struct vertex_tex) : sizeof(struct vertex)) + rz, 0);
+	if (textures) glTexCoordPointer(2, GL_FLOAT, sizeof(struct vertex_tex) + rz, (void*) (sizeof(struct vertex)));
 	glEnableClientState (GL_VERTEX_ARRAY);
 	if (textures) glEnableClientState (GL_TEXTURE_COORD_ARRAY);
+	if (vattrib) glVertexAttribIPointer(0, 1, vattrib, (textures ? sizeof(struct vertex_tex) : sizeof(struct vertex)) + rz, (void*) (sizeof(struct vertex_tex)));
 	glBindVertexArray(0);
 	vao->tex = textures;
 }
@@ -150,7 +152,7 @@ void createMultSubCube(float size, struct vertex_tex* vrt, float x, float y, flo
 void createTexCube(float size, struct vao* vao) {
 	struct vertex_tex vrt[24];
 	createSubCube(size, vrt, 0xFF, 0., 0., 0., 0., 0., 1., 1.);
-	createVAO(vrt, 24, vao, 1, 0, 4);
+	createVAO(vrt, 24, vao, 1, 0, 0);
 }
 
 void drawSkeleton(struct vao* vao) {
@@ -179,6 +181,9 @@ int updateChunk(struct chunk* chunk) {
 			struct vertex_tex* vts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
 			size_t vtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
 			size_t cvts = 0;
+			uint16_t* txd = malloc(512 * sizeof(uint16_t));
+			size_t txs = 0;
+			size_t txc = 512;
 			//struct vertex_tex* tvts = malloc(2048 * 4 * 6 * sizeof(struct vertex_tex));
 			//size_t tvtsx = 2048 * 4 * 6 * sizeof(struct vertex_tex);
 			//size_t tcvts = 0;
@@ -211,7 +216,7 @@ int updateChunk(struct chunk* chunk) {
 								} else if (z == 15 && chzp != NULL && isBlockOpaque(chzp->blocks[x][0][y + sy])) fm ^= 0x01;
 								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
 							} else {
-								drawBlock(&vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
+								drawBlock(&txd, &txs, &txc, &vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
 							}
 						}
 					}
@@ -220,9 +225,12 @@ int updateChunk(struct chunk* chunk) {
 			//clock_gettime(CLOCK_MONOTONIC, &ts);
 			//ms2 = ((double) ts.tv_sec * 1000. + (double) ts.tv_nsec / 1000000.) - ms2;
 			//printf("chunk took: %f opaq = %i/4096\n", ms2, opaw);
+			glBindTexture(GL_TEXTURE_BUFFER, chunk->tbufs[i]);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_RG8UI, chunk->tbufs[i]);
+			glTexImage1D(GL_TEXTURE_BUFFER, 0, GL_RG8UI, txs, 0, GL_RG8UI, GL_UNSIGNED_BYTE, txd);
 			if (cvts > 0) {
 				//printf("pic (opaque) = %i\n", cvts);
-				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1, 4);
+				createVAO(vts, cvts, &chunk->vaos[i], 1, chunk->vaos[i].vao == -1 ? 0 : 1, 0);
 				free(vts);
 				//if (chunk->calls[i] == -1) {
 				//	chunk->calls[i] = glGenLists(1);
@@ -302,6 +310,9 @@ void drawChunk(struct chunk* chunk, struct plane* planes) {
 				glTranslatef(0., 16. * ltc, 0.);
 				ltc = 0.;
 			}
+			glBindTexture(GL_TEXTURE_BUFFER, chunk->tbufs[i]);
+			glTexBuffer(GL_TEXTURE_BUFFER, GL_RG8UI, chunk->tbufs[i]);
+
 			if (chunk->vaos[i].vao >= 0) {
 				drawQuads(&chunk->vaos[i]);
 			}
@@ -433,7 +444,7 @@ void drawWorld(struct world* world) {
 	frust[FR_RIGHT].px = ncx + (xp[0] * wnear);
 	frust[FR_RIGHT].py = ncy + (xp[1] * wnear);
 	frust[FR_RIGHT].pz = ncz + (xp[2] * wnear);
-	glBindTexture(GL_TEXTURE_2D, TX_DEFAULT);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, TX_DEFAULT);
 	for (size_t i = 0; i < world->chunk_count; i++) {
 		if (world->chunks[i] != NULL) {
 			if (world->chunks[i]->kill) {

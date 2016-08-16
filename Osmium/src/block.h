@@ -407,7 +407,7 @@
 
 void loadBlocks();
 
-void drawBlock(struct vertex_tex** vex, size_t* vexs, size_t* cvec, block block, unsigned char faceMask, float x, float y, float z, int32_t wx, int32_t wy, int32_t wz);
+void drawBlock(uint16_t** txd, size_t* txs, size_t* txc, struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, unsigned char faceMask, float x, float y, float z, int32_t wx, int32_t wy, int32_t wz);
 
 int isBlockOpaque(block block);
 

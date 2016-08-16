@@ -787,7 +787,7 @@ struct pkt_play_server_playerlistitem {
 		struct li_player* players;
 };
 
-struct pkt_play_server_playerposlook {
+struct pkt_play_server_playerpositionandlook {
 		double x;
 		double y;
 		double z;
@@ -1056,8 +1056,8 @@ union pkt_state_play_client {
 		struct pkt_play_client_pluginmessage pluginmessage;
 		struct pkt_play_client_useentity useentity;
 		struct pkt_play_client_keepalive keepalive;
-		struct pkt_play_client_playerpos playerpos;
-		struct pkt_play_client_playerposlook playerposlook;
+		struct pkt_play_client_playerpos playerposition;
+		struct pkt_play_client_playerposlook playerpositionandlook;
 		struct pkt_play_client_playerlook playerlook;
 		struct pkt_play_client_player player;
 		struct pkt_play_client_vehiclemove vehiclemove;
@@ -1122,7 +1122,7 @@ union pkt_state_play_server {
 		struct pkt_play_server_playerabilities playerabilities;
 		struct pkt_play_server_combatevent combatevent;
 		struct pkt_play_server_playerlistitem playerlistitem;
-		struct pkt_play_server_playerposlook playerposlook;
+		struct pkt_play_server_playerpositionandlook playerpositionandlook;
 		struct pkt_play_server_usebed usebed;
 		struct pkt_play_server_destroyentities destroyentities;
 		struct pkt_play_server_removeentityeffect removeentityeffect;

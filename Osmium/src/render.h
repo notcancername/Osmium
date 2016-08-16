@@ -169,7 +169,7 @@ void virtVertex3f(union uvertex* vert, float x, float y, float z);
 
 void virtTexCoord2f(struct vertex_tex* vert, float x, float y);
 
-void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, uint16_t restart);
+void createVAO(struct vertex* verticies, size_t count, struct vao* vao, int textures, int overwrite, int vattrib);
 
 void deleteVAO(struct vao* vao);
 

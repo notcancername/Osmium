@@ -38,7 +38,7 @@ void loadIngame() {
 			virtVertex3f(&vts[vi++], x1, 16., x2 + 64.);
 		}
 	}
-	createVAO(vts, 676, &skybox, 0, 0, 4);
+	createVAO(vts, 676, &skybox, 0, 0, 0);
 	gs.playerinv = malloc(sizeof(struct inventory));
 	newInventory(gs.playerinv, INVTYPE_PLAYERINVENTORY, 0);
 	gs.playerinv->slot_count = 46;
@@ -500,12 +500,12 @@ void ingame_tick() {
 	}
 	struct packet pkt;
 	pkt.id = PKT_PLAY_CLIENT_PLAYERPOSLOOK;
-	pkt.data.play_client.playerposlook.x = gs.player->x;
-	pkt.data.play_client.playerposlook.y = gs.player->y;
-	pkt.data.play_client.playerposlook.z = gs.player->z;
-	pkt.data.play_client.playerposlook.yaw = gs.player->yaw;
-	pkt.data.play_client.playerposlook.pitch = gs.player->pitch;
-	pkt.data.play_client.playerposlook.onGround = gs.player->onGround;
+	pkt.data.play_client.playerpositionandlook.x = gs.player->x;
+	pkt.data.play_client.playerpositionandlook.y = gs.player->y;
+	pkt.data.play_client.playerpositionandlook.z = gs.player->z;
+	pkt.data.play_client.playerpositionandlook.yaw = gs.player->yaw;
+	pkt.data.play_client.playerpositionandlook.pitch = gs.player->pitch;
+	pkt.data.play_client.playerpositionandlook.onGround = gs.player->onGround;
 	if (writePacket(gs.conn, &pkt) != 0) {
 		printf("Failed to write packet: %s\n", strerror(errno));
 	}
@@ -1204,18 +1204,18 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERLISTITEM) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERPOSLOOK) {
-			gs.player->x = ((pkt.data.play_server.playerposlook.flags & 0x01) == 0x01 ? gs.player->x : 0.) + pkt.data.play_server.playerposlook.x;
-			gs.player->y = ((pkt.data.play_server.playerposlook.flags & 0x02) == 0x02 ? gs.player->y : 0.) + pkt.data.play_server.playerposlook.y;
-			gs.player->z = ((pkt.data.play_server.playerposlook.flags & 0x04) == 0x04 ? gs.player->z : 0.) + pkt.data.play_server.playerposlook.z;
+			gs.player->x = ((pkt.data.play_server.playerpositionandlook.flags & 0x01) == 0x01 ? gs.player->x : 0.) + pkt.data.play_server.playerpositionandlook.x;
+			gs.player->y = ((pkt.data.play_server.playerpositionandlook.flags & 0x02) == 0x02 ? gs.player->y : 0.) + pkt.data.play_server.playerpositionandlook.y;
+			gs.player->z = ((pkt.data.play_server.playerpositionandlook.flags & 0x04) == 0x04 ? gs.player->z : 0.) + pkt.data.play_server.playerpositionandlook.z;
 			gs.player->lx = gs.player->x;
 			gs.player->ly = gs.player->y;
 			gs.player->lz = gs.player->z;
-			gs.player->pitch = ((pkt.data.play_server.playerposlook.flags & 0x08) == 0x08 ? gs.player->pitch : 0.) + pkt.data.play_server.playerposlook.y;
-			gs.player->yaw = ((pkt.data.play_server.playerposlook.flags & 0x10) == 0x10 ? gs.player->yaw : 0.) + pkt.data.play_server.playerposlook.z;
+			gs.player->pitch = ((pkt.data.play_server.playerpositionandlook.flags & 0x08) == 0x08 ? gs.player->pitch : 0.) + pkt.data.play_server.playerpositionandlook.y;
+			gs.player->yaw = ((pkt.data.play_server.playerpositionandlook.flags & 0x10) == 0x10 ? gs.player->yaw : 0.) + pkt.data.play_server.playerpositionandlook.z;
 			gs.player->health = 20.;
 			printf("spawned in at: %f, %f, %f\n", gs.player->x, gs.player->y, gs.player->z);
 			rpkt.id = PKT_PLAY_CLIENT_TELEPORTCONFIRM;
-			rpkt.data.play_client.teleportconfirm.teleportID = pkt.data.play_server.playerposlook.teleportID;
+			rpkt.data.play_client.teleportconfirm.teleportID = pkt.data.play_server.playerpositionandlook.teleportID;
 			writePacket(conn, &rpkt);
 			running = 1;
 			spawnedIn = 1;

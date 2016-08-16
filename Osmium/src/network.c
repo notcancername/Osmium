@@ -1956,30 +1956,30 @@ int readPacket(struct conn* conn, struct packet* packet) {
 				free(pktbuf);
 				return -1;
 			}
-			memcpy(&packet->data.play_server.playerposlook.x, pbuf, sizeof(double));
+			memcpy(&packet->data.play_server.playerpositionandlook.x, pbuf, sizeof(double));
 			pbuf += sizeof(double);
 			ps -= sizeof(double);
-			swapEndian(&packet->data.play_server.playerposlook.x, 8);
-			memcpy(&packet->data.play_server.playerposlook.y, pbuf, sizeof(double));
+			swapEndian(&packet->data.play_server.playerpositionandlook.x, 8);
+			memcpy(&packet->data.play_server.playerpositionandlook.y, pbuf, sizeof(double));
 			pbuf += sizeof(double);
 			ps -= sizeof(double);
-			swapEndian(&packet->data.play_server.playerposlook.y, 8);
-			memcpy(&packet->data.play_server.playerposlook.z, pbuf, sizeof(double));
+			swapEndian(&packet->data.play_server.playerpositionandlook.y, 8);
+			memcpy(&packet->data.play_server.playerpositionandlook.z, pbuf, sizeof(double));
 			pbuf += sizeof(double);
 			ps -= sizeof(double);
-			swapEndian(&packet->data.play_server.playerposlook.z, 8);
-			memcpy(&packet->data.play_server.playerposlook.yaw, pbuf, sizeof(float));
+			swapEndian(&packet->data.play_server.playerpositionandlook.z, 8);
+			memcpy(&packet->data.play_server.playerpositionandlook.yaw, pbuf, sizeof(float));
 			pbuf += sizeof(float);
 			ps -= sizeof(float);
-			swapEndian(&packet->data.play_server.playerposlook.yaw, 4);
-			memcpy(&packet->data.play_server.playerposlook.pitch, pbuf, sizeof(float));
+			swapEndian(&packet->data.play_server.playerpositionandlook.yaw, 4);
+			memcpy(&packet->data.play_server.playerpositionandlook.pitch, pbuf, sizeof(float));
 			pbuf += sizeof(float);
 			ps -= sizeof(float);
-			swapEndian(&packet->data.play_server.playerposlook.pitch, 4);
-			packet->data.play_server.playerposlook.flags = pbuf[0];
+			swapEndian(&packet->data.play_server.playerpositionandlook.pitch, 4);
+			packet->data.play_server.playerpositionandlook.flags = pbuf[0];
 			pbuf++;
 			ps--;
-			int rx = readVarInt(&packet->data.play_server.playerposlook.teleportID, pbuf, ps);
+			int rx = readVarInt(&packet->data.play_server.playerpositionandlook.teleportID, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
 		} else if (id == PKT_PLAY_SERVER_USEBED) {
@@ -2721,34 +2721,34 @@ int writePacket(struct conn* conn, struct packet* packet) {
 		} else if (packet->id == PKT_PLAY_CLIENT_KEEPALIVE) {
 			pi += writeVarInt(packet->data.play_client.keepalive.key, pktbuf + pi);
 		} else if (packet->id == PKT_PLAY_CLIENT_PLAYERPOS) {
-			memcpy(pktbuf + pi, &packet->data.play_client.playerpos.x, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerposition.x, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerpos.y, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerposition.y, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerpos.z, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerposition.z, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerpos.onGround, 1);
+			memcpy(pktbuf + pi, &packet->data.play_client.playerposition.onGround, 1);
 			pi++;
 		} else if (packet->id == PKT_PLAY_CLIENT_PLAYERPOSLOOK) {
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.x, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.x, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.y, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.y, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.z, sizeof(double));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.z, sizeof(double));
 			swapEndian(pktbuf + pi, 8);
 			pi += sizeof(double);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.yaw, sizeof(float));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.yaw, sizeof(float));
 			swapEndian(pktbuf + pi, 4);
 			pi += sizeof(float);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.pitch, sizeof(float));
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.pitch, sizeof(float));
 			swapEndian(pktbuf + pi, 4);
 			pi += sizeof(float);
-			memcpy(pktbuf + pi, &packet->data.play_client.playerposlook.onGround, 1);
+			memcpy(pktbuf + pi, &packet->data.play_client.playerpositionandlook.onGround, 1);
 			pi++;
 		} else if (packet->id == PKT_PLAY_CLIENT_PLAYERLOOK) {
 			memcpy(pktbuf + pi, &packet->data.play_client.playerlook.yaw, sizeof(float));

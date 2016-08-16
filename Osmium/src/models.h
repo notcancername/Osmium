@@ -631,4 +631,6 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 
 void loadTextureData(int id, size_t width, size_t height, void* data, int s);
 
+int loadTexturesPNG2(char* path, int wrap, int id, int s, char** map, int maps, int* smap);
+
 #endif /* MODELS_H_ */
