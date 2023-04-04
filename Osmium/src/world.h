@@ -36,6 +36,7 @@ struct chunk {
 		int needsUpdate[16];
 		int empty;
 		int kill;
+        unsigned int tbufs[8];
 };
 
 struct world {

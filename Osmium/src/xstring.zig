@@ -79,35 +79,35 @@ export fn contains(haystack: ?[*:0]const u8, needle: ?[*:0]const u8) c_int {
     if(haystack == needle) return 1;
     if(haystack == null or needle == null) return 0;
 
-    return c.strstr(haystack, needle);
+    return if(c.strstr(haystack, needle) != null) 1 else 0;
 }
 
 export fn contains_nocase(haystack: ?[*:0]const u8, needle: ?[*:0]const u8) c_int {
     if(haystack == needle) return 1;
     if(haystack == null or needle == null) return 0;
 
-    return if(comptime @hasDecl(c, "strcasestr")) c.strcasestr(haystack, needle) else @compileError("stub");
+    return if(comptime @hasDecl(c, "strcasestr")) if(c.strcasestr(haystack, needle) != null) 1 else 0 else @compileError("stub");
 }
 
 export fn toLowerCase(str: ?[*:0]u8) ?[*:0]u8 {
     if(str) |s| {
-        const sl = std.mem.span(s.?);
-        std.ascii.lowerString(sl, sl);
+        const sl = std.mem.span(s);
+        _ = std.ascii.lowerString(sl, sl);
     }
     return str;
 }
 
 export fn toUpperCase(str: ?[*:0]u8) ?[*:0]u8 {
     if(str) |s| {
-        const sl = std.mem.span(s.?);
-        std.ascii.upperString(sl, sl);
+        const sl = std.mem.span(s);
+        _ = std.ascii.upperString(sl, sl);
     }
     return str;
 }
 
 export fn strisunum(str: ?[*:0]u8) c_int {
     if(str) |s| {
-        for(s) |ch| {
+        for(s, 0..std.math.maxInt(usize)) |ch, _| {
             switch(ch) {
                 '0'...'9' => {},
                 else => return 0,

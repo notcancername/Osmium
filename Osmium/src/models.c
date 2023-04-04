@@ -18,6 +18,67 @@
 #include "globals.h"
 #include <GL/glext.h>
 
+struct model mod_spider;
+struct model mod_pig;
+struct model mod_pigsaddle;
+struct model mod_sheep;
+struct model mod_sheepwool;
+struct model mod_cow;
+struct model mod_wolf;
+struct model mod_chicken;
+struct model mod_ocelot;
+struct model mod_rabbit;
+struct model mod_silverfish;
+struct model mod_endermite;
+struct model mod_creeper;
+struct model mod_creepercharge;
+struct model mod_enderman;
+struct model mod_snowman;
+struct model mod_skeleton;
+struct model mod_skeletonleggings;
+struct model mod_skeletonarmor;
+struct model mod_witch;
+struct model mod_blaze;
+struct model mod_zombie;
+struct model mod_zombieleggings;
+struct model mod_zombiearmor;
+struct model mod_zombievillager;
+struct model mod_slime;
+struct model mod_slimegel;
+struct model mod_magmacube;
+struct model mod_ghast;
+struct model mod_squid;
+struct model mod_villager;
+struct model mod_irongolem;
+struct model mod_bat;
+struct model mod_guardian;
+struct model mod_shulker;
+struct model mod_dragon;
+struct model mod_endercrystal;
+struct model mod_endercrystalbaseless;
+struct model mod_wither;
+struct model mod_witheraura;
+struct model mod_leashknot;
+struct model mod_witherskull;
+struct model mod_shulkerbullet;
+struct model mod_armorstand;
+struct model mod_armorstandleggings;
+struct model mod_armorstandarmor;
+struct model mod_minecarttnt;
+struct model mod_minecartmobspawner;
+struct model mod_minecart;
+struct model mod_boat;
+struct model mod_horse;
+struct model mod_player;
+struct model mod_playerleggings;
+struct model mod_playerarmor;
+struct model mod_playerelytra;
+struct model mod_splayer;
+struct model mod_splayerleggings;
+struct model mod_splayerarmor;
+struct model mod_splayerelytra;
+
+
 void loadBaseModels() {
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/entity/steve.png", TX_STEVE, 1);
 	loadTexturePNG(INSTALLDIR "assets/minecraft/textures/entity/creeper/creeper.png", TX_CREEPER, 1);

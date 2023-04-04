@@ -59,47 +59,6 @@ int connectToServer(struct conn* conn, char* ip, uint16_t port) {
 	return 0;
 }
 
-void swapEndian(void* dou, size_t ss) {
-	uint8_t* pxs = (uint8_t*) dou;
-	for (int i = 0; i < ss / 2; i++) {
-		uint8_t tmp = pxs[i];
-		pxs[i] = pxs[ss - 1 - i];
-		pxs[ss - 1 - i] = tmp;
-	}
-}
-
-int getVarIntSize(int32_t input) {
-	for (unsigned char x = 1; x < 5; ++x)
-		if (((input & -1) << (x * 7)) == 0) return x;
-	return 5;
-}
-
-int getVarLongSize(int64_t input) {
-	for (unsigned char x = 1; x < 10; ++x)
-		if (((input & -1) << (x * 7)) == 0) return x;
-	return 10;
-}
-
-int writeVarInt(int32_t input, unsigned char* buffer) {
-	int i = 0;
-	while ((input & -128) != 0) {
-		buffer[i++] = (input & 127) | 128;
-		input >>= 7;
-	}
-	buffer[i++] = input;
-	return i;
-}
-
-int writeVarLong(int64_t input, unsigned char* buffer) {
-	int i = 0;
-	while ((input & -128) != 0) {
-		buffer[i++] = (input & 127) | 128;
-		input >>= 7;
-	}
-	buffer[i++] = input;
-	return i;
-}
-
 int writeVarInt_stream(int32_t input,
 #ifdef __MINGW32__
 		SOCKET
@@ -126,32 +85,6 @@ int writeVarInt_stream(int32_t input,
 	if (write(fd, &input, 1) != 1) return -1;
 #endif
 	return i;
-}
-
-int readVarInt(int32_t* output, unsigned char* buffer, size_t buflen) {
-	*output = 0;
-	int v2 = 0;
-	signed char v3;
-	do {
-		if (v2 >= buflen) break;
-		v3 = buffer[v2];
-		*output |= (v3 & 127) << (v2++ * 7);
-		if (v2 > 5) return v2;
-	} while ((v3 & 128) == 128);
-	return v2;
-}
-
-int readVarLong(int64_t* output, unsigned char* buffer, size_t buflen) {
-	*output = 0;
-	int v2 = 0;
-	signed char v3;
-	do {
-		if (v2 >= buflen) break;
-		v3 = buffer[v2];
-		*output |= (v3 & 127) << (v2++ * 7);
-		if (v2 > 10) return v2;
-	} while ((v3 & 128) == 128);
-	return v2;
 }
 
 int readVarInt_stream(int32_t* output,
@@ -2971,4 +2904,3 @@ int writePacket(struct conn* conn, struct packet* packet) {
 	pthread_mutex_unlock(&conn->writeMutex);
 	return 0;
 }
-

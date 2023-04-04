@@ -25,12 +25,12 @@
 #define INVTYPE_DROPPER 11
 #define INVTYPE_HORSE 12
 
-int idef_width;
-int idef_height;
-int idef_wrap;
-char** itemMap;
-int* itemSizeMap;
-int itemMapLength;
+extern int idef_width;
+extern int idef_height;
+extern int idef_wrap;
+extern char** itemMap;
+extern int* itemSizeMap;
+extern int itemMapLength;
 
 struct slot {
 		int16_t item;

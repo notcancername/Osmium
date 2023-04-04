@@ -13,6 +13,7 @@
 #include "xstring.h"
 #include <dirent.h>
 #include <errno.h>
+#include <unistd.h>
 
 struct bmodel* readBmodel(char* path) {
 	char* nplx = strrchr(path, '/');
@@ -42,7 +43,7 @@ struct bmodel* readBmodel(char* path) {
 	buf[cr] = 0;
 	close(bfd);
 	struct json_object json;
-	if (parseJSON(&json, buf) < 0) return -1;
+	if (parseJSON(&json, buf) < 0) return (struct bmodel *)-1;
 	struct bmodel* bm = malloc(sizeof(struct bmodel));
 	memset(bm, 0, sizeof(struct bmodel));
 	bm->name = nplx;
@@ -318,7 +319,7 @@ struct blockstate* readBlockstate(char* path) {
 	buf[cr] = 0;
 	close(bfd);
 	struct json_object json;
-	if (parseJSON(&json, buf) < 0) return -1;
+	if (parseJSON(&json, buf) < 0) return (struct bmodel *)-1;
 	struct blockstate* bs = malloc(sizeof(struct blockstate));
 	memset(bs, 0, sizeof(struct blockstate));
 	bs->name = nplx;
@@ -376,4 +377,3 @@ struct blockstate* readBlockstate(char* path) {
 int readAllBlockstates(char* directory, struct blockstate*** bss, size_t* bs_count) {
 
 }
-

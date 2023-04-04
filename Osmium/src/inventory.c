@@ -17,6 +17,14 @@
 #include <string.h>
 #include <math.h>
 
+int idef_width;
+int idef_height;
+int idef_wrap;
+char** itemMap;
+int* itemSizeMap;
+int itemMapLength;
+
+
 void newInventory(struct inventory* inv, int type, int id) {
 	inv->title = NULL;
 	inv->slots = NULL;
@@ -1032,4 +1040,3 @@ dm[0] = name;
 dm[1] = value;
 inv->props[inv->prop_count++] = dm;
 }
-

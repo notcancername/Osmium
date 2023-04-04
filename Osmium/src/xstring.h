@@ -10,6 +10,7 @@
 
 #include <string.h>
 
+
 char* trim(char* str);
 
 int streq(const char* str1, const char* str2);

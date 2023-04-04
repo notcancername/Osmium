@@ -23,6 +23,11 @@
 #include <errno.h>
 #include "inventory.h"
 
+int spawnedIn;
+struct gamestate gs;
+
+
+
 int running = 0;
 struct vao skybox;
 

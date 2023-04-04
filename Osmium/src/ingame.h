@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-int spawnedIn;
+extern int spawnedIn;
 
 struct gamestate {
 		struct world* world;
@@ -53,7 +53,7 @@ void ingame_keyboardCallback(int key, int scancode, int action, int mods);
 
 void ingame_mouseMotionCallback(double x, double y);
 
-struct gamestate gs;
+extern struct gamestate gs;
 
 void loadIngame();
 

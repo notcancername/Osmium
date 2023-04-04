@@ -12,8 +12,8 @@
 #include "models.h"
 #include "world.h"
 
-unsigned char fontColors[32][3];
-unsigned char fontWidth[256];
+extern unsigned char fontColors[32][3];
+extern unsigned char fontWidth[256];
 
 struct __attribute__((packed)) vertex {
 		float x;

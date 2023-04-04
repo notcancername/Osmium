@@ -1,5 +1,31 @@
 const std = @import("std");
 
+fn makeCObjects(b: *std.Build, comptime c_sources: anytype, target: anytype, optimize: anytype, exe: anytype) void {
+    inline for(c_sources) |source| {
+        const obj = b.addObject(.{
+            .name = source,
+            .target = target,
+            .optimize = optimize,
+        });
+        obj.linkLibC();
+        obj.addCSourceFile("Osmium/src/" ++ source, &.{});
+        exe.addObject(obj);
+    }
+}
+
+fn makeZigObjects(b: *std.Build, comptime sources: anytype, target: anytype, optimize: anytype, exe: anytype) void {
+    inline for(sources) |source| {
+        const obj = b.addObject(.{
+            .name = source,
+            .target = target,
+            .optimize = optimize,
+            .root_source_file = .{.path = "Osmium/src/" ++ source},
+        });
+        obj.linkLibC();
+        exe.addObject(obj);
+    }
+}
+
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
@@ -9,6 +35,17 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+
+    const libs = .{
+        "gl",
+        "glu",
+        "glut",
+        "glfw",
+        "png",
+        "z"
+    };
+
+    inline for(libs) |lib| exe.linkSystemLibrary(lib);
 
     exe.addIncludePath("./Osmium");
     exe.linkLibC();
@@ -29,14 +66,16 @@ pub fn build(b: *std.Build) void {
         "render.c",
         "world.c",
         "json.c",
+        "globals.c",
     };
 
     const zig_sources = .{
         "xstring.zig",
+        "network.zig",
     };
 
-    inline for(c_sources) |source| exe.addCSourceFile("Osmium/src/" ++ source, &.{});
-    inline for(zig_sources) |source| exe.addObjectFileSource(.{.path = "Osmium/src/" ++ source});
+    makeCObjects(b, c_sources, target, optimize, exe);
+    makeZigObjects(b, zig_sources, target, optimize, exe);
 
     exe.install();
 }

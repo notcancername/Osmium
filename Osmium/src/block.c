@@ -25,7 +25,22 @@ void getTextureCoordinates(int tx, int ty, float* tx1, float* ty1, float* tx2, f
 	*ty2 = th * (ty + 1) - ((float) TEXTURE_BUFFER + 0.01) / (float) def_height;
 }
 
-void drawBlock(uint16_t** txd, size_t* txs, size_t* txc, struct vertex_tex** vex, size_t* vexs, size_t* cvec, block blk, unsigned char faceMask, float x, float y, float z, int32_t wx, int32_t wy, int32_t wz) {
+void drawBlock(
+    uint16_t** txd,
+    size_t* txs,
+    size_t* txc,
+    struct vertex_tex** vex,
+    size_t* vexs,
+    size_t* cvec,
+    block blk,
+    unsigned char faceMask,
+    float x,
+    float y,
+    float z,
+    int32_t wx,
+    int32_t wy,
+    int32_t wz
+) {
 	unsigned char fc = 0;
 	if (faceMask & 0x01) fc++;
 	if (faceMask & 0x02) fc++;

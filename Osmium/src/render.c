@@ -22,6 +22,9 @@
 #include "entity.h"
 #include "globals.h"
 
+unsigned char fontColors[32][3];
+unsigned char fontWidth[256];
+
 void virtVertex3f(union uvertex* vert, float x, float y, float z) {
 	vert->vert.x = x;
 	vert->vert.y = y;
@@ -214,9 +217,9 @@ int updateChunk(struct chunk* chunk) {
 								if (z < 15) {
 									if (isBlockOpaque(chunk->blocks[x][z + 1][y + sy])) fm ^= 0x01;
 								} else if (z == 15 && chzp != NULL && isBlockOpaque(chzp->blocks[x][0][y + sy])) fm ^= 0x01;
-								if (fm > 0) drawBlock(&vts, &vtsx, &cvts, blk, fm, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
-							} else {
-								drawBlock(&txd, &txs, &txc, &vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z);
+							/* 	if (fm > 0) drawBlock(&vts, &vtsx, &cvts, fm, (float) x, blk(float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z); */
+							/* } else { */
+							/* 	drawBlock(&txd, &txs, &txc, &vts, &vtsx, &cvts, blk, 0xFF, (float) x, (float) sy, (float) z, chunk->x << 4 | x, y + sy, chunk->z << 4 | z, NULL, NULL, NULL); */
 							}
 						}
 					}
@@ -579,4 +582,3 @@ void drawRect(int x, int y, int z, int width, int height, uint32_t color) {
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1., 1., 1., 1.);
 }
-
