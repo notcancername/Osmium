@@ -8,7 +8,7 @@ fn makeCObjects(b: *std.Build, comptime c_sources: anytype, target: anytype, opt
             .optimize = optimize,
         });
         obj.linkLibC();
-        obj.addCSourceFile("Osmium/src/" ++ source, &.{});
+        obj.addCSourceFile("Osmium/src/" ++ source, &.{"-Wall", "-Wvla"});
         exe.addObject(obj);
     }
 }
@@ -22,6 +22,7 @@ fn makeZigObjects(b: *std.Build, comptime sources: anytype, target: anytype, opt
             .root_source_file = .{.path = "Osmium/src/" ++ source},
         });
         obj.linkLibC();
+        obj.addIncludePath("Osmium/src");
         exe.addObject(obj);
     }
 }
@@ -36,18 +37,19 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    exe.disable_sanitize_c = false;
+
     const libs = .{
         "gl",
         "glu",
         "glut",
         "glfw",
         "png",
-        "z"
+        "z",
     };
 
     inline for(libs) |lib| exe.linkSystemLibrary(lib);
 
-    exe.addIncludePath("./Osmium");
     exe.linkLibC();
 
     // XXX: add libraries to link
@@ -72,6 +74,7 @@ pub fn build(b: *std.Build) void {
     const zig_sources = .{
         "xstring.zig",
         "network.zig",
+        "models.zig",
     };
 
     makeCObjects(b, c_sources, target, optimize, exe);

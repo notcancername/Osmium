@@ -4779,6 +4779,7 @@ int loadTexturesPNG(char* path, int wrap, int* w, int* h, int id, int s, char** 
 	return 0;
 }
 
+#if 0
 int loadTexturesPNG2(char* path, int wrap, int id, int s, char** map, int maps, int* smap) {
 	int rw = 0;
 	int rh = 0;
@@ -4832,7 +4833,7 @@ int loadTexturesPNG2(char* path, int wrap, int id, int s, char** map, int maps, 
 		smap[mi] = mo;
 		png_bytep* row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
 		int bry = 0;
-		void* imgs[height / rh];
+		void* imgs[height / rh + 1];
 		for (int y = 0; y < height / rh; y++) {
 			imgs[y] = malloc(rw * rh * 4);
 		}
@@ -4911,7 +4912,9 @@ int loadTexturesPNG2(char* path, int wrap, int id, int s, char** map, int maps, 
 	 png_free_data(png_ptr, info_ptr, PNG_FREE_ALL, -1);
 	 png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
 	 printf("wrote /dsk/test.png\n");*/
-	return 0;
+
+    // WTF? You don't even do anything with the data here! ?!
+    return 0;
 }
 
 void loadTextureData(int id, size_t width, size_t height, void* data, int s) {
@@ -4927,3 +4930,4 @@ void loadTextureData(int id, size_t width, size_t height, void* data, int s) {
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
+#endif

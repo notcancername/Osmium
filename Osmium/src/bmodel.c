@@ -222,6 +222,7 @@ int readAllBmodels(char* directory, struct bmodel*** bmodels, size_t* bmodel_cou
 		else *bmodels = realloc(*bmodels, sizeof(struct bmodel*) * (1 + (*bmodel_count)));
 		(*bmodels)[(*bmodel_count)++] = readBmodel(tp);
 	}
+    closedir(dir);
 	return 0;
 }
 
