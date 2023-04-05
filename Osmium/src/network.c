@@ -683,7 +683,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 	size_t ps = pktlen;
 	int32_t id = 0;
 	size_t t = readVarInt(&id, pbuf, ps);
-	//printf("pktid = %02X\n", id);
+	printf("pktid = %02X\n", id);
 	pbuf += t;
 	ps -= t;
 	packet->id = id;
@@ -1778,11 +1778,13 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			ps -= rx;
 			if (packet->data.play_server.playerlistitem.player_count < 1) {
 				free(pktbuf);
-				return -1;
+				return -2;
 			}
+            // the notchian 1.9.4 server triggers this for some reason
 			if (packet->data.play_server.playerlistitem.action < 0 || packet->data.play_server.playerlistitem.action > 3) {
+                puts("b");
 				free(pktbuf);
-				return -1;
+				return -2;
 			}
 			packet->data.play_server.playerlistitem.players = malloc(sizeof(struct li_player) * packet->data.play_server.playerlistitem.player_count);
 			for (int32_t i = 0; i < packet->data.play_server.playerlistitem.player_count; i++) {

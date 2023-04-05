@@ -84,3 +84,23 @@ export fn readVarLong(out: *i64, buf: [*]u8, len: usize) c_int {
     out.* = x.out;
     return @intCast(c_int, x.nb_read);
 }
+
+export fn stringifyPacketId(id: i32) ?[*:0]u8 {
+    @setEvalBranchQuota(100000);
+
+    const storage = struct {
+        var buf: [8192]u8 = undefined;
+    };
+
+    inline for(@typeInfo(c).Struct.decls) |field| {
+        if(field.is_pub and (comptime std.mem.startsWith(u8, field.name, "PKT_"))) {
+            if(@field(c, field.name) == id) {
+                std.debug.assert(field.name.len + 1 < storage.buf.len);
+                @memcpy(@ptrCast([*]u8, &storage.buf), field.name.ptr, field.name.len);
+                storage.buf[field.name.len] = 0;
+                return @ptrCast([*:0]u8, &storage.buf);
+            }
+        }
+    }
+    return null;
+}

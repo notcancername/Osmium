@@ -22,6 +22,7 @@
 #include "block.h"
 #include <errno.h>
 #include "inventory.h"
+#include "gui.h"
 
 int spawnedIn;
 struct gamestate gs;
@@ -811,11 +812,15 @@ void runNetwork(struct conn* conn) {
 	viewDistance = 16. * 10.;
 	struct packet pkt;
 	struct packet rpkt;
+    printf("runNetwork entered\n");
 	while (1) {
-		if (readPacket(conn, &pkt)) {
+		if (readPacket(conn, &pkt) == -1) {
 			printf("closed\n");
-			return;
+            return;
 		}
+
+        printf("packet id: %x (%s)\n ", pkt.id, stringifyPacketId(pkt.id));
+
 		//printf("recv: %i\n", pkt.id);
 		if (pkt.id == PKT_PLAY_SERVER_SPAWNOBJECT) {
 			struct entity* ent = newEntity(pkt.data.play_server.spawnobject.entityID, pkt.data.play_server.spawnobject.x, pkt.data.play_server.spawnobject.y, pkt.data.play_server.spawnobject.z, entNetworkConvert(0, pkt.data.play_server.spawnobject.type), pkt.data.play_server.spawnobject.yaw, pkt.data.play_server.spawnobject.pitch);
@@ -1194,7 +1199,7 @@ void runNetwork(struct conn* conn) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERABILITIES) {
 			//todo
-			if (!spawnedIn && 0) {
+			if (!spawnedIn) {
 				rpkt.id = PKT_PLAY_CLIENT_PLUGINMESSAGE;
 				rpkt.data.play_client.pluginmessage.channel = "MC|Brand";
 				rpkt.data.play_client.pluginmessage.data = "vanilla/remake in C";
@@ -1209,6 +1214,7 @@ void runNetwork(struct conn* conn) {
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERLISTITEM) {
 
 		} else if (pkt.id == PKT_PLAY_SERVER_PLAYERPOSLOOK) {
+            printf("got ppl\n");
 			gs.player->x = ((pkt.data.play_server.playerpositionandlook.flags & 0x01) == 0x01 ? gs.player->x : 0.) + pkt.data.play_server.playerpositionandlook.x;
 			gs.player->y = ((pkt.data.play_server.playerpositionandlook.flags & 0x02) == 0x02 ? gs.player->y : 0.) + pkt.data.play_server.playerpositionandlook.y;
 			gs.player->z = ((pkt.data.play_server.playerpositionandlook.flags & 0x04) == 0x04 ? gs.player->z : 0.) + pkt.data.play_server.playerpositionandlook.z;

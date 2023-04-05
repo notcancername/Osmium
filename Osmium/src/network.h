@@ -1177,4 +1177,6 @@ int readPacket(struct conn* conn, struct packet* packet);
 
 int writePacket(struct conn* conn, struct packet* packet);
 
+const char *stringifyPacketId(int32_t id);
+
 #endif /* NETWORK_H_ */
