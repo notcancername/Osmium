@@ -1,7 +1,12 @@
 # Osmium
+## roadmap
+- [ ] get it to function somewhat
+- [ ] port everything to Zig
+- [ ] ziggify
+
 A MC clone in C, protocol-compatible with 1.9.4
 
-Dependencies (Linux): 
+Dependencies (Linux):
 - libpng
 - libz
 - libglfw3 (statically linked)
@@ -17,7 +22,7 @@ Dependencies (Linux):
 - libGL
 - libGLU
 
-Dependencies (Windows): 
+Dependencies (Windows):
 - libz
 - glew32
 - glfw3 (statically linked)
@@ -27,7 +32,7 @@ Dependencies (Windows):
 - ws2_32
 - libpng
 
-Installation: 
+Installation:
 
 1. Download executable from releases tab above.
 2. Put in a folder of your choosing.
@@ -51,4 +56,3 @@ Linux: Requires GCC, depenencies for linux listed above.
 4. Move the compiled executable into the directory
 5. Open a 1.9.4 minecraft.jar from Mojang, and copy the assets folder into that directory. (ie INSTALLDIR/assets/minecraft/etc)
 6. Run it!
-
