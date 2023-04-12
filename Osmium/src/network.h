@@ -25,6 +25,16 @@
 void swapEndian(void* dou, size_t ss);
 
 int readVarInt(int32_t* output, unsigned char* buffer, size_t buflen);
+int readVarLong(int64_t* output, unsigned char* buffer, size_t buflen);
+
+int writeVarInt(int32_t in, unsigned char* buffer);
+int writeVarLong(int64_t in, unsigned char* buffer);
+
+size_t getVarIntSize(int32_t in);
+size_t getVarLongSize(int64_t in);
+
+int readSlot(struct slot* slot, unsigned char* buffer, size_t buflen);
+int readString(char** output, unsigned char* buffer, size_t buflen);
 
 struct conn {
 #ifdef __MINGW32__
@@ -1178,5 +1188,7 @@ int readPacket(struct conn* conn, struct packet* packet);
 int writePacket(struct conn* conn, struct packet* packet);
 
 const char *stringifyPacketId(int32_t id);
+
+
 
 #endif /* NETWORK_H_ */

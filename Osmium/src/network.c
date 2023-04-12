@@ -2556,7 +2556,7 @@ int readPacket(struct conn* conn, struct packet* packet) {
 			pbuf += rx;
 			ps -= rx;
 		} else if (id == PKT_LOGIN_SERVER_SETCOMPRESSION) {
-			int rx = readVarInt(&packet->data.login_server.setcompression.threshold, pbuf, ps);
+			int rx = readVarLong(&packet->data.login_server.setcompression.threshold, pbuf, ps);
 			pbuf += rx;
 			ps -= rx;
 		}

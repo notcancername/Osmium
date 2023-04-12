@@ -10,8 +10,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #endif
+#define GL_GLEXT_PROTOTYPES 1
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glext.h>
 #include <GLFW/glfw3.h>
 #include "render.h"
 #include "models.h"
@@ -22,6 +24,7 @@
 #include <png.h>
 #include "network.h"
 #include "ingame.h"
+#include "xstring.h"
 
 struct vao mod_pan;
 
@@ -530,7 +533,7 @@ void drawConnecting(float partialTick) {
 		drawString("Downloading Terrain...", swidth / 2 - stringWidth("Downloading Terrain...") / 2, sheight / 2 - 54, 16777215);
 		if (cgs == 6) {
 			pthread_t pt;
-			pthread_create(&pt, NULL, runNetwork, cg_conn);
+			pthread_create(&pt, NULL, &runNetwork, cg_conn);
 			cgs = 7;
 		}
 		if (spawnedIn) {

@@ -57,7 +57,7 @@ extern struct gamestate gs;
 
 void loadIngame();
 
-void runNetwork(struct conn* conn);
+void *runNetwork(void *conn);
 
 void ingame_tick();
 

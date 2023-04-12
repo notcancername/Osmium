@@ -13,6 +13,8 @@
 #include "globals.h"
 #include "ingame.h"
 #include <math.h>
+#include "xstring.h"
+
 int entNetworkConvert(int type, int id) {
 	if (type == 0) {
 		if (id == 1) return ENT_BOAT;

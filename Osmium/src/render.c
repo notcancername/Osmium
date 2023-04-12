@@ -11,8 +11,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #endif
+#define GL_GLEXT_PROTOTYPES 1
 #include <GL/gl.h>
 #include <GL/glext.h>
+#include <GL/glu.h>
 #include "xstring.h"
 #include <math.h>
 #include "world.h"

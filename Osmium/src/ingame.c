@@ -23,6 +23,7 @@
 #include <errno.h>
 #include "inventory.h"
 #include "gui.h"
+#include "xstring.h"
 
 int spawnedIn;
 struct gamestate gs;
@@ -806,7 +807,8 @@ void drawIngame(float partialTick) {
 	}
 }
 
-void runNetwork(struct conn* conn) {
+void *runNetwork(void* v_conn) {
+    struct conn *conn = v_conn;
 	spawnedIn = 0;
 	gs.conn = conn;
 	viewDistance = 16. * 10.;
@@ -816,7 +818,7 @@ void runNetwork(struct conn* conn) {
 	while (1) {
 		if (readPacket(conn, &pkt) == -1) {
 			printf("closed\n");
-            return;
+            return NULL;
 		}
 
         printf("packet id: %x (%s)\n ", pkt.id, stringifyPacketId(pkt.id));
@@ -1340,4 +1342,5 @@ void runNetwork(struct conn* conn) {
 		}
 		rcmp: ;
 	}
+    return NULL;
 }

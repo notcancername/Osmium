@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "bmodel.h"
+#include "xstring.h"
 
 int fr = 30;
 int rr = 0;
